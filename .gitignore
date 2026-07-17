@@ -1,0 +1,54 @@
+# Build artifacts
+build/
+DerivedData/
+
+# User state & settings
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+
+# UI config
+*.xccheckout
+*.moved-aside
+
+# Logs & diagnostics
+*.xcuserstate
+*.log
+
+# ==========================================
+# Dependencies
+# ==========================================
+
+# Swift Package Manager
+.build/
+
+# CocoaPods
+Pods/
+*.xcworkspace/xcuserdata/
+
+# Carthage
+Carthage/Build/
+
+# ==========================================
+# Security & Secrets
+# ==========================================
+
+.env
+*.env.*
+Secrets.plist
+Config.plist
+
+# ==========================================
+# macOS System Files
+# ==========================================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V10
+.Trashes
+
