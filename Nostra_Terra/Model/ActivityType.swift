@@ -16,7 +16,7 @@ enum ActivityType: String, CaseIterable {
     
     var color: Color {
         switch self {
-            case .gastronomie: return Color.yellow
+            case .gastronomie: return Color.pink
             case .musique: return Color.red
             case .festival: return Color.orange
             case .artVivant: return Color.blue
