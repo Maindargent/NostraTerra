@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-enum ActivityType: String, CaseIterable {
+enum PublicationType: String, CaseIterable {
     case gastronomie = "Gastronomie"
     case musique = "Musique"
     case festival = "Festival"

@@ -13,7 +13,7 @@ struct Publication: Identifiable {
     let title: String
     let description: AttributedString
     let created_at: Date
-    let activity: ActivityType
+    let activity: PublicationType
     let region: String
     let author: User
     let geoPoint: CLLocationCoordinate2D
