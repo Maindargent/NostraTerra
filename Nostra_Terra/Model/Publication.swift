@@ -9,7 +9,7 @@ import MapKit
 
 struct Publication: Identifiable {
     let id = UUID()
-    let image: URL
+    let image: String
     let title: String
     let description: AttributedString
     let created_at: Date
