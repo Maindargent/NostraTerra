@@ -11,7 +11,7 @@ import SwiftUI
 struct Nostra_TerraApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
         }
     }
 }
