@@ -7,7 +7,7 @@
 import Foundation
 import MapKit
 
-struct Publication: Identifiable {
+struct Publication: Identifiable, Hashable {
     let id = UUID()
     let image: String
     let title: String
@@ -18,6 +18,14 @@ struct Publication: Identifiable {
     let author: User
     let geoPoint: CLLocationCoordinate2D
     let likeCount: Int
+    
+    static func == (lhs: Publication, rhs: Publication) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 
 

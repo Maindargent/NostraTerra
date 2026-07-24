@@ -7,14 +7,29 @@
 
 import SwiftUI
 
+enum AppTab: String, CaseIterable {
+    case landing = "Accueil"
+    case map = "Carte"
+    case addForm = "Ajouter"
+    case search = "Recherche"
+}
+
 struct RootView: View {
+    @State var selectedTab: AppTab = .map
+    
     var body: some View {
-        TabView {
-            Tab("Carte", systemImage: "map") {
+        TabView(selection: $selectedTab) {
+            Tab("Accueil", systemImage: "house", value: .landing) {
+                SuggestionsView()
+            }
+            Tab("Carte", systemImage: "map", value: .map) {
               MapView()
             }
+            Tab("Ajouter", systemImage: "plus", value: .addForm) {
+              PublicationAddFormView()
+            }
             
-            Tab("Recherche", systemImage: "magnifyingglass", role: .search) {
+            Tab("Recherche", systemImage: "magnifyingglass", value: .search ,role: .search) {
                 SearchView()
             }
         }
