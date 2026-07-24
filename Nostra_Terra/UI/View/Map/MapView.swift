@@ -30,7 +30,10 @@ struct MapView: View {
                     AsyncImage(url: URL(string: publication.image)) { image in
                         image.resizable()
                     } placeholder: {
-                        Image("placeholder").resizable()
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .frame(width: 45, height: 45)
+                            .glassEffect()
                     }
                     .scaledToFill()
                     .frame(width: 45, height: 45)
