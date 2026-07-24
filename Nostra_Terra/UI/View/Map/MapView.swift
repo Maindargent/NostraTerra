@@ -26,7 +26,7 @@ struct MapView: View {
         ) {
             UserAnnotation()
             ForEach(publications) { publication in
-                Annotation(publication.title, coordinate: publication.geoPoint) {
+                Annotation(publication.title, coordinate: publication.geoPoint, anchor: .bottom) {
                     AsyncImage(url: URL(string: publication.image)) { image in
                         image.resizable()
                     } placeholder: {
@@ -55,14 +55,18 @@ struct MapView: View {
             guard let publication else {
                 return
             }
-
-            cameraPosition = .region(
-                MKCoordinateRegion(
-                    center: publication.geoPoint,
-                    latitudinalMeters: 1_000,
-                    longitudinalMeters: 1_000
-                )
+            
+            var region = MKCoordinateRegion(
+                center: publication.geoPoint,
+                latitudinalMeters: 100_000,
+                longitudinalMeters: 100_000
             )
+
+            region.center.latitude -= region.span.latitudeDelta * 0.80
+
+            withAnimation(.spring) {
+                cameraPosition = .region(region)
+            }
         }
         .onAppear {
 //            locationManager.requestWhenInUseAuthorization()
@@ -77,32 +81,18 @@ struct MapView: View {
 //            )
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .sheet(item: $selectedPublication) { publication in
-            ZStack {
-                AsyncImage(url: URL(string: publication.image)) { image in
-                    image.resizable()
-                } placeholder: {
-                    Image("placeholder").resizable()
-                }
-                .scaledToFill()
-                .ignoresSafeArea()
-                
-                VStack() {
-                    Spacer()
-                    Button {
-                        selectedPublication = nil
-                    } label: {
-                        Text(publication.title)
-                            .foregroundStyle(.white)
-                            .font(.system(size: 22, weight: .semibold))
-                            .padding(12)
-                    }
-                    .tint(.clear)
-                    .buttonStyle(.glass)
+        .sheet(
+            item: $selectedPublication,
+            onDismiss: {
+                withAnimation(.smooth) {
+                    cameraPosition = .automatic
                 }
             }
-            .presentationDragIndicator(.visible)
-            .presentationDetents([.fraction(0.8)])
+        ) { publication in
+            PublicationDetailView(
+                publication: publication,
+                selectedPublication: $selectedPublication
+            )
         }
     }
 }
