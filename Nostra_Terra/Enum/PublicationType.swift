@@ -6,7 +6,9 @@
 //
 import SwiftUI
 
-enum PublicationType: String, CaseIterable {
+enum PublicationType: String, CaseIterable, Identifiable {
+    var id: Self { self }
+
     case gastronomie = "Gastronomie"
     case musique = "Musique"
     case festival = "Festival"
@@ -16,12 +18,12 @@ enum PublicationType: String, CaseIterable {
     
     var color: Color {
         switch self {
-            case .gastronomie: return Color.pink
+            case .gastronomie: return Color.yellow
             case .musique: return Color.red
             case .festival: return Color.orange
             case .artVivant: return Color.blue
             case .artVisuel: return Color.green
-            case .reconstitution: return Color.brown
+            case .reconstitution: return Color.pink
         }
     }
 }

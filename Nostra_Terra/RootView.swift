@@ -15,7 +15,7 @@ enum AppTab: String, CaseIterable {
 }
 
 struct RootView: View {
-    @State var selectedTab: AppTab = .map
+    @State var selectedTab: AppTab = .addForm
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -26,7 +26,9 @@ struct RootView: View {
               MapView()
             }
             Tab("Ajouter", systemImage: "plus", value: .addForm) {
-              PublicationAddFormView()
+              NavigationStack {
+                  PublicationAddFormView()
+              }
             }
             
             Tab("Recherche", systemImage: "magnifyingglass", value: .search ,role: .search) {
