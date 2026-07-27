@@ -27,7 +27,13 @@ struct PublicationAddFormMapSheetView: View {
             }
             .mapControls {
                 MapUserLocationButton()
+                MapScaleView()
+                MapCompass()
+                MapPitchToggle()
+               
             }
+            .buttonBorderShape(.circle)
+            .tint(.yellowTuscanSun)
             .onTapGesture { position in
                 tempGeoPoint = proxy.convert(position, from: .local)
             }
@@ -47,43 +53,64 @@ struct PublicationAddFormMapSheetView: View {
                 cameraPosition = .userLocation(fallback: .automatic)
             }
         }
-        .overlay(alignment: .bottom) {
-            HStack {
-                Button {
-                    showMapSheet = false
-                } label: {
-                    Text("Retour")
-                        .foregroundStyle(.yellow)
-                        .padding()
-                        .glassEffect(
-                            .regular,
-                            in: RoundedRectangle(cornerRadius: 12)
-                        )
-                }
-
-                Spacer()
-
-                Button {
-                    guard let tempGeoPoint else { return }
-
-                    selectedGeoPoint = tempGeoPoint
-                    showMapSheet = false
-                } label: {
-                    HStack {
-                        Text("Valider")
-                        Image(systemName: "pointer.arrow.ipad.rays")
+        .overlay(alignment: .topLeading) {
+            VStack(alignment: .leading) {
+                if let tempGeoPoint {
+                    VStack(alignment: .leading) {
+                        Text("Latitude : \(tempGeoPoint.latitude)")
+                        Text("Longitude : \(tempGeoPoint.longitude)")
                     }
-                    .foregroundStyle(.ultraThickMaterial)
-                    .padding()
+                    .foregroundStyle(.yellow)
+                    .padding(12)
                     .glassEffect(
-                        .regular.tint(.yellow),
+                        .regular,
                         in: RoundedRectangle(cornerRadius: 12)
                     )
                 }
-                .disabled(tempGeoPoint == nil)
+                Spacer()
+                HStack {
+                    Spacer()
+                    
+                    Button {
+                        showMapSheet = false
+                    } label: {
+                        Text("Retour")
+    //                        .foregroundStyle(.yellow)
+                            .padding(4)
+    //                        .glassEffect(
+    //                            .regular,
+    //                            in: RoundedRectangle(cornerRadius: 12)
+    //                        )
+                    }
+                    .buttonStyle(.glass)
+                    .tint(.yellowTuscanSun)
+
+
+                    Button {
+                        guard let tempGeoPoint else { return }
+
+                        selectedGeoPoint = tempGeoPoint
+                        showMapSheet = false
+                    } label: {
+                        HStack {
+                            Text("Valider")
+                            Image(systemName: "pointer.arrow.ipad.rays")
+                        }
+    //                    .foregroundStyle(.ultraThickMaterial)
+                        .padding(4)
+    //                    .glassEffect(
+    //                        .regular.tint(.yellow),
+    //                        in: RoundedRectangle(cornerRadius: 12)
+    //                    )
+    //                    .tint(.ultraThickMaterial)
+    //                    .buttonStyle(.borderedProminent)
+                    }
+                    .buttonStyle(.glassProminent)
+                    .tint(.yellowTuscanSun)
+                    .disabled(tempGeoPoint == nil)
+                }
             }
-            .padding(.horizontal)
-            .padding(.bottom)
+            .padding()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
