@@ -8,35 +8,74 @@
 import SwiftUI
 
 struct PublicationDetailView: View {
-    var publication: Publication
-    @Binding var selectedPublication: Publication?
+    let publication: Publication
+    let colorType: PublicationType = .artVisuel
     
     var body: some View {
-        ZStack {
-            AsyncImage(url: URL(string: publication.image)) { image in
-                image.resizable()
-            } placeholder: {
-                Image("placeholder").resizable()
-            }
-            .scaledToFill()
-            .ignoresSafeArea()
-            
-            Button {
-                selectedPublication = nil
-            } label: {
+        ScrollView{
+            ZStack(alignment: .leading){
+                AsyncImage(url: URL(string: publication.image)) { image in
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(maxHeight: 275)
+                        .clipped()
+                        .cornerRadius(20)
+                        .padding(.horizontal, 5)
+                } placeholder: {
+                    ProgressView()
+                }
+                Rectangle()
+                    .fill(
+                        LinearGradient(
+                            colors: [.black, .clear],
+                            startPoint: .bottom,
+                            endPoint: .top
+                        )
+                    )
+                    .padding(.horizontal, 5)
+                    .cornerRadius(20)
                 Text(publication.title)
-                    .foregroundStyle(.white)
-                    .font(.system(size: 22, weight: .semibold))
-                    .padding(12)
+                    .foregroundStyle(.whiteIvoryMist)
+                    .bold()
+                    .font(.title)
+                    .padding(.horizontal)
+                    .padding(.top, 200)
             }
-            .tint(.clear)
-            .buttonStyle(.glass)
+            
+            ScrollView(.horizontal) {
+                HStack{
+                    Text(publication.region)
+                        .foregroundStyle(.whiteIvoryMist)
+                        .padding(5)
+                        .glassEffect(.clear.tint(publication.activity.color))
+                    Text(publication.activity.rawValue)
+                        .foregroundStyle(.whiteIvoryMist)
+                        .padding(5)
+//                        .background(colorType.color)
+//                        .clipShape(Capsule())
+                        .glassEffect(.clear.tint(publication.activity.color))
+//                        .overlay(
+//                                RoundedRectangle(cornerRadius: 20)
+//                                .stroke(Color.whiteIvoryMist, lineWidth: 2)
+//                        )
+                }
+            }
+            Text(publication.description)
+                .foregroundStyle(.whiteIvoryMist)
+                .padding()
+            Rectangle()
+                .frame(maxWidth: .infinity)
+                .cornerRadius(20)
+                .padding(.horizontal)
+                .frame(height: 200)
         }
-        .presentationDragIndicator(.visible)
-        .presentationDetents([.fraction(0.8)])
+        .background {
+            Image(.backgroundPicture)
+        }
     }
 }
 
 #Preview {
-    PublicationDetailView(publication: publications[0], selectedPublication: .constant(publications[0]))
+    PublicationDetailView(publication: publications[0])
 }
