@@ -9,10 +9,13 @@ import SwiftUI
 
 struct SuggestionsView: View {
     
+    @State var x: [CGFloat] = [0,0,0]
+    @State var degree: [Double] = [0,0,0]
     let user: User
+    var shufflePublications = publications.shuffled()
     
     var body: some View {
-        VStack{
+        VStack(alignment: .leading){
             HStack{
                 AsyncImage(url: user.profilPicture) { image in
                     image.resizable()
@@ -38,9 +41,112 @@ struct SuggestionsView: View {
                 .bold()
                 .foregroundStyle(.whiteIvoryMist)
             
+            ZStack{
+                VStack{
+                    Text("Vous pouvez revoir vos suggestions.")
+                        .font(.footnote)
+                        .foregroundStyle(.whiteIvoryMist)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                    
+                    Button(action: {
+                        for i in 0..<self.x.count{
+                            self.x[i] = 0
+                        }
+                        
+                        for i in 0..<self.degree.count{
+                            self.degree[i] = 0
+                        }
+                    }) {
+                        
+                        Image(systemName: "repeat.circle.fill")
+                            .font(.title)
+                            .tint(.yellowTuscanSun)
+                        
+                    }
+                }
+            
+                ZStack{
+                    ForEach(0..<3, id: \.self){i in
+                        
+                        SuggestionRow(publication: shufflePublications[i])
+                            .offset(x: self.x[i])
+                            .rotationEffect(.init(degrees: self.degree[i]))
+                            .gesture(DragGesture()
+                                .onChanged({ (value) in
+                                    
+                                    if value.translation.width > 0 {
+                                        
+                                        self.x[i] = value.translation.width
+                                        self.degree[i] = 7
+                                        
+                                    } else {
+                                        
+                                        self.x[i] = value.translation.width
+                                        self.degree[i] = -7
+                                        
+                                    }
+                                    
+                                })
+                                    .onEnded({ (value) in
+                                        
+                                        if value.translation.width > 0 {
+                                            
+                                            if value.translation.width > 100 {
+                                                
+                                                self.x[i] = 500
+                                                self.degree[i] = 12
+                                                
+                                            } else {
+                                                
+                                                self.x[i] = 0
+                                                self.degree[i] = 0
+                                            }
+                                            
+                                        } else {
+                                            
+                                            if value.translation.width < -100 {
+                                                
+                                                self.x[i] = -500
+                                                self.degree[i] = -15
+                                                
+                                            } else {
+                                                
+                                                self.x[i] = 0
+                                                self.degree[i] = 0
+                                            }
+                                            
+                                        }
+                                        
+                                    }))
+                    }
+                }
+            }
+            .padding()
+            .animation(.default)
+            
+            Text("Découverte de nos régions")
+                .font(.system(size: 16))
+                .bold()
+                .foregroundStyle(.whiteIvoryMist)
+            
+            
+            ScrollView(.horizontal){
+                    HStack(alignment: .bottom){
+                    PublicationRow(publication: publications[0])
+                    PublicationRow(publication: publications[1])
+                    PublicationRow(publication: publications[3])
+                }
+            }
+            
+            Spacer()
         }
+        .padding()
         .background(
             Image("backgroundPicture")
+                .resizable()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
         )
     }
 }
