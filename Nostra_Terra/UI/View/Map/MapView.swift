@@ -6,11 +6,12 @@
 //
 import SwiftUI
 import MapKit
-import CoreLocation
 
 
 struct MapView: View {
-    @State var selectedPublication: Publication? = nil
+    @State var selectedPublication: (any Publication)? = nil
+//    @State var selectedPublication: Event? = nil
+    
     @State private var cameraPosition: MapCameraPosition = .automatic
     @State var userLocationOnAppear = CLLocationCoordinate2D(latitude: 1.0, longitude: 1.0)
 
@@ -20,14 +21,21 @@ struct MapView: View {
     
     var body: some View {
         Map(
-//            initialPosition: .userLocation(fallback: .automatic),
-            position: $cameraPosition,
-            selection: $selectedPublication
+            position: $cameraPosition
         ) {
             UserAnnotation()
-            ForEach(publications) { publication in
+            ForEach(events, id: \.id) { publication in
+                
+                
+                if type(of: publication) == Tradition {
+                    let tradition = Tradition(image: publication.image, uploadedImages: [], title: publication.title, description: publication.description, created_at: publication.created_at, categories: publication.categories, region: publication.region, author: publication.author, geoPoint: publication.geoPoint, likeCount: publication.likeCount)
+                } else {
+                    let event = Event(image: publication.image, uploadedImages: [], title: publication.title, description: publication.description, created_at: publication.created_at, categories: publication.categories, region: publication.region, author: publication.author, geoPoint: publication.geoPoint, likeCount: publication.likeCount, startDate: publication.startDate, endDate: publication.endDate)
+                }
+                
+                
                 Annotation(publication.title, coordinate: publication.geoPoint, anchor: .bottom) {
-                    AsyncImage(url: URL(string: publication.image)) { image in
+                    AsyncImage(url: publication.image) { image in
                         image.resizable()
                     } placeholder: {
                         ProgressView()
@@ -92,10 +100,10 @@ struct MapView: View {
                 }
             }
         ) { publication in
-            PublicationDetailView(
-                publication: publication,
-                selectedPublication: $selectedPublication
-            )
+//            PublicationDetailView(
+//                publication: publication,
+//                selectedPublication: $selectedPublication
+//            )
         }
     }
 }

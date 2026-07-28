@@ -15,8 +15,8 @@ struct User: Identifiable {
     let birthDate: Date
     let description: String
     let profilPicture: URL
-    let likedPublication: [Publication] = []
-    let publishedPublication: [Publication] = []
+    let likedPublication: [(any Publication)] = []
+    let publishedPublication: [(any Publication)] = []
 }
 
 

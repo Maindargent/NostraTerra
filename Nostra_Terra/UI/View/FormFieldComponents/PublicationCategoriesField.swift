@@ -9,7 +9,7 @@ import SwiftUI
 struct PublicationCategoriesField: View {
     @Binding var typeForm: TypeForm
     @Binding var showCategoriesSelectionSheet: Bool
-    @Binding var selectedCategories: Set<PublicationType>
+    @Binding var selectedCategories: Set<PublicationCategory>
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -24,7 +24,9 @@ struct PublicationCategoriesField: View {
                         .font(.subheadline)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Image(systemName: "pointer.arrow.ipad.rays")
+                    Image(.iconCursorClick)
+                        .resizable()
+                        .frame(width: 32, height: 32)
                 }
                 .foregroundStyle(.whiteIvoryMist)
                 .padding()
@@ -33,7 +35,7 @@ struct PublicationCategoriesField: View {
             .sheet(isPresented: $showCategoriesSelectionSheet) {
                 VStack {
                     List(selection: $selectedCategories) {
-                        ForEach(PublicationType.allCases) { category in
+                        ForEach(PublicationCategory.allCases) { category in
                             Text(category.rawValue)
                                 .foregroundStyle(category.color)
                         }
@@ -61,26 +63,28 @@ struct PublicationCategoriesField: View {
                 .presentationDetents([.medium])
             }
             
-            LazyVGrid(columns: Array(
-                repeating: GridItem(.flexible(), spacing: 12),
-                count: 2
-            ), spacing: 12) {
-                ForEach(PublicationType.allCases) { category in
-                    Button(category.rawValue) {
-                        if selectedCategories.contains(category) {
-                            selectedCategories.remove(category)
-                        } else {
-                            selectedCategories.insert(category)
-                        }
-                    }
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .foregroundStyle(selectedCategories.contains(category) ? category.color : .white)
-                    .glassEffect(.regular.tint(selectedCategories.contains(category) ? category.color.opacity(0.2) : .clear))
-                }
-            }
+//            LazyVGrid(columns: Array(
+//                repeating: GridItem(.flexible(), spacing: 12),
+//                count: 2
+//            ), spacing: 12) {
+//                ForEach(PublicationType.allCases) { category in
+//                    Button(category.rawValue) {
+//                        withAnimation(.easeInOut(duration: 0.25)){
+//                            if selectedCategories.contains(category) {
+//                                selectedCategories.remove(category)
+//                            } else {
+//                                selectedCategories.insert(category)
+//                            }
+//                        }
+//                    }
+//                    .padding()
+//                    .lineLimit(1)
+//                    .minimumScaleFactor(0.7)
+//                    .frame(maxWidth: .infinity)
+//                    .foregroundStyle(selectedCategories.contains(category) ? category.color : .white)
+//                    .glassEffect(.regular.tint(selectedCategories.contains(category) ? category.color.opacity(0.2) : .clear), in: .rect(cornerRadius: 12, style: .continuous))
+//                }
+//            }
         }
         
     }
@@ -90,7 +94,7 @@ struct PublicationCategoriesField: View {
     
     @Previewable @State var typeForm: TypeForm = .event
     @Previewable @State var showCategoriesSelectionSheet: Bool = false
-    @Previewable @State var selectedCategories = Set<PublicationType>()
+    @Previewable @State var selectedCategories = Set<PublicationCategory>()
     
     PublicationCategoriesField(
         typeForm: $typeForm,

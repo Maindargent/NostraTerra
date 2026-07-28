@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct PublicationDetailView: View {
-    var publication: Publication
-    @Binding var selectedPublication: Publication?
+    var publication: (any Publication)
+    @Binding var selectedPublication: (any Publication)?
     
     var body: some View {
         ZStack {
-            AsyncImage(url: URL(string: publication.image)) { image in
+            AsyncImage(url: publication.image) { image in
                 image.resizable()
             } placeholder: {
                 Image("placeholder").resizable()
