@@ -13,7 +13,7 @@ let publications: [Publication] = [
     Publication(
         image:  "https://picsum.photos/seed/gastro1/800/600",
         title: "Marché gourmand",
-        description: try! AttributedString(markdown: "Découverte des **saveurs locales** et des producteurs régionaux."),
+        description: try! AttributedString(markdown: "Découverte des **saveurs locales** et des producteurs régionaux.Découverte des **saveurs locales** et des producteurs régionaux.Découverte des **saveurs locales** et des producteurs régionaux.Découverte des **saveurs locales** et des producteurs régionaux.Découverte des **saveurs locales** et des producteurs régionaux.Découverte des **saveurs locales** et des producteurs régionaux."),
         created_at: .now.addingTimeInterval(-3600 * 4),
         activity: .gastronomie,
         region: "Bretagne",
