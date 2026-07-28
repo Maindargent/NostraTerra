@@ -72,6 +72,9 @@ struct PublicationDetailView: View {
         }
         .background {
             Image(.backgroundPicture)
+                .resizable()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
         }
     }
 }

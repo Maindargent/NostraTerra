@@ -94,8 +94,8 @@ struct MapView: View {
         ) { publication in
             PublicationDetailView(
                 publication: publication,
-                selectedPublication: $selectedPublication
             )
+            .presentationDetents([.medium])
         }
     }
 }
