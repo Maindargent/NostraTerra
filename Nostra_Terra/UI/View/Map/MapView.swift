@@ -9,20 +9,22 @@ import MapKit
 
 
 struct MapView: View {
+    @State var selectedPublicationID: UUID? = nil
     
     @State var cameraPosition: MapCameraPosition = .automatic
     @State var userLocationOnAppear = CLLocationCoordinate2D(latitude: 1.0, longitude: 1.0)
     
     @State var showPublicationSheet: Bool = false
     
-    @State var selectedPublicationID: UUID? = nil
+    
+    let locationManager = CLLocationManager()
+    
     var selectedPublication: (any Publication)? {
         guard let selectedPublicationID else {return nil}
         
         return publications.first{$0.id == selectedPublicationID}
     }
     
-    let locationManager = CLLocationManager()
     
     var body: some View {
         Map(
@@ -90,34 +92,29 @@ struct MapView: View {
                 }
             },
             content: {
-                NavigationStack {
-                    PublicationDetailView(
-                        publication: selectedPublication!,
-                        onClose: {
-                            selectedPublicationID = nil
-                        }
-                    )
-                    .toolbar(content: {
-                        ToolbarItem(placement: .bottomBar) {
-                            Button {
-                                selectedPublicationID = nil
-                                showPublicationSheet.toggle()
-                            } label: {
-                                Image(systemName: "arrowshape.turn.up.backward")
-                                    .foregroundStyle(.white)
-                            }
-                            .padding()
-                            .buttonStyle(.glassProminent)
-                            .glassEffect(.clear, in: .circle)
-                        }
-                        .sharedBackgroundVisibility(.hidden)
-                    })
-                    .presentationDragIndicator(.visible)
-                    .presentationDetents([.fraction(0.8), .large])
-                    .presentationBackground(.clear)
-                }
+                PublicationDetailView(
+                    publication: selectedPublication!,
+                    onClose: {
+                        selectedPublicationID = nil
+                    }
+                )
+                .presentationDragIndicator(.visible)
+                .presentationDetents([.medium, .large])
             }
         )
+        
+        .onAppear {
+//            locationManager.requestWhenInUseAuthorization()
+//            guard let userLocation = locationManager.location?.coordinate else {return}
+//            userLocationOnAppear = userLocation
+//            cameraPosition = .region(
+//                MKCoordinateRegion(
+//                    center: userLocation,
+//                    latitudinalMeters: 100_000,
+//                    longitudinalMeters: 100_000
+//                )
+//            )
+        }
     }
 }
 
