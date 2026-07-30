@@ -10,6 +10,32 @@ import MapKit
 
 let publications: [any Publication] = [
     Tradition(
+        image: URL(string: "https://picsum.photos/seed/fetes-saint-jean/800/600")!,
+        uploadedImages: [],
+        title: "Les feux de la Saint-Jean",
+        description: "À l’arrivée de l’été, les villages se rassemblent autour de grands feux de joie. Entre musique traditionnelle, danses collectives et repas partagés, cette célébration transmet un rituel ancien où l’on vient saluer la lumière, retrouver ses voisins et faire vivre les coutumes locales.",
+        created_at: Date(),
+        categories: [.festival, .musique, .artVivant],
+        region: .occitanie,
+        author: users.randomElement()!,
+        geoPoint: CLLocationCoordinate2D(latitude: 43.1730, longitude: 2.7450),
+        likeCount: 267
+    ),
+    Event(
+        image: URL(string: "https://picsum.photos/seed/braderie-lille/800/600")!,
+        uploadedImages: [],
+        title: "La Braderie de Lille",
+        description: "Chaque premier week-end de septembre, les rues de Lille deviennent un immense marché à ciel ouvert. Habitants, associations et visiteurs y chinent des objets, découvrent les spécialités locales et profitent d’animations musicales qui donnent à cette fête populaire une atmosphère unique, conviviale et profondément nordiste.",
+        created_at: Date(),
+        categories: [.festival, .gastronomie, .musique],
+        region: .hautsDeFrance,
+        author: users.randomElement()!,
+        geoPoint: CLLocationCoordinate2D(latitude: 50.6292, longitude: 3.0573),
+        likeCount: 638,
+        startDate: Date(),
+        endDate: Date()
+    ),
+    Tradition(
         image: URL(string: "https://picsum.photos/seed/transhumance/800/600")!,
         uploadedImages: [],
         title: "La transhumance",
