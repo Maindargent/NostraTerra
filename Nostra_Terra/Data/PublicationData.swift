@@ -8,39 +8,7 @@
 import Foundation
 import MapKit
 
-let events: [Event] = [
-    
-    Event(
-        image: URL(string: "https://picsum.photos/seed/menton/800/600")!,
-        uploadedImages: [],
-        title: "Fête du Citron de Menton",
-        description: "Sculptures d’agrumes et corsos fleuris à Menton.",
-        created_at: Date(),
-        categories: [.festival],
-        region: .provenceAlpesCoteDAzur,
-        author: users.randomElement()!,
-        geoPoint: CLLocationCoordinate2D(latitude: 43.7745, longitude: 7.4975),
-        likeCount: 342,
-        startDate: Date(),
-        endDate: Date()
-    ),
-    Event(
-        image: URL(string: "https://picsum.photos/seed/nice/800/600")!,
-        uploadedImages: [],
-        title: "Carnaval de Nice",
-        description: "Défilés de chars et batailles de fleurs.",
-        created_at: Date(),
-        categories: [.festival, .artVivant],
-        region: .provenceAlpesCoteDAzur,
-        author: users.randomElement()!,
-        geoPoint: CLLocationCoordinate2D(latitude: 43.6954, longitude: 7.2650),
-        likeCount: 401,
-        startDate: Date(),
-        endDate: Date()
-    )
-]
-
-let publications: [Publication] = [
+let publications: [any Publication] = [
     Tradition(
         image: URL(string: "https://picsum.photos/seed/transhumance/800/600")!,
         uploadedImages: [],

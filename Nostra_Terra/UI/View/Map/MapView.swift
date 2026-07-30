@@ -9,31 +9,30 @@ import MapKit
 
 
 struct MapView: View {
-    @State var selectedPublication: (any Publication)? = nil
-//    @State var selectedPublication: Event? = nil
+    @State var selectedPublicationID: UUID? = nil
     
-    @State private var cameraPosition: MapCameraPosition = .automatic
+    @State var cameraPosition: MapCameraPosition = .automatic
     @State var userLocationOnAppear = CLLocationCoordinate2D(latitude: 1.0, longitude: 1.0)
-
+    
+    @State var showPublicationSheet: Bool = false
+    
     
     let locationManager = CLLocationManager()
+    
+    var selectedPublication: (any Publication)? {
+        guard let selectedPublicationID else {return nil}
+        
+        return publications.first{$0.id == selectedPublicationID}
+    }
     
     
     var body: some View {
         Map(
-            position: $cameraPosition
+            position: $cameraPosition,
+            selection: $selectedPublicationID
         ) {
             UserAnnotation()
-            ForEach(events, id: \.id) { publication in
-                
-                
-                if type(of: publication) == Tradition {
-                    let tradition = Tradition(image: publication.image, uploadedImages: [], title: publication.title, description: publication.description, created_at: publication.created_at, categories: publication.categories, region: publication.region, author: publication.author, geoPoint: publication.geoPoint, likeCount: publication.likeCount)
-                } else {
-                    let event = Event(image: publication.image, uploadedImages: [], title: publication.title, description: publication.description, created_at: publication.created_at, categories: publication.categories, region: publication.region, author: publication.author, geoPoint: publication.geoPoint, likeCount: publication.likeCount, startDate: publication.startDate, endDate: publication.endDate)
-                }
-                
-                
+            ForEach(publications, id: \.id) { publication in
                 Annotation(publication.title, coordinate: publication.geoPoint, anchor: .bottom) {
                     AsyncImage(url: publication.image) { image in
                         image.resizable()
@@ -56,14 +55,19 @@ struct MapView: View {
                             .shadow(radius: 10)
                             .offset(x: 0, y: 10)
                     }
-                }.tag(publication)
+                }.tag(publication.id)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .mapControls {
             MapUserLocationButton()
         }
-        .onChange(of: selectedPublication) { _, publication in
-            guard let publication else {
+        .onChange(of: selectedPublicationID) { _, publicationID in
+            guard
+                let publicationID,
+                let publication = publications.first(where: { $0.id == publicationID })
+            else {
+                print("oyu")
                 return
             }
             
@@ -72,13 +76,33 @@ struct MapView: View {
                 latitudinalMeters: 100_000,
                 longitudinalMeters: 100_000
             )
-
+            
             region.center.latitude -= region.span.latitudeDelta * 0.80
-
-            withAnimation(.spring) {
+            
+            withAnimation(.smooth) {
                 cameraPosition = .region(region)
+                showPublicationSheet.toggle()
             }
         }
+        .sheet(
+            isPresented: $showPublicationSheet,
+            onDismiss: {
+                withAnimation(.smooth) {
+                    cameraPosition = .automatic
+                }
+            },
+            content: {
+                PublicationDetailView(
+                    publication: selectedPublication!,
+                    onClose: {
+                        selectedPublicationID = nil
+                    }
+                )
+                .presentationDragIndicator(.visible)
+                .presentationDetents([.medium, .large])
+            }
+        )
+        
         .onAppear {
 //            locationManager.requestWhenInUseAuthorization()
 //            guard let userLocation = locationManager.location?.coordinate else {return}
@@ -89,20 +113,6 @@ struct MapView: View {
 //                    latitudinalMeters: 100_000,
 //                    longitudinalMeters: 100_000
 //                )
-//            )
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .sheet(
-            item: $selectedPublication,
-            onDismiss: {
-                withAnimation(.smooth) {
-                    cameraPosition = .automatic
-                }
-            }
-        ) { publication in
-//            PublicationDetailView(
-//                publication: publication,
-//                selectedPublication: $selectedPublication
 //            )
         }
     }
