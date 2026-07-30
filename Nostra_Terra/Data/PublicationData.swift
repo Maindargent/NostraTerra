@@ -8,101 +8,135 @@
 import Foundation
 import MapKit
 
-let publications: [Publication] = [
-
-    Publication(
-        image:  "https://picsum.photos/seed/gastro1/800/600",
-        title: "Marché gourmand",
-        description: try! AttributedString(markdown: "Découverte des **saveurs locales** et des producteurs régionaux.Découverte des **saveurs locales** et des producteurs régionaux.Découverte des **saveurs locales** et des producteurs régionaux.Découverte des **saveurs locales** et des producteurs régionaux.Découverte des **saveurs locales** et des producteurs régionaux.Découverte des **saveurs locales** et des producteurs régionaux."),
-        created_at: .now.addingTimeInterval(-3600 * 4),
-        activity: .gastronomie,
-        region: "Bretagne",
-        author: users[2],
-        geoPoint: CLLocationCoordinate2D(latitude: 48.3904, longitude: -4.4861),
-        likeCount: 126
+let publications: [any Publication] = [
+    Tradition(
+        image: URL(string: "https://picsum.photos/seed/transhumance/800/600")!,
+        uploadedImages: [],
+        title: "La transhumance",
+        description: "La montée traditionnelle des troupeaux vers les alpages.",
+        created_at: Date(),
+        categories: [.artVivant],
+        region: .auvergneRhoneAlpes,
+        author: users.randomElement()!,
+        geoPoint: CLLocationCoordinate2D(latitude: 45.1056, longitude: 5.8778),
+        likeCount: 128
     ),
-
-    Publication(
-        image:  "https://picsum.photos/seed/music1/800/600",
-        title: "Concert en plein air",
-        description: try! AttributedString(markdown: "Une soirée mémorable sous les étoiles avec un groupe indépendant."),
-        created_at: .now.addingTimeInterval(-3600 * 24),
-        activity: .musique,
-        region: "Île-de-France",
-        author: users[1],
-        geoPoint: CLLocationCoordinate2D(latitude: 48.8566, longitude: 2.3522),
-        likeCount: 284
+    Tradition(
+        image: URL(string: "https://picsum.photos/seed/aubusson/800/600")!,
+        uploadedImages: [],
+        title: "La tapisserie d’Aubusson",
+        description: "Un savoir-faire de tissage transmis dans la Creuse.",
+        created_at: Date(),
+        categories: [.artVisuel],
+        region: .nouvelleAquitaine,
+        author: users.randomElement()!,
+        geoPoint: CLLocationCoordinate2D(latitude: 45.9563, longitude: 2.1671),
+        likeCount: 214
     ),
-
-    Publication(
-        image: "https://picsum.photos/seed/festival1/800/600",
-        title: "Festival des Lumières",
-        description: try! AttributedString(markdown: "Des installations lumineuses spectaculaires dans toute la ville."),
-        created_at: .now.addingTimeInterval(-3600 * 48),
-        activity: .festival,
-        region: "Auvergne-Rhône-Alpes",
-        author: users[0],
-        geoPoint: CLLocationCoordinate2D(latitude: 45.7640, longitude: 4.8357),
-        likeCount: 431
+    Tradition(
+        image: URL(string: "https://picsum.photos/seed/limoges/800/600")!,
+        uploadedImages: [],
+        title: "La porcelaine de Limoges",
+        description: "L’artisanat traditionnel de la porcelaine fine.",
+        created_at: Date(),
+        categories: [.artVisuel],
+        region: .nouvelleAquitaine,
+        author: users.randomElement()!,
+        geoPoint: CLLocationCoordinate2D(latitude: 45.8336, longitude: 1.2611),
+        likeCount: 176
     ),
-
-    Publication(
-        image: "https://picsum.photos/seed/art1/800/600",
-        title: "Théâtre de rue",
-        description: try! AttributedString(markdown: "Des artistes investissent les places publiques avec des performances originales."),
-        created_at: .now.addingTimeInterval(-3600 * 72),
-        activity: .artVivant,
-        region: "Occitanie",
-        author: users[0],
-        geoPoint: CLLocationCoordinate2D(latitude: 43.6047, longitude: 1.4442),
-        likeCount: 192
-    ),
-
-    Publication(
-        image: "https://picsum.photos/seed/art2/800/600",
-        title: "Exposition contemporaine",
-        description: try! AttributedString(markdown: "Une collection d'œuvres mêlant **numérique** et peinture traditionnelle."),
-        created_at: .now.addingTimeInterval(-3600 * 96),
-        activity: .artVisuel,
-        region: "Nouvelle-Aquitaine",
-        author: users[1],
-        geoPoint: CLLocationCoordinate2D(latitude: 44.8378, longitude: -0.5792),
-        likeCount: 87
-    ),
-
-    Publication(
-        image: "https://picsum.photos/seed/history1/800/600",
-        title: "Village médiéval",
-        description: try! AttributedString(markdown: "Reconstitution historique avec costumes, artisans et démonstrations."),
-        created_at: .now.addingTimeInterval(-3600 * 120),
-        activity: .reconstitution,
-        region: "Normandie",
-        author: users[2],
-        geoPoint: CLLocationCoordinate2D(latitude: 49.1829, longitude: -0.3707),
-        likeCount: 315
-    ),
-
-    Publication(
-        image: "https://picsum.photos/seed/music2/800/600",
-        title: "Jam Session",
-        description: try! AttributedString(markdown: "Des musiciens locaux improvisent ensemble dans une ambiance conviviale."),
-        created_at: .now.addingTimeInterval(-3600 * 18),
-        activity: .musique,
-        region: "Provence-Alpes-Côte d'Azur",
-        author: users[1],
-        geoPoint: CLLocationCoordinate2D(latitude: 43.2965, longitude: 5.3698),
+    Tradition(
+        image: URL(string: "https://picsum.photos/seed/alencon/800/600")!,
+        uploadedImages: [],
+        title: "Le point d’Alençon",
+        description: "Une dentelle à l’aiguille d’exception.",
+        created_at: Date(),
+        categories: [.artVisuel],
+        region: .normandie,
+        author: users.randomElement()!,
+        geoPoint: CLLocationCoordinate2D(latitude: 48.4321, longitude: 0.0931),
         likeCount: 153
     ),
-
-    Publication(
-        image: "https://picsum.photos/seed/gastro2/800/600",
-        title: "Atelier pâtisserie",
-        description: try! AttributedString(markdown: "Apprentissage des desserts traditionnels avec un chef local."),
-        created_at: .now.addingTimeInterval(-3600 * 30),
-        activity: .gastronomie,
-        region: "Grand Est",
-        author: users[2],
-        geoPoint: CLLocationCoordinate2D(latitude: 48.5734, longitude: 7.7521),
-        likeCount: 209
+    Tradition(
+        image: URL(string: "https://picsum.photos/seed/grasse/800/600")!,
+        uploadedImages: [],
+        title: "Les parfums de Grasse",
+        description: "La création de parfums et la culture des plantes à parfum.",
+        created_at: Date(),
+        categories: [.artVisuel],
+        region: .provenceAlpesCoteDAzur,
+        author: users.randomElement()!,
+        geoPoint: CLLocationCoordinate2D(latitude: 43.6583, longitude: 6.9238),
+        likeCount: 195
+    ),
+    Event(
+        image: URL(string: "https://picsum.photos/seed/menton/800/600")!,
+        uploadedImages: [],
+        title: "Fête du Citron de Menton",
+        description: "Sculptures d’agrumes et corsos fleuris à Menton.",
+        created_at: Date(),
+        categories: [.festival],
+        region: .provenceAlpesCoteDAzur,
+        author: users.randomElement()!,
+        geoPoint: CLLocationCoordinate2D(latitude: 43.7745, longitude: 7.4975),
+        likeCount: 342,
+        startDate: Date(),
+        endDate: Date()
+    ),
+    Event(
+        image: URL(string: "https://picsum.photos/seed/nice/800/600")!,
+        uploadedImages: [],
+        title: "Carnaval de Nice",
+        description: "Défilés de chars et batailles de fleurs.",
+        created_at: Date(),
+        categories: [.festival, .artVivant],
+        region: .provenceAlpesCoteDAzur,
+        author: users.randomElement()!,
+        geoPoint: CLLocationCoordinate2D(latitude: 43.6954, longitude: 7.2650),
+        likeCount: 401,
+        startDate: Date(),
+        endDate: Date()
+    ),
+    Event(
+        image: URL(string: "https://picsum.photos/seed/bayonne/800/600")!,
+        uploadedImages: [],
+        title: "Fêtes de Bayonne",
+        description: "Musique, défilés et traditions basques.",
+        created_at: Date(),
+        categories: [.festival, .musique],
+        region: .nouvelleAquitaine,
+        author: users.randomElement()!,
+        geoPoint: CLLocationCoordinate2D(latitude: 43.4929, longitude: -1.4748),
+        likeCount: 489,
+        startDate: Date(),
+        endDate: Date()
+    ),
+    Event(
+        image: URL(string: "https://picsum.photos/seed/lorient/800/600")!,
+        uploadedImages: [],
+        title: "Festival Interceltique de Lorient",
+        description: "Musique et danses des cultures celtes.",
+        created_at: Date(),
+        categories: [.musique, .festival],
+        region: .bretagne,
+        author: users.randomElement()!,
+        geoPoint: CLLocationCoordinate2D(latitude: 47.7456, longitude: -3.3668),
+        likeCount: 376,
+        startDate: Date(),
+        endDate: Date()
+    ),
+    Event(
+        image: URL(string: "https://picsum.photos/seed/charrues/800/600")!,
+        uploadedImages: [],
+        title: "Festival des Vieilles Charrues",
+        description: "Un grand festival de musique à Carhaix.",
+        created_at: Date(),
+        categories: [.musique, .festival],
+        region: .bretagne,
+        author: users.randomElement()!,
+        geoPoint: CLLocationCoordinate2D(latitude: 48.2756, longitude: -3.5732),
+        likeCount: 521,
+        startDate: Date(),
+        endDate: Date()
     )
 ]

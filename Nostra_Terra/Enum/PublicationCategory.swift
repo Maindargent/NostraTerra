@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-enum PublicationType: String, CaseIterable, Identifiable {
+enum PublicationCategory: String, CaseIterable, Identifiable {
     var id: Self { self }
 
     case gastronomie = "Gastronomie"

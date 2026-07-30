@@ -15,9 +15,6 @@ enum TypeForm: String, CaseIterable {
 }
 
 struct PublicationAddFormView: View {
-    
-    
-    
 //    Type
     @State var typeForm: TypeForm = .tradition
 //    Titre
@@ -31,7 +28,7 @@ struct PublicationAddFormView: View {
 //    Description
     @State var description: String = ""
 //    Type
-    @State var selectedCategories = Set<PublicationType>()
+    @State var selectedCategories = Set<PublicationCategory>()
 //    Région
     @State var region: String = ""
 //    Coordonnées

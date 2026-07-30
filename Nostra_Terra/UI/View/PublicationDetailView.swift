@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct PublicationDetailView: View {
-    let publication: Publication
-    let colorType: PublicationType = .artVisuel
+    let publication: (any Publication)
+    let onClose: () -> Void
     
     var body: some View {
         ScrollView{
             ZStack(alignment: .leading){
-                AsyncImage(url: URL(string: publication.image)) { image in
+                AsyncImage(url: publication.image) { image in
                     image
                         .resizable()
                         .scaledToFill()
@@ -45,20 +45,14 @@ struct PublicationDetailView: View {
             
             ScrollView(.horizontal) {
                 HStack{
-                    Text(publication.region)
+                    Text(publication.region.rawValue)
                         .foregroundStyle(.whiteIvoryMist)
                         .padding(5)
-                        .glassEffect(.clear.tint(publication.activity.color))
-                    Text(publication.activity.rawValue)
+                        .glassEffect(.clear.tint(publication.categories[0].color))
+                    Text(publication.categories[0].rawValue)
                         .foregroundStyle(.whiteIvoryMist)
                         .padding(5)
-//                        .background(colorType.color)
-//                        .clipShape(Capsule())
-                        .glassEffect(.clear.tint(publication.activity.color))
-//                        .overlay(
-//                                RoundedRectangle(cornerRadius: 20)
-//                                .stroke(Color.whiteIvoryMist, lineWidth: 2)
-//                        )
+                        .glassEffect(.clear.tint(publication.categories[0].color))
                 }
             }
             Text(publication.description)
@@ -80,5 +74,5 @@ struct PublicationDetailView: View {
 }
 
 #Preview {
-    PublicationDetailView(publication: publications[0])
+    PublicationDetailView(publication: publications[0], onClose: {})
 }
