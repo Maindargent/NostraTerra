@@ -8,8 +8,16 @@
 import SwiftUI
 
 struct ProfileView: View {
+    
     var body: some View {
-        Text("Shona's view")
+        ZStack{
+            
+            Image("backgroundPicture")
+                .resizable()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
+            
+        }
     }
 }
 
