@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-struct PublicationRow: View {
+struct PublicationItem: View {
     
     let publication: Publication
+    @Binding var showListSuggestion: Bool
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -43,7 +44,7 @@ struct PublicationRow: View {
             .padding(.bottom, 100)
                 
                 Button{
-                    
+                    showListSuggestion = true
                 } label : {
                     Text("Je découvre")
                 }
@@ -58,5 +59,5 @@ struct PublicationRow: View {
 }
 
 #Preview {
-    PublicationRow(publication: publications[0])
+    PublicationItem(publication: publications[0], showListSuggestion: .constant(true))
 }

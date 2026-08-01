@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-struct SuggestionRow: View {
+struct SuggestionItem: View {
     
     let publication: Publication
+    @Binding var showDetail: Bool
     
     var body: some View {
         
@@ -63,7 +64,7 @@ struct SuggestionRow: View {
                     Spacer()
                     
                     Button{
-                        
+                        showDetail = true
                     } label : {
                         Image(systemName: "arrow.right")
                     }
@@ -92,5 +93,5 @@ struct SuggestionRow: View {
 }
 
 #Preview {
-    SuggestionRow(publication: publications[0])
+    SuggestionItem(publication: publications[0], showDetail: .constant(true))
 }

@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct SearchRow: View {
+struct SearchItem: View {
     var body: some View {
         Text("Shona's view")
     }
 }
 
 #Preview {
-    SearchRow()
+    SearchItem()
 }
