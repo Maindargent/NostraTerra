@@ -28,25 +28,28 @@ struct SuggestionsView: View {
                 
                 
                 VStack(alignment: .leading){
-                    HStack{
-                        AsyncImage(url: user.profilPicture) { image in
-                            image.resizable()
-                        } placeholder: {
-                            Image(systemName: "person.slash.fill")
-                                .font(.largeTitle)
-                                .foregroundStyle(.blueDeepSpace)
+                    HStack(alignment: .center, spacing: 16){
+                        NavigationLink{
+                            ProfileView()
+                        }label: {
+                            AsyncImage(url: user.profilPicture) { image in
+                                image.resizable()
+                            } placeholder: {
+                                Image(systemName: "person.slash.fill")
+                                    .font(.largeTitle)
+                                    .foregroundStyle(.blueDeepSpace)
+                            }
+                            .frame(width: 51, height: 51)
+                            .clipShape(Circle())
+                            .shadow(color: .whiteIvoryMist, radius: 3)
                         }
-                        .frame(width: 51, height: 51)
-                        .clipShape(Circle())
-                        .shadow(color: .whiteIvoryMist, radius: 3)
-                        .padding(.trailing)
-                        .padding(.bottom, 20)
                         
                         Text("Bonjour \(user.firstName) !")
                             .font(.title)
                             .bold()
                             .foregroundStyle(.whiteIvoryMist)
                     }
+                    .padding(.bottom, 20)
                     
                     Text("Suggestions")
                         .font(.largeTitle)
