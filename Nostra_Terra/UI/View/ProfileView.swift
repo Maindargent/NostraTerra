@@ -9,6 +9,13 @@ import SwiftUI
 
 struct ProfileView: View {
     
+    let user: User
+    let publications: Publication
+    
+    var age: DateComponents {
+        Calendar.current.dateComponents([.year, .month, .day], from: user.birthDate, to: .now)
+    }
+    
     var body: some View {
         ZStack{
             
@@ -17,10 +24,106 @@ struct ProfileView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea()
             
+            VStack(alignment: .trailing){
+                
+                Button{
+                    //ProfileEditView()
+                }label: {
+                    Image(systemName: "gearshape")
+                        .foregroundStyle(.whiteIvoryMist)
+                        .font(.title)
+                        .bold()
+                }
+                .padding(.trailing, 20)
+                
+                VStack(alignment: .leading){
+                    
+                    Text("Profil")
+                        .foregroundStyle(.whiteIvoryMist)
+                        .font(.system(size: 32))
+                        .bold()
+                        .padding(.leading, 20)
+                    
+                    ZStack{
+                        
+                        Divider()
+                            .overlay(.whiteIvoryMist)
+                        
+                        HStack(spacing: 20) {
+                            
+                            AsyncImage(url: user.profilPicture) { image in
+                                image.resizable()
+                            } placeholder: {
+                                Image(systemName: "photo")
+                            }
+                            .frame(width: 115, height: 115)
+                            .clipShape(Circle())
+                            .overlay {
+                                Circle()
+                                    .stroke(.whiteIvoryMist, lineWidth: 2)
+                            }
+                            .foregroundStyle(.whiteIvoryMist)
+                            
+                            Text("\(user.lastName) \(user.firstName)")
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(.blueDeepSpace)
+                                }
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(.whiteIvoryMist, lineWidth: 2)
+                                }
+                                .foregroundStyle(.whiteIvoryMist)
+                            
+                            Text("\(age.year ?? 0) ans")
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(.blueDeepSpace)
+                                }
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(.whiteIvoryMist, lineWidth: 2)
+                                }
+                                .foregroundStyle(.whiteIvoryMist)
+                        }
+                    }
+                    .padding(.bottom, 20)
+                    
+                    VStack{
+                        Text(user.description)
+                            .foregroundStyle(.whiteIvoryMist)
+                            .multilineTextAlignment(.leading)
+                            .padding(.all, 20)
+                            .glassEffect(in: .rect(cornerRadius: 20))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, 20)
+                    
+                    
+                    Text("Mes publications")
+                        .foregroundStyle(.whiteIvoryMist)
+                        .font(.system(size: 16))
+                        .bold()
+                        .padding(.leading, 20)
+                        .padding(.bottom, 20)
+                    
+                    Text("Mes coups de coeurs")
+                        .foregroundStyle(.whiteIvoryMist)
+                        .font(.system(size: 16))
+                        .bold()
+                        .padding(.leading, 20)
+                        .padding(.bottom, 20)
+                }
+                Spacer()
+            }
         }
     }
 }
 
 #Preview {
-    ProfileView()
+    ProfileView(user: users[0], publications: publications[0])
 }
