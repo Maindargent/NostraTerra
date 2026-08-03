@@ -30,7 +30,7 @@ struct SuggestionsView: View {
                 VStack(alignment: .leading){
                     HStack(alignment: .center, spacing: 16){
                         NavigationLink{
-                            ProfileView()
+                            ProfileView(user: user, publication: publications[0])
                         }label: {
                             AsyncImage(url: user.profilPicture) { image in
                                 image.resizable()
@@ -152,7 +152,7 @@ struct SuggestionsView: View {
                     ScrollView(.horizontal){
                         HStack(alignment: .bottom){
                             ForEach(publication) { publication in
-                                PublicationItem(publication: publication, showListSuggestion: $showListSuggestion)
+                                PublicationRegionItem(publication: publication, showListSuggestion: $showListSuggestion)
                             }
                             .navigationDestination(isPresented: $showListSuggestion) {
                                 ListSuggestionView()

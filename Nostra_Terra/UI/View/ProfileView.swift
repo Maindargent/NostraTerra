@@ -10,7 +10,8 @@ import SwiftUI
 struct ProfileView: View {
     
     let user: User
-    let publications: Publication
+    let publication: Publication
+    @State private var showDetail = false
     
     var age: DateComponents {
         Calendar.current.dateComponents([.year, .month, .day], from: user.birthDate, to: .now)
@@ -65,7 +66,7 @@ struct ProfileView: View {
                             .foregroundStyle(.whiteIvoryMist)
                             
                             Text("\(user.lastName) \(user.firstName)")
-                                .padding(.horizontal, 8)
+                                .padding(.horizontal, 9)
                                 .padding(.vertical, 3)
                                 .background {
                                     RoundedRectangle(cornerRadius: 12)
@@ -78,7 +79,7 @@ struct ProfileView: View {
                                 .foregroundStyle(.whiteIvoryMist)
                             
                             Text("\(age.year ?? 0) ans")
-                                .padding(.horizontal, 8)
+                                .padding(.horizontal, 9)
                                 .padding(.vertical, 3)
                                 .background {
                                     RoundedRectangle(cornerRadius: 12)
@@ -109,14 +110,40 @@ struct ProfileView: View {
                         .font(.system(size: 16))
                         .bold()
                         .padding(.leading, 20)
-                        .padding(.bottom, 20)
+                        .padding(.top, 20)
+                    
+                    ScrollView(.horizontal){
+                        HStack(alignment: .bottom){
+                            ForEach(publications) { publication in
+                                PublicationItem(publication: publication, showDetail: $showDetail)
+                            }
+                            .navigationDestination(isPresented: $showDetail) {
+                                ListSuggestionView()
+                            }
+                            
+                        }
+                    }
+                    .padding(.horizontal)
                     
                     Text("Mes coups de coeurs")
                         .foregroundStyle(.whiteIvoryMist)
                         .font(.system(size: 16))
                         .bold()
                         .padding(.leading, 20)
-                        .padding(.bottom, 20)
+                        .padding(.top, 20)
+                    
+                    ScrollView(.horizontal){
+                        HStack(alignment: .bottom){
+                            ForEach(publications) { publication in
+                                PublicationItem(publication: publication, showDetail: $showDetail)
+                            }
+                            .navigationDestination(isPresented: $showDetail) {
+                                ListSuggestionView()
+                            }
+                            
+                        }
+                    }
+                    .padding(.horizontal)
                 }
                 Spacer()
             }
@@ -125,5 +152,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(user: users[0], publications: publications[0])
+    ProfileView(user: users[0], publication: publications[0])
 }

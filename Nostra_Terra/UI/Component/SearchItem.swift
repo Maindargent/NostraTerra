@@ -1,5 +1,5 @@
 //
-//  SearchRow.swift
+//  SearchItem.swift
 //  Nostra_Terra
 //
 //  Created by ShoSho on 23/07/2026.
