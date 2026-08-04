@@ -10,7 +10,7 @@ import SwiftUI
 struct PublicationRegionItem: View {
     
     let publication: Publication
-    @Binding var showListSuggestion: Bool
+    @Binding var path: [SuggestionScreen]
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -44,7 +44,7 @@ struct PublicationRegionItem: View {
             .padding(.bottom, 100)
                 
                 Button{
-                    showListSuggestion = true
+                    path.append(.listSuggestion)
                 } label : {
                     Text("Je découvre")
                 }
@@ -59,5 +59,5 @@ struct PublicationRegionItem: View {
 }
 
 #Preview {
-    PublicationRegionItem(publication: publications[0], showListSuggestion: .constant(true))
+    PublicationRegionItem(publication: publications[0], path: .constant([]))
 }

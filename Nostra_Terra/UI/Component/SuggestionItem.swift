@@ -10,7 +10,7 @@ import SwiftUI
 struct SuggestionItem: View {
     
     let publication: Publication
-    @Binding var showDetail: Bool
+    @Binding var path: [SuggestionScreen]
     
     var body: some View {
         
@@ -64,7 +64,7 @@ struct SuggestionItem: View {
                     Spacer()
                     
                     Button{
-                        showDetail = true
+                        path.append(.publicationDetail)
                     } label : {
                         Image(systemName: "arrow.right")
                     }
@@ -93,5 +93,5 @@ struct SuggestionItem: View {
 }
 
 #Preview {
-    SuggestionItem(publication: publications[0], showDetail: .constant(true))
+    SuggestionItem(publication: publications[0], path: .constant([]))
 }

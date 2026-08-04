@@ -11,7 +11,6 @@ struct ProfileView: View {
     
     let user: User
     let publication: Publication
-    @State private var showDetail = false
     
     var age: DateComponents {
         Calendar.current.dateComponents([.year, .month, .day], from: user.birthDate, to: .now)
@@ -27,8 +26,8 @@ struct ProfileView: View {
             
             VStack(alignment: .trailing){
                 
-                Button{
-                    //ProfileEditView()
+                NavigationLink{
+                    ListSuggestionView()
                 }label: {
                     Image(systemName: "gearshape")
                         .foregroundStyle(.whiteIvoryMist)
@@ -115,10 +114,12 @@ struct ProfileView: View {
                     ScrollView(.horizontal){
                         HStack(alignment: .bottom){
                             ForEach(publications) { publication in
-                                PublicationItem(publication: publication, showDetail: $showDetail)
-                            }
-                            .navigationDestination(isPresented: $showDetail) {
-                                ListSuggestionView()
+                                NavigationLink {
+                                    ListSuggestionView()
+                                } label: {
+                                    PublicationItem(publication: publication)
+                                }
+                                
                             }
                             
                         }
@@ -135,10 +136,11 @@ struct ProfileView: View {
                     ScrollView(.horizontal){
                         HStack(alignment: .bottom){
                             ForEach(publications) { publication in
-                                PublicationItem(publication: publication, showDetail: $showDetail)
-                            }
-                            .navigationDestination(isPresented: $showDetail) {
-                                ListSuggestionView()
+                                NavigationLink {
+                                    ListSuggestionView()
+                                } label: {
+                                    PublicationItem(publication: publication)
+                                }
                             }
                             
                         }

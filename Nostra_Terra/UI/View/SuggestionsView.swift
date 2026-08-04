@@ -11,14 +11,13 @@ struct SuggestionsView: View {
     
     @State var x: [CGFloat] = [0,0,0,0,0]
     @State var degree: [Double] = [0,0,0,0,0]
-    @State private var showDetail = false
-    @State private var showListSuggestion = false
+    @State private var path: [SuggestionScreen] = []
     let user: User
     let publication: [Publication]
     var shufflePublications = publications.shuffled()
     
     var body: some View {
-        NavigationStack{
+        NavigationStack(path: $path){
             ZStack{
                 
                 Image("backgroundPicture")
@@ -29,8 +28,8 @@ struct SuggestionsView: View {
                 
                 VStack(alignment: .leading){
                     HStack(alignment: .center, spacing: 16){
-                        NavigationLink{
-                            ProfileView(user: user, publication: publications[0])
+                        Button{
+                            path.append(SuggestionScreen.profile)
                         }label: {
                             AsyncImage(url: user.profilPicture) { image in
                                 image.resizable()
@@ -84,7 +83,7 @@ struct SuggestionsView: View {
                         ZStack{
                             ForEach(0..<5, id: \.self){i in
                                 
-                                SuggestionItem(publication: shufflePublications[i], showDetail: $showDetail)
+                                SuggestionItem(publication: shufflePublications[i], path: $path)
                                     .offset(x: self.x[i])
                                     .rotationEffect(.init(degrees: self.degree[i]))
                                     .gesture(DragGesture()
@@ -135,9 +134,6 @@ struct SuggestionsView: View {
                                                 
                                             }))
                             }
-                            .navigationDestination(isPresented: $showDetail) {
-                                PublicationDetailView()
-                            }
                         }
                     }
                     .padding()
@@ -152,10 +148,7 @@ struct SuggestionsView: View {
                     ScrollView(.horizontal){
                         HStack(alignment: .bottom){
                             ForEach(publication) { publication in
-                                PublicationRegionItem(publication: publication, showListSuggestion: $showListSuggestion)
-                            }
-                            .navigationDestination(isPresented: $showListSuggestion) {
-                                ListSuggestionView()
+                                PublicationRegionItem(publication: publication, path: $path)
                             }
                             
                         }
@@ -164,7 +157,20 @@ struct SuggestionsView: View {
                 }
                 .padding()
             }
+            .navigationDestination(for: SuggestionScreen.self) { screen in
+                switch screen {
+                case .profile:
+                    ProfileView(user: user, publication: publication[0])
+                    
+                case .listSuggestion:
+                    ListSuggestionView()
+                    
+                case .publicationDetail:
+                    PublicationDetailView()
+                }
+            }
         }
+        
     }
 }
 

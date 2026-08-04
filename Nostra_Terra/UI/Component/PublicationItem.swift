@@ -10,14 +10,9 @@ import SwiftUI
 struct PublicationItem: View {
     
     let publication: Publication
-    @Binding var showDetail: Bool
     
     var body: some View {
-        
-        Button{
-            showDetail = true
-        } label : {
-        
+
         ZStack(alignment: .bottom) {
             AsyncImage(url: URL(string: publication.image)) { image in
                 image.resizable()
@@ -55,23 +50,11 @@ struct PublicationItem: View {
                 .foregroundStyle(.whiteIvoryMist)
                 .padding(.trailing, 10)
                 .padding(.bottom, 10)
-                
-//                Button{
-//                    showDetail = true
-//                } label : {
-//                    Text("Je découvre")
-//                }
-//                .foregroundStyle(.white)
-//                .font(.system(size: 14))
-//                .padding(10)
-//                .glassEffect(.regular.tint(.yellowTuscanSun.opacity(0.7)).interactive())
-//                .padding(.trailing,40)
-//                .padding(.bottom,10)
-        }
+
         }
     }
 }
 
 #Preview {
-    PublicationItem(publication: publications[0], showDetail: .constant(true))
+    PublicationItem(publication: publications[0])
 }
