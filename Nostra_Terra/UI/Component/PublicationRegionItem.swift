@@ -14,7 +14,7 @@ struct PublicationRegionItem: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            AsyncImage(url: URL(string: publication.image)) { image in
+            AsyncImage(url: publication.image) { image in
                 image.resizable()
             } placeholder: {
                 Image(systemName: "photo")
@@ -36,7 +36,7 @@ struct PublicationRegionItem: View {
                     .font(.system(size: 16))
                     .foregroundStyle(.whiteIvoryMist)
                 
-                Text(publication.region)
+                Text(publication.region.rawValue)
                     .foregroundStyle(.whiteIvoryMist)
                     .font(.system(size: 12))
                 

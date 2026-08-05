@@ -113,7 +113,7 @@ struct ProfileView: View {
                     
                     ScrollView(.horizontal){
                         HStack(alignment: .bottom){
-                            ForEach(publications) { publication in
+                            ForEach(publications, id: \.id) { publication in
                                 NavigationLink {
                                     ListSuggestionView()
                                 } label: {
@@ -135,7 +135,7 @@ struct ProfileView: View {
                     
                     ScrollView(.horizontal){
                         HStack(alignment: .bottom){
-                            ForEach(publications) { publication in
+                            ForEach(publications, id: \.id) { publication in
                                 NavigationLink {
                                     ListSuggestionView()
                                 } label: {

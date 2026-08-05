@@ -12,8 +12,9 @@ struct SuggestionsView: View {
     @State var x: [CGFloat] = [0,0,0,0,0]
     @State var degree: [Double] = [0,0,0,0,0]
     @State private var path: [SuggestionScreen] = []
-    let user: User
-    let publication: [Publication]
+    let user: User = User(lastName: "Doe", firstName: "John", birthDate: .now, description: "je suis une description", profilPicture: URL(string: "https://google.fr")!)
+    
+    
     var shufflePublications = publications.shuffled()
     
     var body: some View {
@@ -147,7 +148,7 @@ struct SuggestionsView: View {
                     
                     ScrollView(.horizontal){
                         HStack(alignment: .bottom){
-                            ForEach(publication) { publication in
+                            ForEach(publications, id: \.id) { publication in
                                 PublicationRegionItem(publication: publication, path: $path)
                             }
                             
@@ -159,14 +160,15 @@ struct SuggestionsView: View {
             }
             .navigationDestination(for: SuggestionScreen.self) { screen in
                 switch screen {
-                case .profile:
-                    ProfileView(user: user, publication: publication[0])
-                    
-                case .listSuggestion:
-                    ListSuggestionView()
-                    
-                case .publicationDetail:
-                    PublicationDetailView()
+                    case .profile:
+                        ProfileView(user: user, publication: publications[0])
+                        
+                    case .listSuggestion:
+                        ListSuggestionView()
+                        
+                    case .publicationDetail:
+                        Text("coucou")
+                        //                    PublicationDetailView(event: )
                 }
             }
         }
@@ -175,5 +177,5 @@ struct SuggestionsView: View {
 }
 
 #Preview {
-    SuggestionsView(user: users[0], publication: publications)
+    SuggestionsView()
 }

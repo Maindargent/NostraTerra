@@ -15,7 +15,7 @@ enum AppTab: String, CaseIterable {
 }
 
 struct RootView: View {
-    @State var selectedTab: AppTab = .addForm
+    @State var selectedTab: AppTab = .landing
     
     var body: some View {
         TabView(selection: $selectedTab) {

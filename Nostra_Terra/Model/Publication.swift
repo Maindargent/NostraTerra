@@ -23,7 +23,7 @@ protocol Publication: Identifiable {
     var likeCount: Int { get set }
 }
 
-struct Tradition: Publication {
+struct Tradition: Publication, Identifiable {
     var id = UUID()
     var image: URL
     var uploadedImages: [ImageResource]
@@ -45,7 +45,7 @@ struct Tradition: Publication {
     }
 }
 
-struct Event: Publication {
+struct Event: Publication, Identifiable {
     var id = UUID()
     var image: URL
     var uploadedImages: [ImageResource]
