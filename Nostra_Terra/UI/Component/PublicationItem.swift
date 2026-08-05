@@ -36,12 +36,8 @@ struct PublicationItem: View {
                     .bold()
                     .font(.system(size: 16))
                 
-<<<<<<< HEAD
                 Text(publication.region.rawValue)
                     .foregroundStyle(.whiteIvoryMist)
-=======
-                Text(publication.region)
->>>>>>> 3cb40cf (.)
                     .font(.system(size: 12))
                 
             }
@@ -50,7 +46,6 @@ struct PublicationItem: View {
             .padding(.bottom, 100)
             .padding(.leading, 5)
             
-<<<<<<< HEAD
 //            Text(publication.activity.rawValue)
 //                .padding(.horizontal, 9)
 //                .padding(.vertical, 3)
@@ -58,15 +53,7 @@ struct PublicationItem: View {
 //                .foregroundStyle(.whiteIvoryMist)
 //                .padding(.trailing, 10)
 //                .padding(.bottom, 10)
-=======
-            Text(publication.activity.rawValue)
-                .padding(.horizontal, 9)
-                .padding(.vertical, 3)
-                .glassEffect(.regular.tint(.yellowTuscanSun.opacity(0.7)).interactive())
-                .padding(.trailing, 10)
-                .padding(.bottom, 10)
-                .padding(.leading, 5)
->>>>>>> 3cb40cf (.)
+
 
         }
         .foregroundStyle(.whiteIvoryMist)
