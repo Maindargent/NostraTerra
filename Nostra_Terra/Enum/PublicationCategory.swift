@@ -9,6 +9,7 @@ import SwiftUI
 enum PublicationCategory: String, CaseIterable, Identifiable {
     var id: Self { self }
 
+    case tous = "Tous"
     case gastronomie = "Gastronomie"
     case musique = "Musique"
     case festival = "Festival"
@@ -18,6 +19,7 @@ enum PublicationCategory: String, CaseIterable, Identifiable {
     
     var color: Color {
         switch self {
+            case .tous: return Color.white
             case .gastronomie: return Color.yellow
             case .musique: return Color.red
             case .festival: return Color.orange

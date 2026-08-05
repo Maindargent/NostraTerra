@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct PublicationDetailView: View {
-    let publication: (any Publication)
-    let onClose: () -> Void
+    let event: Event
+    let colorType: PublicationType = .artVisuel
     
     var body: some View {
         ScrollView{
             ZStack(alignment: .leading){
-                AsyncImage(url: publication.image) { image in
+                AsyncImage(url: URL(string: event.image)) { image in
                     image
                         .resizable()
                         .scaledToFill()
@@ -35,27 +35,37 @@ struct PublicationDetailView: View {
                     )
                     .padding(.horizontal, 5)
                     .cornerRadius(20)
-                Text(publication.title)
+                Text(event.title)
                     .foregroundStyle(.whiteIvoryMist)
                     .bold()
                     .font(.title)
                     .padding(.horizontal)
                     .padding(.top, 200)
             }
+            Text(event.created_at, format: .dateTime.locale(Locale(identifier: "fr_FR")) )
+                .foregroundStyle(.whiteIvoryMist)
+            
+                
             
             ScrollView(.horizontal) {
                 HStack{
-                    Text(publication.region.rawValue)
+                    Text(event.region)
                         .foregroundStyle(.whiteIvoryMist)
                         .padding(5)
-                        .glassEffect(.clear.tint(publication.categories[0].color))
-                    Text(publication.categories[0].rawValue)
+                        .glassEffect(.clear.tint(event.activity.color))
+                    Text(event.activity.rawValue)
                         .foregroundStyle(.whiteIvoryMist)
                         .padding(5)
-                        .glassEffect(.clear.tint(publication.categories[0].color))
+//                        .background(colorType.color)
+//                        .clipShape(Capsule())
+                        .glassEffect(.clear.tint(event.activity.color))
+//                        .overlay(
+//                                RoundedRectangle(cornerRadius: 20)
+//                                .stroke(Color.whiteIvoryMist, lineWidth: 2)
+//                        )
                 }
             }
-            Text(publication.description)
+            Text(event.description)
                 .foregroundStyle(.whiteIvoryMist)
                 .padding()
             Rectangle()
@@ -74,5 +84,5 @@ struct PublicationDetailView: View {
 }
 
 #Preview {
-    PublicationDetailView(publication: publications[0], onClose: {})
+    PublicationDetailView(event: events[0])
 }
