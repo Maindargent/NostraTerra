@@ -17,6 +17,7 @@ struct ProfileEditView: View {
     
     @State private var avatarItem: PhotosPickerItem?
     @State private var avatarImage: Image?
+    
     let user: User
     
     var body: some View {
@@ -41,22 +42,42 @@ struct ProfileEditView: View {
                     .font(.title2)
                     .padding(.horizontal)
                 ZStack{
-                    HStack{
-                        AsyncImage(url: user.profilPicture) { image in
-                            image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width:100, height:100)
-                                .clipShape(Circle())
-                                .cornerRadius(20)
-                                .padding(.horizontal, 5)
-                                .overlay(
-                                    Circle()
-                                        .stroke(.whiteIvoryMist, lineWidth: 3)
-                                )
-                        } placeholder: {
-                            ProgressView()
+                    HStack {
+                        
+                        VStack {
+                            if let avatarImage {
+                                avatarImage
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width:100, height:100)
+                                    .clipShape(Circle())
+                                    .cornerRadius(20)
+                                    .padding(.horizontal, 5)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(.whiteIvoryMist, lineWidth: 3)
+                                    )
+                            } else {
+                                AsyncImage(url: user.profilPicture) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width:100, height:100)
+                                        .clipShape(Circle())
+                                        .cornerRadius(20)
+                                        .padding(.horizontal, 5)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(.whiteIvoryMist, lineWidth: 3)
+                                        )
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                            }
+                            
+                            PhotosPicker("Select avatar", selection: $avatarItem, matching: .images)
                         }
+                        
                         VStack{
                             HStack{
                                 TextField(text: $name) {
@@ -82,19 +103,6 @@ struct ProfileEditView: View {
                             }
                             .padding(.vertical, 8)
                             
-                            PhotosPicker("Select avatar", selection: $avatarItem, matching: .images)
-                            
-                            avatarImage?
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width:100, height:100)
-                                .clipShape(Circle())
-                                .cornerRadius(20)
-                                .padding(.horizontal, 5)
-                                .overlay(
-                                    Circle()
-                                        .stroke(.whiteIvoryMist, lineWidth: 3)
-                                )
                             
                             .onChange(of: avatarItem) {
                                 Task {
