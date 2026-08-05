@@ -90,32 +90,27 @@ struct MapView: View {
                 }
             },
             content: {
-                NavigationStack {
-                    PublicationDetailView(
-                        publication: selectedPublication!,
-                        onClose: {
+                PublicationDetailView(
+                    event: selectedPublication!
+                )
+                .toolbar(content: {
+                    ToolbarItem(placement: .bottomBar) {
+                        Button {
                             selectedPublicationID = nil
+                            showPublicationSheet.toggle()
+                        } label: {
+                            Image(systemName: "arrowshape.turn.up.backward")
+                                .foregroundStyle(.white)
                         }
-                    )
-                    .toolbar(content: {
-                        ToolbarItem(placement: .bottomBar) {
-                            Button {
-                                selectedPublicationID = nil
-                                showPublicationSheet.toggle()
-                            } label: {
-                                Image(systemName: "arrowshape.turn.up.backward")
-                                    .foregroundStyle(.white)
-                            }
-                            .padding()
-                            .buttonStyle(.glassProminent)
-                            .glassEffect(.clear, in: .circle)
-                        }
-                        .sharedBackgroundVisibility(.hidden)
-                    })
-                    .presentationDragIndicator(.visible)
-                    .presentationDetents([.fraction(0.8), .large])
-                    .presentationBackground(.clear)
-                }
+                        .padding()
+                        .buttonStyle(.glassProminent)
+                        .glassEffect(.clear, in: .circle)
+                    }
+                    .sharedBackgroundVisibility(.hidden)
+                })
+                .presentationDragIndicator(.visible)
+                .presentationDetents([.fraction(0.8), .large])
+                .presentationBackground(.clear)
             }
         )
     }

@@ -36,13 +36,13 @@ struct Tradition: Publication {
     var geoPoint: CLLocationCoordinate2D
     var likeCount: Int
     
-//    static func == (lhs: Tradition, rhs: Tradition) -> Bool {
-//        lhs.id == rhs.id
-//    }
-//
-//    func hash(into hasher: inout Hasher) {
-//        hasher.combine(id)
-//    }
+    static func == (lhs: Tradition, rhs: Tradition) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 
 struct Event: Publication {
@@ -60,14 +60,14 @@ struct Event: Publication {
     
     var startDate: Date
     var endDate: Date
-//    
-//    static func == (lhs: Event, rhs: Event) -> Bool {
-//        lhs.id == rhs.id
-//    }
-//    
-//    func hash(into hasher: inout Hasher) {
-//        hasher.combine(id)
-//    }
+    
+    static func == (lhs: Event, rhs: Event) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 
 
