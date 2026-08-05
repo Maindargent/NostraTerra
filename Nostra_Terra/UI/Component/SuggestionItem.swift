@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SuggestionItem: View {
     
-    let publication: Publication
+    let publication: (any Publication)
     @Binding var path: [SuggestionScreen]
     
     var body: some View {

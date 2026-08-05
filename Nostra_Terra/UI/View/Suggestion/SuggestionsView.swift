@@ -11,7 +11,9 @@ struct SuggestionsView: View {
     
     @State var x: [CGFloat] = [0,0,0,0,0]
     @State var degree: [Double] = [0,0,0,0,0]
+    
     @State private var path: [SuggestionScreen] = []
+    
     let user: User = User(lastName: "Doe", firstName: "John", birthDate: .now, description: "je suis une description", profilPicture: URL(string: "https://google.fr")!)
     
     
@@ -81,59 +83,42 @@ struct SuggestionsView: View {
                             }
                         }
                         
-                        ZStack{
-                            ForEach(0..<5, id: \.self){i in
-                                
+                        ZStack {
+                            ForEach(0..<5, id: \.self) {i in
                                 SuggestionItem(publication: shufflePublications[i], path: $path)
                                     .offset(x: self.x[i])
                                     .rotationEffect(.init(degrees: self.degree[i]))
-                                    .gesture(DragGesture()
-                                        .onChanged({ (value) in
-                                            
-                                            if value.translation.width > 0 {
-                                                
-                                                self.x[i] = value.translation.width
-                                                self.degree[i] = 7
-                                                
-                                            } else {
-                                                
-                                                self.x[i] = value.translation.width
-                                                self.degree[i] = -7
-                                                
-                                            }
-                                            
-                                        })
-                                            .onEnded({ (value) in
-                                                
+                                    .gesture(
+                                        DragGesture()
+                                            .onChanged({(value) in
                                                 if value.translation.width > 0 {
-                                                    
+                                                    self.x[i] = value.translation.width
+                                                    self.degree[i] = 7
+                                                } else {
+                                                    self.x[i] = value.translation.width
+                                                    self.degree[i] = -7
+                                                }
+                                            })
+                                            .onEnded({ (value) in
+                                                if value.translation.width > 0 {
                                                     if value.translation.width > 100 {
-                                                        
                                                         self.x[i] = 500
                                                         self.degree[i] = 12
-                                                        
                                                     } else {
-                                                        
                                                         self.x[i] = 0
                                                         self.degree[i] = 0
                                                     }
-                                                    
                                                 } else {
-                                                    
                                                     if value.translation.width < -100 {
-                                                        
                                                         self.x[i] = -500
                                                         self.degree[i] = -15
-                                                        
                                                     } else {
-                                                        
                                                         self.x[i] = 0
                                                         self.degree[i] = 0
                                                     }
-                                                    
                                                 }
-                                                
-                                            }))
+                                            })
+                                    )
                             }
                         }
                     }
@@ -167,8 +152,7 @@ struct SuggestionsView: View {
                         ListSuggestionView()
                         
                     case .publicationDetail:
-                        Text("coucou")
-                        //                    PublicationDetailView(event: )
+                        PublicationDetailView(publication: publications[0])
                 }
             }
         }

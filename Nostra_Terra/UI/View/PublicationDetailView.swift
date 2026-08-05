@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct PublicationDetailView: View {
-    let event: (any Publication)
+    let publication: (any Publication)
 //    let colorType: PublicationType = .artVisuel
     
     var body: some View {
         ScrollView{
             ZStack(alignment: .leading){
-                AsyncImage(url: event.image) { image in
+                AsyncImage(url: publication.image) { image in
                     image
                         .resizable()
                         .scaledToFill()
@@ -35,31 +35,31 @@ struct PublicationDetailView: View {
                     )
                     .padding(.horizontal, 5)
                     .cornerRadius(20)
-                Text(event.title)
+                Text(publication.title)
                     .foregroundStyle(.whiteIvoryMist)
                     .bold()
                     .font(.title)
                     .padding(.horizontal)
                     .padding(.top, 200)
             }
-            Text(event.created_at, format: .dateTime.locale(Locale(identifier: "fr_FR")) )
+            Text(publication.created_at, format: .dateTime.locale(Locale(identifier: "fr_FR")) )
                 .foregroundStyle(.whiteIvoryMist)
             
                 
             
             ScrollView(.horizontal) {
                 HStack{
-                    Text(event.region.rawValue)
+                    Text(publication.region.rawValue)
                         .foregroundStyle(.whiteIvoryMist)
                         .padding(5)
-                        .glassEffect(.clear.tint(event.region.color))
+                        .glassEffect(.clear.tint(publication.region.color))
 //                    Text(event.activity.rawValue)
 //                        .foregroundStyle(.whiteIvoryMist)
 //                        .padding(5)
 //                        .glassEffect(.clear.tint(event.activity.color))
                 }
             }
-            Text(event.description)
+            Text(publication.description)
                 .foregroundStyle(.whiteIvoryMist)
                 .padding()
             Rectangle()
@@ -78,5 +78,5 @@ struct PublicationDetailView: View {
 }
 
 #Preview {
-    PublicationDetailView(event: publications[0])
+    PublicationDetailView(publication: publications.randomElement()!)
 }
