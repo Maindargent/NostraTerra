@@ -86,6 +86,17 @@ struct PublicationDetailView: View {
                 Map(position: $cameraPosition, content: {
                     Marker(publication.title, coordinate: publication.geoPoint)
                 })
+                .onAppear {
+                    cameraPosition = .region(
+                        MKCoordinateRegion(
+                            center: publication.geoPoint,
+                            span: MKCoordinateSpan(
+                                latitudeDelta: 0.01,
+                                longitudeDelta: 0.01
+                            )
+                        )
+                    )
+                }
                 .frame(maxWidth: .infinity)
                 .cornerRadius(20)
                 .frame(height: 200)
