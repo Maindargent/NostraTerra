@@ -17,18 +17,20 @@ enum AppTab: String, CaseIterable {
 struct RootView: View {
     @State var selectedTab: AppTab = .landing
     
+    @State var publicationManager = PublicationViewModel()
+    
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Accueil", systemImage: "house", value: .landing) {
                 SuggestionsView()
             }
             Tab("Carte", systemImage: "map", value: .map) {
-              MapView()
+                MapView()
             }
             Tab("Ajouter", systemImage: "plus", value: .addForm) {
-              NavigationStack {
-                  PublicationAddFormView()
-              }
+                NavigationStack {
+                    PublicationAddFormView()
+                }
             }
             
             Tab("Recherche", systemImage: "magnifyingglass", value: .search ,role: .search) {
@@ -36,6 +38,7 @@ struct RootView: View {
             }
         }
         .tabBarMinimizeBehavior(.automatic)
+        .environment(publicationManager)
     }
 }
 

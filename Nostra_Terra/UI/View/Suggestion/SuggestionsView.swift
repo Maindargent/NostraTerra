@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SuggestionsView: View {
+    @Environment(PublicationViewModel.self) var publicationsManager
     
     @State var x: [CGFloat] = [0,0,0,0,0]
     @State var degree: [Double] = [0,0,0,0,0]
@@ -16,8 +17,6 @@ struct SuggestionsView: View {
     
     let user: User = User(lastName: "Doe", firstName: "John", birthDate: .now, description: "je suis une description", profilPicture: URL(string: "https://google.fr")!)
     
-    
-    var shufflePublications = publications.shuffled()
     
     var body: some View {
         NavigationStack(path: $path){
@@ -83,9 +82,11 @@ struct SuggestionsView: View {
                             }
                         }
                         
+                        
+                        
                         ZStack {
-                            ForEach(0..<5, id: \.self) {i in
-                                SuggestionItem(publication: shufflePublications[i], path: $path)
+                            ForEach(publicationsManager.getShuffledPublications(maxLength: 5).enumerated(), id: \.element.id) {i, publication in
+                                SuggestionItem(publication: publication, path: $path)
                                     .offset(x: self.x[i])
                                     .rotationEffect(.init(degrees: self.degree[i]))
                                     .gesture(
@@ -133,7 +134,7 @@ struct SuggestionsView: View {
                     
                     ScrollView(.horizontal){
                         HStack(alignment: .bottom){
-                            ForEach(publications, id: \.id) { publication in
+                            ForEach(publicationsManager.getPublications(), id: \.id) { publication in
                                 PublicationRegionItem(publication: publication, path: $path)
                             }
                             
@@ -146,13 +147,13 @@ struct SuggestionsView: View {
             .navigationDestination(for: SuggestionScreen.self) { screen in
                 switch screen {
                     case .profile:
-                        ProfileView(user: user, publication: publications[0])
+                        ProfileView(user: user)
                         
                     case .listSuggestion:
                         ListSuggestionView()
                         
                     case .publicationDetail:
-                        PublicationDetailView(publication: publications[0])
+                        PublicationDetailView(publication: publicationsManager.getRandomPublication())
                 }
             }
         }
@@ -161,5 +162,7 @@ struct SuggestionsView: View {
 }
 
 #Preview {
+    @Previewable @State var publicationManager = PublicationViewModel()
     SuggestionsView()
+        .environment(publicationManager)
 }

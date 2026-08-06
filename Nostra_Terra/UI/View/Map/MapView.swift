@@ -9,6 +9,7 @@ import MapKit
 
 
 struct MapView: View {
+    @Environment(PublicationViewModel.self) var publicationsManager
     
     @State var cameraPosition: MapCameraPosition = .automatic
     @State var userLocationOnAppear = CLLocationCoordinate2D(latitude: 1.0, longitude: 1.0)
@@ -19,7 +20,7 @@ struct MapView: View {
     var selectedPublication: (any Publication)? {
         guard let selectedPublicationID else {return nil}
         
-        return publications.first{$0.id == selectedPublicationID}
+        return publicationsManager.getPublication(id: selectedPublicationID)
     }
     
     let locationManager = CLLocationManager()
@@ -30,7 +31,7 @@ struct MapView: View {
             selection: $selectedPublicationID
         ) {
             UserAnnotation()
-            ForEach(publications, id: \.id) { publication in
+            ForEach(publicationsManager.getPublications(), id: \.id) { publication in
                 Annotation(publication.title, coordinate: publication.geoPoint, anchor: .bottom) {
                     AsyncImage(url: publication.image) { image in
                         image.resizable()
@@ -63,9 +64,8 @@ struct MapView: View {
         .onChange(of: selectedPublicationID) { _, publicationID in
             guard
                 let publicationID,
-                let publication = publications.first(where: { $0.id == publicationID })
+                let publication = publicationsManager.getPublication(id: publicationID)
             else {
-                print("oyu")
                 return
             }
             

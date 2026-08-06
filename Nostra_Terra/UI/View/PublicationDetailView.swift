@@ -9,22 +9,22 @@ import SwiftUI
 
 struct PublicationDetailView: View {
     let publication: (any Publication)
-//    let colorType: PublicationType = .artVisuel
+    //    let colorType: PublicationType = .artVisuel
     
     var body: some View {
-        ScrollView{
-            ZStack(alignment: .leading){
-                AsyncImage(url: publication.image) { image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(maxHeight: 275)
-                        .clipped()
-                        .cornerRadius(20)
-                        .padding(.horizontal, 5)
-                } placeholder: {
-                    ProgressView()
-                }
+        ZStack(alignment: .leading) {
+            AsyncImage(url: publication.image) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxHeight: 275)
+                    .clipped()
+                    .cornerRadius(20)
+            } placeholder: {
+                ProgressView()
+            }
+            .overlay(content: {
+                
                 Rectangle()
                     .fill(
                         LinearGradient(
@@ -33,41 +33,61 @@ struct PublicationDetailView: View {
                             endPoint: .top
                         )
                     )
-                    .padding(.horizontal, 5)
+                    .frame(maxHeight: 275)
+                    .clipped()
                     .cornerRadius(20)
-                Text(publication.title)
-                    .foregroundStyle(.whiteIvoryMist)
-                    .bold()
-                    .font(.title)
-                    .padding(.horizontal)
-                    .padding(.top, 200)
-            }
-            Text(publication.created_at, format: .dateTime.locale(Locale(identifier: "fr_FR")) )
-                .foregroundStyle(.whiteIvoryMist)
-            
+            })
+            .overlay(alignment: .bottomLeading) {
                 
+                VStack(alignment: .leading) {
+                    Text(publication.title)
+                        .foregroundStyle(.whiteIvoryMist)
+                        .bold()
+                        .font(.title)
+                    
+                    
+                    Text(publication.created_at, format: .dateTime.locale(Locale(identifier: "fr_FR")) )
+                        .foregroundStyle(.whiteIvoryMist)
+                }
+                .padding(.horizontal)
+            }
+            
+            
+        }.ignoresSafeArea()
+        
+        ScrollView {
+            
+            
+            
             
             ScrollView(.horizontal) {
-                HStack{
-                    Text(publication.region.rawValue)
+                HStack() {
+                    Text(publication.region.titre)
                         .foregroundStyle(.whiteIvoryMist)
                         .padding(5)
                         .glassEffect(.clear.tint(publication.region.color))
-//                    Text(event.activity.rawValue)
-//                        .foregroundStyle(.whiteIvoryMist)
-//                        .padding(5)
-//                        .glassEffect(.clear.tint(event.activity.color))
+                    
+                    ForEach(publication.categories) { categorie in
+                        Text(categorie.rawValue)
+                            .foregroundStyle(.whiteIvoryMist)
+                            .padding(5)
+                            .glassEffect(.clear.tint(categorie.color))
+                    }
+                    
                 }
             }
+            .contentMargins(8, for: .scrollContent)
+            
             Text(publication.description)
                 .foregroundStyle(.whiteIvoryMist)
-                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
             Rectangle()
                 .frame(maxWidth: .infinity)
                 .cornerRadius(20)
-                .padding(.horizontal)
                 .frame(height: 200)
         }
+        .padding()
         .background {
             Image(.backgroundPicture)
                 .resizable()
@@ -78,5 +98,7 @@ struct PublicationDetailView: View {
 }
 
 #Preview {
-    PublicationDetailView(publication: publications.randomElement()!)
+    @Previewable @State var publicationManager = PublicationViewModel()
+    
+    PublicationDetailView(publication: publicationManager.getRandomPublication())
 }

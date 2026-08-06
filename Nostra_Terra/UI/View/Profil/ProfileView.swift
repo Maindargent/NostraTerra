@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @Environment(PublicationViewModel.self) var publicationManager: PublicationViewModel
     
     let user: User
-    let publication: Publication
     
     var age: DateComponents {
         Calendar.current.dateComponents([.year, .month, .day], from: user.birthDate, to: .now)
@@ -113,7 +113,7 @@ struct ProfileView: View {
                     
                     ScrollView(.horizontal){
                         HStack(alignment: .bottom){
-                            ForEach(publications, id: \.id) { publication in
+                            ForEach(publicationManager.getPublications(), id: \.id) { publication in
                                 NavigationLink {
                                     ListSuggestionView()
                                 } label: {
@@ -135,7 +135,7 @@ struct ProfileView: View {
                     
                     ScrollView(.horizontal){
                         HStack(alignment: .bottom){
-                            ForEach(publications, id: \.id) { publication in
+                            ForEach(publicationManager.getPublications(), id: \.id) { publication in
                                 NavigationLink {
                                     ListSuggestionView()
                                 } label: {
@@ -154,5 +154,7 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(user: users[0], publication: publications[0])
+    @Previewable @State var publicationManager = PublicationViewModel()
+    
+    ProfileView(user: users[0])
 }

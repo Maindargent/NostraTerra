@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-let publications: [any Publication] = [
+let MOCKED_PUBLICATIONS: [any Publication] = [
     Tradition(
         image: URL(string: "https://picsum.photos/seed/fetes-saint-jean/800/600")!,
         uploadedImages: [],
