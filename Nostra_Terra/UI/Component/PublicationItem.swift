@@ -9,13 +9,12 @@ import SwiftUI
 
 struct PublicationItem: View {
     
-    let publication: (any Publication)
+    let publication: Publication
     
     var body: some View {
 
-        ZStack(alignment: .bottom) {
-            AsyncImage(url: publication.image) { image in
-
+        ZStack(alignment: .bottomLeading) {
+            AsyncImage(url: URL(string: publication.image)) { image in
                 image.resizable()
             } placeholder: {
                 Image(systemName: "photo")
@@ -36,8 +35,7 @@ struct PublicationItem: View {
                     .bold()
                     .font(.system(size: 16))
                 
-                Text(publication.region.rawValue)
-                    .foregroundStyle(.whiteIvoryMist)
+                Text(publication.region)
                     .font(.system(size: 12))
                 
             }
@@ -46,14 +44,13 @@ struct PublicationItem: View {
             .padding(.bottom, 100)
             .padding(.leading, 5)
             
-//            Text(publication.activity.rawValue)
-//                .padding(.horizontal, 9)
-//                .padding(.vertical, 3)
-//                .glassEffect(.regular.tint(.yellowTuscanSun.opacity(0.7)).interactive())
-//                .foregroundStyle(.whiteIvoryMist)
-//                .padding(.trailing, 10)
-//                .padding(.bottom, 10)
-
+            Text(publication.activity.rawValue)
+                .padding(.horizontal, 9)
+                .padding(.vertical, 3)
+                .glassEffect(.regular.tint(.yellowTuscanSun.opacity(0.7)).interactive())
+                .padding(.trailing, 10)
+                .padding(.bottom, 10)
+                .padding(.leading, 5)
 
         }
         .foregroundStyle(.whiteIvoryMist)
