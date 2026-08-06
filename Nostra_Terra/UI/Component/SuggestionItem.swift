@@ -93,5 +93,6 @@ struct SuggestionItem: View {
 }
 
 #Preview {
-    SuggestionItem(publication: publications[0], path: .constant([]))
+    @Previewable @State var publicationManager = PublicationViewModel()
+    SuggestionItem(publication: publicationManager.getRandomPublication(), path: .constant([]))
 }

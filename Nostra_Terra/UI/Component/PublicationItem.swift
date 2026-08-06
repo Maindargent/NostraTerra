@@ -56,5 +56,7 @@ struct PublicationItem: View {
 }
 
 #Preview {
-    PublicationItem(publication: publications[0])
+    @Previewable @State var publicationManager = PublicationViewModel()
+    
+    PublicationItem(publication: publicationManager.getRandomPublication())
 }
