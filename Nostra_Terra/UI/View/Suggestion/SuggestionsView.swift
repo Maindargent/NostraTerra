@@ -73,6 +73,7 @@ struct SuggestionsView: View {
                                 for i in 0..<self.degree.count{
                                     self.degree[i] = 0
                                 }
+                                publicationsManager.refreshSuggestionPublicationsShuffled()
                             }) {
                                 
                                 Image(systemName: "repeat.circle.fill")
@@ -85,7 +86,7 @@ struct SuggestionsView: View {
                         
                         
                         ZStack {
-                            ForEach(publicationsManager.getShuffledPublications(maxLength: 5).enumerated(), id: \.element.id) {i, publication in
+                            ForEach(publicationsManager.suggestionPublicationsShuffled, id: \.element.id) {i, publication in
                                 SuggestionItem(publication: publication, path: $path)
                                     .offset(x: self.x[i])
                                     .rotationEffect(.init(degrees: self.degree[i]))

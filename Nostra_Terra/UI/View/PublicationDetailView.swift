@@ -53,7 +53,8 @@ struct PublicationDetailView: View {
             }
             
             
-        }.ignoresSafeArea()
+        }
+        .ignoresSafeArea()
         
         ScrollView {
             
