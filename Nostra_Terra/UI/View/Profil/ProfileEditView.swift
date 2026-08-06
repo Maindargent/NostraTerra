@@ -111,7 +111,7 @@ struct ProfileEditView: View {
                     .padding(.horizontal, 8)
                 }
                 TextField(text: $texte, axis: .vertical) {
-                    Text("Waffles attack like a vicious monster but use lap as chair stare at ceiling tweeting a baseball. Pee on walls it smells like breakfast fooled again thinking the dog likes me for kitty power so find empty spot in cupboard and sleep all day so cat gets stuck in tree firefighters try to get cat down firefighters get stuck in tree cat eats")
+                    Text(user.description)
                         .foregroundStyle(.white.opacity(0.5))
                 }
                 .lineLimit(8...10)
