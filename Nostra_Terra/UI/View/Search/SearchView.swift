@@ -11,6 +11,7 @@ struct SearchView: View {
     
     @Environment(PublicationViewModel.self) var publicationsManager
     @State var searchResults: [any Publication] = []
+    @State var searchSuggestions: [any Publication] = []
     @State var searchQuery: String = ""
     
     var isSearching: Bool {
@@ -19,16 +20,36 @@ struct SearchView: View {
     
     var body: some View {
         NavigationStack {
-            List{
-                if isSearching {
-                    ForEach(searchResults, id: \.id) { result in
-                        Text(result.title)
+            ZStack{
+                Image("backgroundPicture")
+                    .resizable()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .ignoresSafeArea()
+                
+                VStack (alignment: .leading, spacing: 0){
+                    ForEach(searchSuggestions, id: \.id) { suggestion in
+                        Button{
+                            
+                        }label: {
+                            HStack{
+                                Image(systemName: "magnifyingglass")
+                                Text(suggestion.title)
+                            }
+                            .padding(.horizontal, 9)
+                            .padding(.vertical, 3)
+                        }
+                        Divider()
+                            .frame(width: 3)
+                            .overlay(.grayLines)
                     }
-                } else {
-//                    ForEach(publicationsManager.getPublications(), id: \.id) { publication in
-//                        Text(publication.title)
-//                    }
+                    
+                    ForEach(searchResults, id: \.id) { result in
+                        SearchItem(publication: result)
+                        //                        Text(result.title)
+                    }
                 }
+                .padding()
+                .frame(maxHeight: .infinity, alignment: .top)
             }
             .searchable(
                 text: $searchQuery,
@@ -38,9 +59,7 @@ struct SearchView: View {
             .textInputAutocapitalization(.never)
             .onChange(of: searchQuery) {
                 self.fetchSearchResults()
-            }
-            .onSubmit(of: .search) {
-                fetchSearchResults()//for: searchQuery)
+                self.fetchSearchSuggestions()
             }
             .overlay {
                 if isSearching && searchResults.isEmpty {
@@ -49,16 +68,30 @@ struct SearchView: View {
                         systemImage: "magnifyingglass",
                         description: Text("Vérifiez l'orthographe ou lancez une nouvelle recherche.")
                     )
+                    .foregroundStyle(.whiteIvoryMist)
                 }
             }
         }
     }
-    private func fetchSearchResults(){//for query: String) {
-        searchResults = publicationsManager.getPublications().filter { publication in
-            publication.title
-                .lowercased()
-                .contains(searchQuery)
-        }
+    private func fetchSearchResults(){
+        searchResults = Array(
+            publicationsManager.getPublications().filter { publication in
+                publication.title
+                    .lowercased()
+                    .contains(searchQuery)
+            }
+                .prefix(3)
+        )
+    }
+    
+    private func fetchSearchSuggestions(){
+        searchSuggestions = Array(
+            publicationsManager.getPublications()
+                .filter {
+                    $0.title.localizedCaseInsensitiveContains(searchQuery)
+                }
+                .prefix(3)
+        )
     }
 }
 
