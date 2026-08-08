@@ -9,12 +9,9 @@ import SwiftUI
 
 struct ProfileView: View {
     @Environment(PublicationViewModel.self) var publicationManager: PublicationViewModel
+    @State var profileViewModel = ProfileViewModel()
     
     let user: User
-    
-    var age: DateComponents {
-        Calendar.current.dateComponents([.year, .month, .day], from: user.birthDate, to: .now)
-    }
     
     var body: some View {
         ZStack{
@@ -77,7 +74,7 @@ struct ProfileView: View {
                                     }
                                     .foregroundStyle(.whiteIvoryMist)
                                 
-                                Text("\(age.year ?? 0) ans")
+                                Text("\(profileViewModel.age.year ?? 0) ans")
                                     .padding(.horizontal, 9)
                                     .padding(.vertical, 3)
                                     .background {
@@ -115,13 +112,13 @@ struct ProfileView: View {
                             HStack(alignment: .bottom){
                                 
                                 let userPublications = publicationManager.getPublications().filter{
-                                    $0.author.firstName == user.firstName && $0.author.lastName == user.lastName
+                                    $0.author.id == user.id
                                 }
                                     if userPublications.isEmpty{
                                         Text("Vous n'avez rien publié.")
                                             .foregroundStyle(.whiteIvoryMist)
                                     }else{
-                                        ForEach(publicationManager.getPublications(), id: \.id) { publication in
+                                        ForEach(userPublications, id: \.id) { publication in
                                         NavigationLink {
                                             PublicationDetailView(publication: publication)
                                         } label: {
