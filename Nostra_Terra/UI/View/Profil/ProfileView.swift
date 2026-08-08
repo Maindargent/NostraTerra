@@ -154,7 +154,10 @@ struct ProfileView: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager = PublicationViewModel()
+    @Previewable @State var publicationManager =
+           PublicationViewModel(
+               currentUser: users[0]
+           )
     
     ProfileView(user: users[0])
 }

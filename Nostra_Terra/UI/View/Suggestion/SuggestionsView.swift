@@ -15,7 +15,7 @@ struct SuggestionsView: View {
     
     @State private var path: [SuggestionScreen] = []
     
-    let user: User = User(lastName: "Doe", firstName: "John", birthDate: .now, description: "je suis une description", profilPicture: URL(string: "https://google.fr")!)
+  //  let user: User = User(lastName: "Doe", firstName: "John", birthDate: .now, description: "je suis une description", profilPicture: URL(string: "https://google.fr")!)
     
     
     var body: some View {
@@ -33,7 +33,7 @@ struct SuggestionsView: View {
                         Button{
                             path.append(SuggestionScreen.profile)
                         }label: {
-                            AsyncImage(url: user.profilPicture) { image in
+                            AsyncImage(url: publicationsManager.currentUser.profilPicture) { image in
                                 image.resizable()
                             } placeholder: {
                                 Image(systemName: "person.slash.fill")
@@ -45,7 +45,7 @@ struct SuggestionsView: View {
                             .shadow(color: .whiteIvoryMist, radius: 3)
                         }
                         
-                        Text("Bonjour \(user.firstName) !")
+                        Text("Bonjour \(publicationsManager.currentUser.firstName) !")
                             .font(.title)
                             .bold()
                             .foregroundStyle(.whiteIvoryMist)
@@ -147,13 +147,13 @@ struct SuggestionsView: View {
             .navigationDestination(for: SuggestionScreen.self) { screen in
                 switch screen {
                     case .profile:
-                        ProfileView(user: user)
+                        ProfileView(user: publicationsManager.currentUser)
                         
                     case .listSuggestion:
                         ListSuggestionView()
                         
                     case .publicationDetail:
-                        PublicationDetailView(publication: publicationsManager.getRandomPublication())
+                    PublicationDetailView(publicationID: publicationsManager.getRandomPublication().id)
                 }
             }
         }
@@ -162,7 +162,10 @@ struct SuggestionsView: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager = PublicationViewModel()
+    @Previewable @State var publicationManager =
+           PublicationViewModel(
+               currentUser: users[0]
+           )
     SuggestionsView()
         .environment(publicationManager)
 }

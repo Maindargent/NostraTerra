@@ -91,7 +91,7 @@ struct MapView: View {
             },
             content: {
                 PublicationDetailView(
-                    publication: selectedPublication!
+                    publicationID: selectedPublicationID!
                 )
                 .toolbar(content: {
                     ToolbarItem(placement: .bottomBar) {
