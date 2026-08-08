@@ -54,7 +54,7 @@ struct SuggestionItem: View {
                             Text("00/00/0000")
                                 .foregroundStyle(.whiteIvoryMist)
                             
-                            Text(publication.region.rawValue)
+                            Text(publication.region.titre)
                                 .foregroundStyle(.whiteIvoryMist)
                         }
                         .font(.system(size: 12))

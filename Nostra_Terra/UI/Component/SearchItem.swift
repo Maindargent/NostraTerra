@@ -28,10 +28,6 @@ struct SearchItem: View {
                     .scaledToFill()
                     .frame(width: 140, height: 100)
                     .clipShape(.rect(cornerRadius: 5))
-                    //                .overlay(
-                    //                    RoundedRectangle(cornerRadius: 5)
-                    //                        .stroke(.grayLines, lineWidth: 1)
-                    //                )
                     .padding(.top, 5)
                     
                     Text("Publié par : \(publication.author.firstName)")
@@ -43,29 +39,36 @@ struct SearchItem: View {
                 }
             }
             .frame(width: 150, height: 130)
-//            .padding(.horizontal, 10)
-                    
+            
             VStack(alignment: .leading){
                 Text(publication.title)
-                    .fontWeight(.bold)
+                    .font(.system(size: 24, weight: .bold))
+                    .lineLimit(1)
                 Text(publication.description)
                     .lineLimit(3)
+                    .font(.system(size: 14))
                 
-                HStack{
-                    Text(publication.region.titre)
-                        .padding(5)
-                        .glassEffect(.clear.tint(publication.region.color))
-                    
-                    ForEach(publication.categories) { categorie in
-                        Text(categorie.rawValue)
-                            .padding(5)
-                            .glassEffect(.clear.tint(categorie.color))
+                
+                
+                ScrollView(.horizontal){
+                    HStack{
+                        Text(publication.region.titre)
+                            .padding(.horizontal, 9)
+                            .padding(.vertical, 3)
+                            .glassEffect(.clear.tint(publication.region.color))
+                        
+                        ForEach(publication.categories) { categorie in
+                            Text(categorie.rawValue)
+                                .padding(.horizontal, 9)
+                                .padding(.vertical, 3)
+                                .glassEffect(.clear.tint(categorie.color))
+                        }
+                        .foregroundStyle(.whiteIvoryMist)
                     }
-                    
                 }
-                .foregroundStyle(.whiteIvoryMist)
                 .font(.system(size: 8))
             }
+            .foregroundStyle(.whiteIvoryMist)
         }
         .frame(maxWidth: .infinity, idealHeight: 130, alignment: .topLeading)
     }

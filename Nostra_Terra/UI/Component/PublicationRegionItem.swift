@@ -35,13 +35,29 @@ struct PublicationRegionItem: View {
                     .bold()
                     .font(.system(size: 16))
                     .foregroundStyle(.whiteIvoryMist)
+                    .lineLimit(1)
+                    .shadow(
+                            color: .black,
+                            radius: 2,
+                            x: 1,
+                            y: 1
+                        )
                 
-                Text(publication.region.rawValue)
+                Text(publication.region.titre)
                     .foregroundStyle(.whiteIvoryMist)
                     .font(.system(size: 12))
+                    .lineLimit(1)
+                    .shadow(
+                            color: .black,
+                            radius: 2,
+                            x: 1,
+                            y: 1
+                        )
                 
             }
-            .padding(.bottom, 100)
+            .padding(.horizontal, 9)
+            .padding(.vertical, 3)
+            .frame(width: 150, height: 150, alignment: .topLeading)
                 
                 Button{
                     path.append(.listSuggestion)

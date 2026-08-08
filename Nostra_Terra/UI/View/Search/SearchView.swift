@@ -27,26 +27,43 @@ struct SearchView: View {
                     .ignoresSafeArea()
                 
                 VStack (alignment: .leading, spacing: 0){
+                    
+                    if isSearching {
+                        Text("Suggestions :\n")
+                            .foregroundStyle(.whiteIvoryMist)
+                    }
+                    
                     ForEach(searchSuggestions, id: \.id) { suggestion in
-                        Button{
-                            
+                        NavigationLink{
+                            PublicationDetailView(publication: suggestion)
                         }label: {
                             HStack{
                                 Image(systemName: "magnifyingglass")
                                 Text(suggestion.title)
                             }
+                            .foregroundStyle(.grayLines)
                             .padding(.horizontal, 9)
                             .padding(.vertical, 3)
                         }
                         Divider()
                             .frame(width: 3)
                             .overlay(.grayLines)
+                            .padding(.bottom, 20)
+                    }
+                    
+                    if isSearching && !searchResults.isEmpty{
+                        Text("Résultats de recherches :\n")
+                            .foregroundStyle(.whiteIvoryMist)
                     }
                     
                     ForEach(searchResults, id: \.id) { result in
-                        SearchItem(publication: result)
-                        //                        Text(result.title)
+                        NavigationLink{
+                            PublicationDetailView(publication: result)
+                        }label: {
+                            SearchItem(publication: result)
+                        }
                     }
+                    .padding(.bottom, 20)
                 }
                 .padding()
                 .frame(maxHeight: .infinity, alignment: .top)
@@ -74,24 +91,32 @@ struct SearchView: View {
         }
     }
     private func fetchSearchResults(){
-        searchResults = Array(
-            publicationsManager.getPublications().filter { publication in
-                publication.title
-                    .lowercased()
-                    .contains(searchQuery)
-            }
-                .prefix(3)
-        )
+        if searchQuery.isEmpty{
+            searchResults = []
+        }else{
+            searchResults = Array(
+                publicationsManager.getPublications().filter { publication in
+                    publication.title
+                        .lowercased()
+                        .hasPrefix(searchQuery)
+                }
+                    .prefix(3)
+            )
+        }
     }
     
     private func fetchSearchSuggestions(){
-        searchSuggestions = Array(
-            publicationsManager.getPublications()
-                .filter {
-                    $0.title.localizedCaseInsensitiveContains(searchQuery)
-                }
-                .prefix(3)
-        )
+        if searchQuery.isEmpty{
+            searchSuggestions = []
+        }else{
+            searchSuggestions = Array(
+                publicationsManager.getPublications()
+                    .filter {
+                        $0.title.localizedCaseInsensitiveContains(searchQuery)
+                    }
+                    .prefix(3)
+            )
+        }
     }
 }
 
