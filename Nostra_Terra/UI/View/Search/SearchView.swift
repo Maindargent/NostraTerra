@@ -10,13 +10,7 @@ import SwiftUI
 struct SearchView: View {
     
     @Environment(PublicationViewModel.self) var publicationsManager
-    @State var searchResults: [any Publication] = []
-    @State var searchSuggestions: [any Publication] = []
-    @State var searchQuery: String = ""
-    
-    var isSearching: Bool {
-        return !searchQuery.isEmpty
-    }
+    @State var searchViewModel = SearchViewModel()
     
     var body: some View {
         NavigationStack {
@@ -28,12 +22,12 @@ struct SearchView: View {
                 
                 VStack (alignment: .leading, spacing: 0){
                     
-                    if isSearching {
+                    if searchViewModel.isSearching && !searchViewModel.searchSuggestions.isEmpty{
                         Text("Suggestions :\n")
                             .foregroundStyle(.whiteIvoryMist)
                     }
                     
-                    ForEach(searchSuggestions, id: \.id) { suggestion in
+                    ForEach(searchViewModel.searchSuggestions, id: \.id) { suggestion in
                         NavigationLink{
                             PublicationDetailView(publication: suggestion)
                         }label: {
@@ -51,12 +45,12 @@ struct SearchView: View {
                             .padding(.bottom, 20)
                     }
                     
-                    if isSearching && !searchResults.isEmpty{
+                    if searchViewModel.isSearching && !searchViewModel.searchResults.isEmpty{
                         Text("Résultats de recherches :\n")
                             .foregroundStyle(.whiteIvoryMist)
                     }
                     
-                    ForEach(searchResults, id: \.id) { result in
+                    ForEach(searchViewModel.searchResults, id: \.id) { result in
                         NavigationLink{
                             PublicationDetailView(publication: result)
                         }label: {
@@ -69,53 +63,25 @@ struct SearchView: View {
                 .frame(maxHeight: .infinity, alignment: .top)
             }
             .searchable(
-                text: $searchQuery,
+                text: $searchViewModel.searchQuery,
                 placement: .automatic,
                 prompt: "Recherche..."
             )
             .textInputAutocapitalization(.never)
-            .onChange(of: searchQuery) {
-                self.fetchSearchResults()
-                self.fetchSearchSuggestions()
+            .onChange(of: searchViewModel.searchQuery) {
+                self.searchViewModel.fetchSearchResults(publicationsManager.getPublications())
+                self.searchViewModel.fetchSearchSuggestions(publicationsManager.getPublications())
             }
             .overlay {
-                if isSearching && searchResults.isEmpty {
+                if searchViewModel.isSearching && searchViewModel.searchResults.isEmpty {
                     ContentUnavailableView(
-                        "Aucun résultat pour \(searchQuery)",
+                        "Aucun résultat pour \(searchViewModel.searchQuery)",
                         systemImage: "magnifyingglass",
                         description: Text("Vérifiez l'orthographe ou lancez une nouvelle recherche.")
                     )
                     .foregroundStyle(.whiteIvoryMist)
                 }
             }
-        }
-    }
-    private func fetchSearchResults(){
-        if searchQuery.isEmpty{
-            searchResults = []
-        }else{
-            searchResults = Array(
-                publicationsManager.getPublications().filter { publication in
-                    publication.title
-                        .lowercased()
-                        .hasPrefix(searchQuery)
-                }
-                    .prefix(3)
-            )
-        }
-    }
-    
-    private func fetchSearchSuggestions(){
-        if searchQuery.isEmpty{
-            searchSuggestions = []
-        }else{
-            searchSuggestions = Array(
-                publicationsManager.getPublications()
-                    .filter {
-                        $0.title.localizedCaseInsensitiveContains(searchQuery)
-                    }
-                    .prefix(3)
-            )
         }
     }
 }
