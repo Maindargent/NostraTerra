@@ -101,10 +101,7 @@ struct ProfileView: View {
                         .padding(.bottom, 20)
                         
                         
-                        Text("Mes publications")
-                            .foregroundStyle(.whiteIvoryMist)
-                            .font(.system(size: 16))
-                            .bold()
+                        LabelUIKitRepresentable(text: "Mes publications")
                             .padding(.leading, 20)
                             .padding(.top, 20)
                         
@@ -132,10 +129,7 @@ struct ProfileView: View {
                         }
                         .padding(.horizontal)
                         
-                        Text("Mes coups de coeurs")
-                            .foregroundStyle(.whiteIvoryMist)
-                            .font(.system(size: 16))
-                            .bold()
+                        LabelUIKitRepresentable(text: "Mes coups de coeurs")
                             .padding(.leading, 20)
                             .padding(.top, 20)
                         
