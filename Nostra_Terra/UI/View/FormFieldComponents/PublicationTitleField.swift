@@ -7,8 +7,12 @@
 import SwiftUI
 
 struct PublicationTitleField: View {
+    @Environment(FormPublicationVM.self) var formVm
+    
     @Binding var title: String
     
+    @FocusState private var isFieldFocused: Bool
+
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -16,15 +20,21 @@ struct PublicationTitleField: View {
             TextField("Bigouden", text: $title)
                 .padding()
                 .glassEffect(.clear, in: RoundedRectangle(cornerRadius: 12))
+                .focused($isFieldFocused)
+                .onChange(of: isFieldFocused) { oldValue, newValue in
+                    if !isFieldFocused {
+                        formVm.validate(title: title, )
+                    }
+                }
         }
     }
 }
 
 #Preview {
-    @Previewable @State var title: String = ""
-    PublicationTitleField(
-        title: $title
-    )
+    NavigationStack {
+        PublicationAddFormView()
+            .preferredColorScheme(.dark)
+    }
 }
 
 

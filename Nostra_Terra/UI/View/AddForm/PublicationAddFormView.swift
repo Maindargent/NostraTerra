@@ -15,25 +15,9 @@ enum TypeForm: String, CaseIterable {
 }
 
 struct PublicationAddFormView: View {
-//    Type
-    @State var typeForm: TypeForm = .tradition
-//    Titre
-    @State var title: String = ""
-//    Date
-    @State var startDate: Date = .now
-    @State var endDate: Date = .now
-//    Image
-    @State var showPicturePickerSheet: Bool  = false
-    @State var selectedItems: [PhotosPickerItem] = []
-//    Description
-    @State var description: String = ""
-//    Type
-    @State var selectedCategories = Set<PublicationCategory>()
-//    Région
-    @State var region: String = ""
-//    Coordonnées
-    @State var selectedGeoPoint: CLLocationCoordinate2D?
+    @State var formVM = FormPublicationVM()
     
+    @State var showPicturePickerSheet: Bool  = false
     @State var showCategoriesSelectionSheet: Bool = false
     @State var showMapSheet: Bool = false
     
@@ -48,44 +32,61 @@ struct PublicationAddFormView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     
                     //MARK: FIELD Type
-                    PublicationTypeField(typeForm: $typeForm)
+                    PublicationTypeField(typeForm: $formVM.typeForm)
                     
                     
                     //MARK: FIELD : Titre
-                    PublicationTitleField(title: $title)
+                    PublicationTitleField(title: $formVM.title)
                     
                     
                     //MARK: FIELD : Date
-                    if typeForm == .event {
-                        PublicationDateField(startDate: $startDate, endDate: $endDate)
+                    if formVM.typeForm == .event {
+                        PublicationDateField(startDate: $formVM.startDate, endDate: $formVM.endDate)
                     }
                     
                     //MARK: FIELD Image
                     PublicationImageField(
-                        showPicturePickerSheet: $showPicturePickerSheet, selectedItems: $selectedItems
+                        showPicturePickerSheet: $showPicturePickerSheet, selectedItems: $formVM.selectedItems
                     )
                     
                     
                     //MARK: FIELD : Description
-                    PublicationDescField(description: $description)
+                    PublicationDescField(description: $formVM.description)
                     
                     //MARK: FIELD : Type
                     PublicationCategoriesField(
-                        typeForm: $typeForm,
+                        typeForm: $formVM.typeForm,
                         showCategoriesSelectionSheet: $showCategoriesSelectionSheet,
-                        selectedCategories: $selectedCategories
+                        selectedCategories: $formVM.selectedCategories
                     )
                     
                     //MARK: FIELD : Région
-                    PublicationRegionField(region: $region)
+                    PublicationRegionField(region: $formVM.region)
                     
                     
                     //MARK: FIELD : Coordonnées GPS
                     PublicationCoordField(
                         showMapSheet: $showMapSheet,
-                        selectedGeoPoint: $selectedGeoPoint
+                        selectedGeoPoint: $formVM.selectedGeoPoint
                     )
+                    
+                    //MARK: Save button
+                    Button {
+                        //call vm for validation
+                        //si valid : call publicationManager to add Publication
+                    } label: {
+                        Text("Mettre en ligne \(formVM.title)")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .padding(.vertical, 6)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.glassProminent)
+                    .buttonBorderShape(.roundedRectangle(radius: 12))
+                    .tint(.yellowTuscanSun)
+                    .padding(.top, 16)
                 }
+                .environment(formVM)
             }
             .scrollDismissesKeyboard(.immediately)
             .contentMargins(16, for: .scrollContent)
@@ -97,5 +98,10 @@ struct PublicationAddFormView: View {
 }
 
 #Preview {
-    RootView()
+//    @Previewable @State var vm = FormPublicationVM()
+    NavigationStack {
+        PublicationAddFormView()
+            .preferredColorScheme(.dark)
+//            .environment(vm)
+    }
 }

@@ -29,7 +29,6 @@ struct PublicationDetailView: View {
 //                .clipped()
 //                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .overlay(content: {
-                    
                     Rectangle()
                         .fill(
                             LinearGradient(
