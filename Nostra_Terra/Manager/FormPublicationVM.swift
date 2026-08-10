@@ -20,4 +20,40 @@ final class FormPublicationVM {
     var selectedCategories = Set<PublicationCategory>()
     var region: String = ""
     var selectedGeoPoint: CLLocationCoordinate2D?
+    
+    var isTitleValid: Bool {
+        return !title.isEmpty && title.count > 4
+    }
+    
+    var isEndDateValid: Bool {
+        guard typeForm == .event else {
+            return true
+        }
+        return endDate > startDate
+    }
+    var isSelectedItemsValid: Bool {
+        return selectedItems.count > 0
+    }
+    var isDescriptionValid: Bool {
+        return !description.isEmpty && description.count > 10
+    }
+    var isSelectedCategoriesValid: Bool {
+        return selectedCategories.count > 0
+    }
+    var isRegionValid: Bool {
+        return !region.isEmpty
+    }
+    var isSelectedGeoPointValid: Bool {
+        return selectedGeoPoint != nil
+    }
+    
+    var isFormValid: Bool {
+        return isTitleValid &&
+                isEndDateValid &&
+                isSelectedItemsValid &&
+                isDescriptionValid &&
+                isSelectedCategoriesValid &&
+                isRegionValid &&
+                isSelectedGeoPointValid
+    }
 }

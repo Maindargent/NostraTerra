@@ -10,22 +10,15 @@ struct PublicationTitleField: View {
     @Environment(FormPublicationVM.self) var formVm
     
     @Binding var title: String
-    
-    @FocusState private var isFieldFocused: Bool
 
     
     var body: some View {
         VStack(alignment: .leading) {
             Text("Titre")
+                .foregroundStyle(formVm.isTitleValid ? .white : .red)
             TextField("Bigouden", text: $title)
                 .padding()
-                .glassEffect(.clear, in: RoundedRectangle(cornerRadius: 12))
-                .focused($isFieldFocused)
-                .onChange(of: isFieldFocused) { oldValue, newValue in
-                    if !isFieldFocused {
-                        formVm.validate(title: title, )
-                    }
-                }
+                .glassEffect(formVm.isTitleValid ? .clear : .clear.tint(.red.opacity(0.1)), in: RoundedRectangle(cornerRadius: 12))
         }
     }
 }

@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct PublicationDateField: View {
+    @Environment(FormPublicationVM.self) var formVm
 
     @Binding var startDate: Date
     @Binding var endDate: Date
@@ -27,6 +28,7 @@ struct PublicationDateField: View {
                        selection: $endDate
             )
             .datePickerStyle(.compact)
+            .foregroundStyle(formVm.isEndDateValid ? .white : .red)
         }
 //        .onChange(of: endDate) {
 //            if startDate > endDate {
@@ -45,12 +47,15 @@ struct PublicationDateField: View {
 }
 
 #Preview {
-    @Previewable @State var startDate: Date = .now
-    @Previewable @State var endDate: Date = Calendar.current.date(byAdding: .day, value: 7, to: .now) ?? .now
+//    @Previewable @State var startDate: Date = .now
+//    @Previewable @State var endDate: Date = Calendar.current.date(byAdding: .day, value: 7, to: .now) ?? .now
+//    
+//    PublicationDateField(
+//        startDate: $startDate,
+//        endDate: $endDate
+//    )
     
-    PublicationDateField(
-        startDate: $startDate,
-        endDate: $endDate
-    )
+    PublicationAddFormView()
+    
 }
 

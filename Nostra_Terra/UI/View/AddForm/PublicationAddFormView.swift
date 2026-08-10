@@ -55,7 +55,6 @@ struct PublicationAddFormView: View {
                     
                     //MARK: FIELD : Type
                     PublicationCategoriesField(
-                        typeForm: $formVM.typeForm,
                         showCategoriesSelectionSheet: $showCategoriesSelectionSheet,
                         selectedCategories: $formVM.selectedCategories
                     )
@@ -94,14 +93,12 @@ struct PublicationAddFormView: View {
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .preferredColorScheme(.dark)
     }
 }
 
 #Preview {
-//    @Previewable @State var vm = FormPublicationVM()
     NavigationStack {
         PublicationAddFormView()
-            .preferredColorScheme(.dark)
-//            .environment(vm)
     }
 }
