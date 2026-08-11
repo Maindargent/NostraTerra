@@ -9,12 +9,9 @@ import SwiftUI
 
 struct ProfileView: View {
     @Environment(PublicationViewModel.self) var publicationManager: PublicationViewModel
+    @State var profileViewModel = ProfileViewModel()
     
     let user: User
-    
-    var age: DateComponents {
-        Calendar.current.dateComponents([.year, .month, .day], from: user.birthDate, to: .now)
-    }
     
     var body: some View {
         ZStack{
@@ -23,131 +20,148 @@ struct ProfileView: View {
                 .resizable()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea()
-            
-            VStack(alignment: .trailing){
-                
-                NavigationLink{
-                    ListSuggestionView()
-                }label: {
-                    Image(systemName: "gearshape")
-                        .foregroundStyle(.whiteIvoryMist)
-                        .font(.title)
-                        .bold()
-                }
-                .padding(.trailing, 20)
-                
-                VStack(alignment: .leading){
+            ScrollView{
+                VStack(alignment: .trailing){
                     
-                    Text("Profil")
-                        .foregroundStyle(.whiteIvoryMist)
-                        .font(.system(size: 32))
-                        .bold()
-                        .padding(.leading, 20)
-                    
-                    ZStack{
-                        
-                        Divider()
-                            .overlay(.whiteIvoryMist)
-                        
-                        HStack(spacing: 20) {
-                            
-                            AsyncImage(url: user.profilPicture) { image in
-                                image.resizable()
-                            } placeholder: {
-                                Image(systemName: "photo")
-                            }
-                            .frame(width: 115, height: 115)
-                            .clipShape(Circle())
-                            .overlay {
-                                Circle()
-                                    .stroke(.whiteIvoryMist, lineWidth: 2)
-                            }
+                    NavigationLink{
+                        ProfileEditView(user: user)
+                    }label: {
+                        Image(systemName: "gearshape")
                             .foregroundStyle(.whiteIvoryMist)
+                            .font(.title)
+                            .bold()
+                    }
+                    .padding(.trailing, 20)
+                    
+                    VStack(alignment: .leading){
+                        
+                        Text("Profil")
+                            .foregroundStyle(.whiteIvoryMist)
+                            .font(.system(size: 32))
+                            .bold()
+                            .padding(.leading, 20)
+                        
+                        ZStack{
                             
-                            Text("\(user.lastName) \(user.firstName)")
-                                .padding(.horizontal, 9)
-                                .padding(.vertical, 3)
-                                .background {
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(.blueDeepSpace)
+                            Divider()
+                                .overlay(.whiteIvoryMist)
+                            
+                            HStack(spacing: 20) {
+                                
+                                AsyncImage(url: user.profilPicture) { image in
+                                    image.resizable()
+                                } placeholder: {
+                                    Image(systemName: "photo")
                                 }
+                                .frame(width: 115, height: 115)
+                                .clipShape(Circle())
                                 .overlay {
-                                    RoundedRectangle(cornerRadius: 12)
+                                    Circle()
                                         .stroke(.whiteIvoryMist, lineWidth: 2)
                                 }
                                 .foregroundStyle(.whiteIvoryMist)
-                            
-                            Text("\(age.year ?? 0) ans")
-                                .padding(.horizontal, 9)
-                                .padding(.vertical, 3)
-                                .background {
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(.blueDeepSpace)
-                                }
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(.whiteIvoryMist, lineWidth: 2)
-                                }
-                                .foregroundStyle(.whiteIvoryMist)
+                                
+                                Text("\(user.lastName) \(user.firstName)")
+                                    .padding(.horizontal, 9)
+                                    .padding(.vertical, 3)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(.blueDeepSpace)
+                                    }
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(.whiteIvoryMist, lineWidth: 2)
+                                    }
+                                    .foregroundStyle(.whiteIvoryMist)
+                                
+                                Text("\(profileViewModel.age.year ?? 0) ans")
+                                    .padding(.horizontal, 9)
+                                    .padding(.vertical, 3)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(.blueDeepSpace)
+                                    }
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(.whiteIvoryMist, lineWidth: 2)
+                                    }
+                                    .foregroundStyle(.whiteIvoryMist)
+                            }
                         }
-                    }
-                    .padding(.bottom, 20)
-                    
-                    VStack{
-                        Text(user.description)
-                            .foregroundStyle(.whiteIvoryMist)
-                            .multilineTextAlignment(.leading)
-                            .padding(.all, 20)
-                            .glassEffect(in: .rect(cornerRadius: 20))
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.bottom, 20)
-                    
-                    
-                    Text("Mes publications")
-                        .foregroundStyle(.whiteIvoryMist)
-                        .font(.system(size: 16))
-                        .bold()
-                        .padding(.leading, 20)
-                        .padding(.top, 20)
-                    
-                    ScrollView(.horizontal){
-                        HStack(alignment: .bottom){
-                            ForEach(publicationManager.getPublications(), id: \.id) { publication in
-                                NavigationLink {
-                                    ListSuggestionView()
-                                } label: {
-                                    PublicationItem(publication: publication)
+                        .padding(.bottom, 20)
+                        
+                        VStack{
+                            Text(user.description)
+                                .foregroundStyle(.whiteIvoryMist)
+                                .multilineTextAlignment(.leading)
+                                .padding(.all, 20)
+                                .glassEffect(in: .rect(cornerRadius: 20))
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, 20)
+                        
+                        
+                        LabelUIKitRepresentable(text: "Mes publications")
+                            .padding(.leading, 20)
+                            .padding(.top, 20)
+                        
+                        ScrollView(.horizontal){
+                            HStack(alignment: .bottom){
+                                
+                                let userPublications = publicationManager.getPublications().filter{
+                                    $0.author.id == user.id
+                                }
+                                if userPublications.isEmpty{
+                                    Text("Vous n'avez rien publié.")
+                                        .padding(.leading, 20)
+                                        .padding(.top, 20)
+                                        .foregroundStyle(.whiteIvoryMist)
+                                }else{
+                                    ForEach(userPublications, id: \.id) { publication in
+                                        NavigationLink {
+                                            PublicationDetailView(publication: publication)
+                                        } label: {
+                                            PublicationItem(publication: publication)
+                                        }
+                                    }
+                                    
                                 }
                                 
                             }
-                            
                         }
-                    }
-                    .padding(.horizontal)
-                    
-                    Text("Mes coups de coeurs")
-                        .foregroundStyle(.whiteIvoryMist)
-                        .font(.system(size: 16))
-                        .bold()
-                        .padding(.leading, 20)
-                        .padding(.top, 20)
-                    
-                    ScrollView(.horizontal){
-                        HStack(alignment: .bottom){
-                            ForEach(publicationManager.getPublications(), id: \.id) { publication in
-                                NavigationLink {
-                                    ListSuggestionView()
-                                } label: {
-                                    PublicationItem(publication: publication)
+                        .padding(.horizontal)
+                        
+                        LabelUIKitRepresentable(text: "Mes coups de coeurs")
+                            .padding(.leading, 20)
+                            .padding(.top, 20)
+                        
+                        ScrollView(.horizontal){
+                            HStack(alignment: .bottom){
+                                
+                                let likedPublications = publicationManager.getPublications().filter{ publication in
+                                    publicationManager.isLiked(publication)
                                 }
+                                if likedPublications.isEmpty{
+                                    Text("Vous n'avez aucun favoris.")
+                                        .padding(.leading, 20)
+                                        .padding(.top, 20)
+                                        .foregroundStyle(.whiteIvoryMist)
+                                }else{
+                                    ForEach(likedPublications, id: \.id) { publication in
+                                        NavigationLink {
+                                            PublicationDetailView(publication: publication)
+                                        } label: {
+                                            PublicationItem(publication: publication)
+                                        }
+                                    }
+                                }
+                                
                             }
-                            
                         }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
+                    Spacer()
                 }
-                Spacer()
             }
         }
     }
@@ -159,5 +173,6 @@ struct ProfileView: View {
                currentUser: users[0]
            )
     
-    ProfileView(user: users[0]).environment(publicationManager)
+    ProfileView(user: users[0])
+        .environment(publicationManager)
 }

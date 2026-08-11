@@ -22,7 +22,7 @@ struct RootView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Accueil", systemImage: "house", value: .landing) {
-                SuggestionsView()
+                SuggestionsView(user: users[0])
             }
             Tab("Carte", systemImage: "map", value: .map) {
                 MapView()
