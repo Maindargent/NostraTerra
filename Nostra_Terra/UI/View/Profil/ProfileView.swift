@@ -119,7 +119,7 @@ struct ProfileView: View {
                                 }else{
                                     ForEach(userPublications, id: \.id) { publication in
                                         NavigationLink {
-                                            PublicationDetailView(publication: publication)
+                                            PublicationDetailView(publicationID: publication.id)
                                         } label: {
                                             PublicationItem(publication: publication)
                                         }
@@ -149,7 +149,7 @@ struct ProfileView: View {
                                 }else{
                                     ForEach(likedPublications, id: \.id) { publication in
                                         NavigationLink {
-                                            PublicationDetailView(publication: publication)
+                                            PublicationDetailView(publicationID: publication.id)
                                         } label: {
                                             PublicationItem(publication: publication)
                                         }
@@ -168,7 +168,10 @@ struct ProfileView: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager = PublicationViewModel()
+    @Previewable @State var publicationManager =
+           PublicationViewModel(
+               currentUser: users[0]
+           )
     
     ProfileView(user: users[0])
         .environment(publicationManager)

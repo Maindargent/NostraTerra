@@ -145,24 +145,27 @@ struct SuggestionsView: View {
                 }
                 .navigationDestination(for: SuggestionScreen.self) { screen in
                     switch screen {
-                    case .profile:
-                        ProfileView(user: user)
-                        
-                    case .listSuggestion:
-                        ListSuggestionView()
-                        
-                    case .publicationDetail:
-                        PublicationDetailView(publication: publicationsManager.getRandomPublication())
+                        case .profile:
+                            ProfileView(user: publicationsManager.currentUser)
+                            
+                        case .listSuggestion:
+                            ListSuggestionView()
+                            
+                        case .publicationDetail:
+                            PublicationDetailView(publicationID: publicationsManager.getRandomPublication().id)
                     }
                 }
             }
+            
         }
-        
     }
 }
 
-#Preview {
-    @Previewable @State var publicationManager = PublicationViewModel()
+
+#Preview { 
+    @Previewable @State var publicationManager = PublicationViewModel(currentUser: users[0])
+    
     SuggestionsView(user: users[0])
         .environment(publicationManager)
 }
+

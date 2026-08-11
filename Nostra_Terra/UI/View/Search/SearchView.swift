@@ -29,7 +29,7 @@ struct SearchView: View {
                     
                     ForEach(searchViewModel.searchSuggestions, id: \.id) { suggestion in
                         NavigationLink{
-                            PublicationDetailView(publication: suggestion)
+                            PublicationDetailView(publicationID: suggestion.id)
                         }label: {
                             HStack{
                                 Image(systemName: "magnifyingglass")
@@ -52,7 +52,7 @@ struct SearchView: View {
                     
                     ForEach(searchViewModel.searchResults, id: \.id) { result in
                         NavigationLink{
-                            PublicationDetailView(publication: result)
+                            PublicationDetailView(publicationID: result.id)
                         }label: {
                             SearchItem(publication: result)
                         }
@@ -87,7 +87,7 @@ struct SearchView: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager = PublicationViewModel()
+    @Previewable @State var publicationManager = PublicationViewModel(currentUser: users[0])
     SearchView()
         .environment(publicationManager)
 }

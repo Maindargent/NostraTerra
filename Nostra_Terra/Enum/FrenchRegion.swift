@@ -52,6 +52,47 @@ enum FrenchRegion: String, CaseIterable, Identifiable {
         }
     }
 
+    var wikipediaURL: URL? {
+           switch self {
+           case .auvergneRhoneAlpes:
+               return URL(string: "https://fr.wikipedia.org/wiki/Auvergne-Rhône-Alpes")
+           case .bourgogneFrancheComte:
+               return URL(string: "https://fr.wikipedia.org/wiki/Bourgogne-Franche-Comté")
+           case .bretagne:
+               return URL(string: "https://fr.wikipedia.org/wiki/Bretagne")
+           case .centreValDeLoire:
+               return URL(string: "https://fr.wikipedia.org/wiki/Centre-Val_de_Loire")
+           case .corse:
+               return URL(string: "https://fr.wikipedia.org/wiki/Corse")
+           case .grandEst:
+               return URL(string: "https://fr.wikipedia.org/wiki/Grand_Est")
+           case .hautsDeFrance:
+               return URL(string: "https://fr.wikipedia.org/wiki/Hauts-de-France")
+           case .ileDeFrance:
+               return URL(string: "https://fr.wikipedia.org/wiki/Île-de-France")
+           case .normandie:
+               return URL(string: "https://fr.wikipedia.org/wiki/Normandie")
+           case .nouvelleAquitaine:
+               return URL(string: "https://fr.wikipedia.org/wiki/Nouvelle-Aquitaine")
+           case .occitanie:
+               return URL(string: "https://fr.wikipedia.org/wiki/Occitanie")
+           case .paysDeLaLoire:
+               return URL(string: "https://fr.wikipedia.org/wiki/Pays_de_la_Loire")
+           case .provenceAlpesCoteDAzur:
+               return URL(string: "https://fr.wikipedia.org/wiki/Provence-Alpes-Côte_d%27Azur")
+           case .mayotte:
+               return URL(string: "https://fr.wikipedia.org/wiki/Mayotte")
+           case .guyane:
+               return URL(string: "https://fr.wikipedia.org/wiki/Guyane")
+           case .martinique:
+               return URL(string: "https://fr.wikipedia.org/wiki/Martinique")
+           case .guadeloupe:
+               return URL(string: "https://fr.wikipedia.org/wiki/Guadeloupe")
+           case .reunion:
+               return URL(string: "https://fr.wikipedia.org/wiki/La_Réunion")
+           }
+       }
+    
     var coordonneeGPS: CLLocationCoordinate2D {
         switch self {
         case .auvergneRhoneAlpes: .init(latitude: 45.7640, longitude: 4.8357) // Lyon
