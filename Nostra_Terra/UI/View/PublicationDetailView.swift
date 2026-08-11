@@ -149,9 +149,12 @@ struct PublicationDetailView: View {
 
 #Preview {
     @Previewable @State var publicationManager = PublicationViewModel()
+    @Previewable @State var userViewModel = UserViewModel(currentUser: users[0])
+    
     PublicationDetailView(
         publicationID: publicationManager.getRandomPublication().id
     )
     .environment(publicationManager)
+    .environment(userViewModel)
 }
 
