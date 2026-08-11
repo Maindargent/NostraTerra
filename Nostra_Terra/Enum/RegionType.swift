@@ -30,6 +30,49 @@ enum RegionType: String, CaseIterable, Identifiable {
     case guyane = "Guyane"
     case martinique = "Martinique"
     case gouadeloupe = "Gouadeloupe"
+    
+    var wikipediaURL: URL? {
+           switch self {
+           case .toutes:
+               return nil
+           case .auvergneRhoneAlpes:
+               return URL(string: "https://fr.wikipedia.org/wiki/Auvergne-Rhône-Alpes")
+           case .bourgogneFrancheComte:
+               return URL(string: "https://fr.wikipedia.org/wiki/Bourgogne-Franche-Comté")
+           case .bretagne:
+               return URL(string: "https://fr.wikipedia.org/wiki/Bretagne")
+           case .centreValDeLoire:
+               return URL(string: "https://fr.wikipedia.org/wiki/Centre-Val_de_Loire")
+           case .corse:
+               return URL(string: "https://fr.wikipedia.org/wiki/Corse")
+           case .grandEst:
+               return URL(string: "https://fr.wikipedia.org/wiki/Grand_Est")
+           case .hautsDeFrance:
+               return URL(string: "https://fr.wikipedia.org/wiki/Hauts-de-France")
+           case .ileDeFrance:
+               return URL(string: "https://fr.wikipedia.org/wiki/Île-de-France")
+           case .normandie:
+               return URL(string: "https://fr.wikipedia.org/wiki/Normandie")
+           case .nouvelleAquitaine:
+               return URL(string: "https://fr.wikipedia.org/wiki/Nouvelle-Aquitaine")
+           case .occitanie:
+               return URL(string: "https://fr.wikipedia.org/wiki/Occitanie")
+           case .paysDeLaLoire:
+               return URL(string: "https://fr.wikipedia.org/wiki/Pays_de_la_Loire")
+           case .provenceAlpesCoteDAzur:
+               return URL(string: "https://fr.wikipedia.org/wiki/Provence-Alpes-Côte_d%27Azur")
+           case .mayotte:
+               return URL(string: "https://fr.wikipedia.org/wiki/Mayotte")
+           case .laReunion:
+               return URL(string: "https://fr.wikipedia.org/wiki/La_Réunion")
+           case .guyane:
+               return URL(string: "https://fr.wikipedia.org/wiki/Guyane")
+           case .martinique:
+               return URL(string: "https://fr.wikipedia.org/wiki/Martinique")
+           case .gouadeloupe:
+               return URL(string: "https://fr.wikipedia.org/wiki/Guadeloupe")
+           }
+       }
 
     var color: Color {
         switch self {
