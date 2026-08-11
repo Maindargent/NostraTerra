@@ -10,6 +10,7 @@ import MapKit
 
 struct MapView: View {
     @Environment(PublicationViewModel.self) var publicationsManager
+    @Environment(UserViewModel.self) var userViewModel
     
     @State var cameraPosition: MapCameraPosition = .automatic
     @State var userLocationOnAppear = CLLocationCoordinate2D(latitude: 1.0, longitude: 1.0)
@@ -25,13 +26,19 @@ struct MapView: View {
     
     let locationManager = CLLocationManager()
     
+    
+    @State var showFilterRegionSheet: Bool = false
+    
+    @State private var selectedCategory: PublicationCategory?
+    @State private var selectedRegion: FrenchRegion?
+    
     var body: some View {
         Map(
             position: $cameraPosition,
             selection: $selectedPublicationID
         ) {
             UserAnnotation()
-            ForEach(publicationsManager.getPublications(), id: \.id) { publication in
+            ForEach(publicationsManager.getFilteredPublications(region: selectedRegion, category: selectedCategory), id: \.id) { publication in
                 Annotation(publication.title, coordinate: publication.geoPoint, anchor: .bottom) {
                     AsyncImage(url: publication.image) { image in
                         image.resizable()
@@ -57,6 +64,7 @@ struct MapView: View {
                 }.tag(publication.id)
             }
         }
+        .colorScheme(.dark)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .mapControls {
             MapUserLocationButton()
@@ -65,7 +73,7 @@ struct MapView: View {
             guard
                 let publicationID,
                 let publication = publicationsManager.getPublication(id: publicationID)
-            else {
+                    else {
                 return
             }
             
@@ -92,7 +100,7 @@ struct MapView: View {
             content: {
                 PublicationDetailView(
                     publicationID: selectedPublicationID!
-                )
+                ).environment(userViewModel)
                 .toolbar(content: {
                     ToolbarItem(placement: .bottomBar) {
                         Button {
@@ -113,10 +121,60 @@ struct MapView: View {
                 .presentationBackground(.clear)
             }
         )
+        .overlay(alignment: .topLeading) {
+            HStack {
+                Button {
+                    showFilterRegionSheet.toggle()
+                } label: {
+                    Image(systemName: "line.3.horizontal.decrease")
+                        .padding(12)
+                }
+                .buttonStyle(.glassProminent)
+                .tint(.clear)
+                .buttonBorderShape(.circle)
+            }
+            .padding()
+        }
+        .sheet(isPresented: $showFilterRegionSheet, content: {
+            FilterPublicationView(
+                selectedCategory: $selectedCategory,
+                selectedRegion: $selectedRegion,
+                showFilterRegionSheet: $showFilterRegionSheet
+            )
+            .presentationDetents([.fraction(0.4)])
+            .presentationDragIndicator(.visible)
+        })
+        .onChange(of: selectedRegion) { oldValue, newValue in
+            let showedPublication = publicationsManager.getFilteredPublications(
+                region: selectedRegion,
+                category: selectedCategory
+            )
+            
+            if showedPublication.count == 1 {
+                
+                var region = MKCoordinateRegion(
+                    center: showedPublication[0].geoPoint,
+                    latitudinalMeters: 100_000,
+                    longitudinalMeters: 100_000
+                )
+                
+                withAnimation(.smooth) {
+                    cameraPosition = .region(region)
+                }
+            } else {
+                withAnimation(.smooth) {
+                    cameraPosition = .automatic
+                }
+            }
+        }
     }
 }
 
 
 #Preview {
+    @Previewable @State var publicationManager = PublicationViewModel()
+    @Previewable @State var userViewModel = UserViewModel(currentUser: users[0])
     MapView()
+        .environment(publicationManager)
+        .environment(userViewModel)
 }

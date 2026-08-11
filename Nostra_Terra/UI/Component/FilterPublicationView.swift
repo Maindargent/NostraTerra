@@ -9,60 +9,53 @@ import SwiftUI
 
 
 struct FilterPublicationView: View {
-//    @State private var selectedType: PublicationType = .tous
-//    @State private var selectedRegion: RegionType = .toutes
-//    
-//    var filteredActivity: [Event]{
-//        if selectedType == .tous {
-//            return events
-//        } else {
-//            return events.filter{ $0.activity ==  selectedType }
-//        }
-//    }
-//    
+    @Environment(PublicationViewModel.self) var publicationManager: PublicationViewModel
+    
+    @Binding var selectedCategory: PublicationCategory?
+    @Binding var selectedRegion: FrenchRegion?
+    @Binding var showFilterRegionSheet: Bool
+    
     var body: some View {
-//                HStack{
-//                    Menu{
-//                        ForEach(PublicationType.allCases, id: \.self) { type in
-//                            Button(type.rawValue){
-//                                selectedType = type
-//                            }
-//                        }
-//                    } label: {
-//                        Image(systemName: "line.3.horizontal.decrease.circle")
-//                    }
+//        HStack{
+//            Menu{
+//                ForEach(PublicationCategory.allCases, id: \.self) { category in
+//                    Button(category.rawValue){
+//                        selectedCategory = category
+//                    }.tag(category)
 //                }
-        
-//        VStack{
-//            Form {
-//                Section ("Types"){
-//                    Picker("Appearance", selection: $selectedType) {
-//                        ForEach(PublicationType.allCases, id: \.self) {
-//                            type in
-//                            Button(type.rawValue) {
-//                                selectedType = type
-//                            }
-//                        }
-//                    }
-//                }
-//                .pickerStyle(.wheel)
-//                Section ("Région"){
-//                    Picker("Appearance", selection: $selectedRegion) {
-//                        ForEach(RegionType.allCases, id: \.self) {
-//                            region in
-//                            Button(region.rawValue) {
-//                                selectedRegion = region
-//                            }
-//                        }
-//                    }
-//                }
-//                .pickerStyle(.wheel)
+//            } label: {
+//                Image(systemName: "line.3.horizontal.decrease.circle")
 //            }
-//            
 //        }
+        
+        Picker("Appearance", selection: $selectedRegion) {
+            Text("Toutes les regions").tag(nil as FrenchRegion?)
+            ForEach(publicationManager.getUsedRegions(), id: \.region.id) { region in
+                Text(region.region.titre).tag(region.region)
+            }
+        }
+        .pickerStyle(.wheel)
+        
+        Button {
+            showFilterRegionSheet.toggle()
+        } label: {
+            Text("Valider")
+                .padding(.vertical, 8)
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.glassProminent)
+        .tint(.yellowTuscanSun)
+        .buttonBorderShape(.roundedRectangle(radius: 12))
+        .padding()
     }
 }
 
 #Preview {
-    FilterPublicationView()
+    @Previewable @State var publicationManager = PublicationViewModel()
+    @Previewable @State var selectedCategory: PublicationCategory?
+    @Previewable @State var selectedRegion: FrenchRegion?
+    @Previewable @State var showFilterRegionSheet: Bool = false
+    
+    FilterPublicationView(selectedCategory: $selectedCategory, selectedRegion: $selectedRegion, showFilterRegionSheet: $showFilterRegionSheet)
+        .environment(publicationManager)
 }

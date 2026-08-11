@@ -22,3 +22,7 @@ struct LabelUIKitRepresentable: UIViewRepresentable {
         
     }
 }
+
+#Preview {
+    LabelUIKitRepresentable(text: "coucou").preferredColorScheme(.dark)
+}
