@@ -150,8 +150,8 @@ struct MapView: View {
                             ForEach(PublicationCategory.allCases) { cat in
                                 Button {
                                     withAnimation {
-                                        selectedCategory = cat
                                         selectedRegion = nil
+                                        selectedCategory = cat
                                         showFilterCategories.toggle()
                                     }
                                 } label: {
@@ -227,10 +227,12 @@ struct MapView: View {
                 )
                 
                 withAnimation(.smooth) {
+                    selectedCategory = nil
                     cameraPosition = .region(region)
                 }
             } else {
                 withAnimation(.smooth) {
+                    selectedCategory = nil
                     cameraPosition = .automatic
                 }
             }
