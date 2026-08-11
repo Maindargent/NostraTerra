@@ -16,5 +16,4 @@ final class ProfileViewModel{
         Calendar.current.dateComponents([.year, .month, .day], from: profileUser[0].birthDate, to: .now)
     }
     
-    
 }

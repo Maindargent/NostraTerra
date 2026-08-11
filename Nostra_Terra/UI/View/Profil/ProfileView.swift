@@ -111,11 +111,13 @@ struct ProfileView: View {
                                 let userPublications = publicationManager.getPublications().filter{
                                     $0.author.id == user.id
                                 }
-                                    if userPublications.isEmpty{
-                                        Text("Vous n'avez rien publié.")
-                                            .foregroundStyle(.whiteIvoryMist)
-                                    }else{
-                                        ForEach(userPublications, id: \.id) { publication in
+                                if userPublications.isEmpty{
+                                    Text("Vous n'avez rien publié.")
+                                        .padding(.leading, 20)
+                                        .padding(.top, 20)
+                                        .foregroundStyle(.whiteIvoryMist)
+                                }else{
+                                    ForEach(userPublications, id: \.id) { publication in
                                         NavigationLink {
                                             PublicationDetailView(publication: publication)
                                         } label: {
@@ -135,11 +137,22 @@ struct ProfileView: View {
                         
                         ScrollView(.horizontal){
                             HStack(alignment: .bottom){
-                                ForEach(publicationManager.getPublications(), id: \.id) { publication in
-                                    NavigationLink {
-                                        ListSuggestionView()
-                                    } label: {
-                                        PublicationItem(publication: publication)
+                                
+                                let likedPublications = publicationManager.getPublications().filter{ publication in
+                                    publicationManager.isLiked(publication)
+                                }
+                                if likedPublications.isEmpty{
+                                    Text("Vous n'avez aucun favoris.")
+                                        .padding(.leading, 20)
+                                        .padding(.top, 20)
+                                        .foregroundStyle(.whiteIvoryMist)
+                                }else{
+                                    ForEach(likedPublications, id: \.id) { publication in
+                                        NavigationLink {
+                                            PublicationDetailView(publication: publication)
+                                        } label: {
+                                            PublicationItem(publication: publication)
+                                        }
                                     }
                                 }
                                 
