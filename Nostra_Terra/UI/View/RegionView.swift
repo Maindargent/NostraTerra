@@ -9,13 +9,15 @@ import SwiftUI
 import WebKit
 
 struct RegionView: View {
+    let selectedRegion: FrenchRegion
+    
     var body: some View {
-        MyView(url: URL(string: "\(FrenchRegion.bretagne.wikipediaURL, default: "https://fr.wikipedia.org/wiki/Wikipédia:Accueil_principal")")!)
+        RegionWikiView(url: URL(string: "\(selectedRegion.wikipediaURL, default: "https://fr.wikipedia.org/wiki/Wikipédia:Accueil_principal")")!)
             .frame(maxWidth: .infinity, maxHeight: .infinity    )
     }
 }
 
-struct MyView: UIViewRepresentable {
+struct RegionWikiView: UIViewRepresentable {
     let url: URL
     
     func makeUIView(context: Context) -> WKWebView {
@@ -30,5 +32,5 @@ struct MyView: UIViewRepresentable {
 }
 
 #Preview {
-    RegionView()
+    RegionView(selectedRegion: .bretagne)
 }

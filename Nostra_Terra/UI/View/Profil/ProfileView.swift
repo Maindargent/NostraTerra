@@ -159,5 +159,5 @@ struct ProfileView: View {
                currentUser: users[0]
            )
     
-    ProfileView(user: users[0])
+    ProfileView(user: users[0]).environment(publicationManager)
 }
