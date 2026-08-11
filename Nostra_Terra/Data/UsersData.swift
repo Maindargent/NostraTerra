@@ -9,8 +9,8 @@ import Foundation
 
 let users: [User] = [
     User(
-        lastName: "Martin",
-        firstName: "Lucas",
+        lastName: "Swift",
+        firstName: "Yann",
         birthDate: Calendar.current.date(from: DateComponents(year: 1995, month: 3, day: 12))!,
         description: "Passionné de randonnée et de photographie.",
         profilPicture: URL(string: "https://picsum.photos/seed/user1/300/300")!

@@ -16,10 +16,10 @@ struct PublicationRegionField: View {
         VStack(alignment: .leading) {
             Picker("Région", selection: $region) {
                 if region == nil {
-                    Text("Sélectionner une région").tag(nil as String?)
+                    Text("Sélectionner une région").tag(nil as FrenchRegion?)
                 }
                 ForEach(FrenchRegion.allCases) { region in
-                    Text(region.titre).tag(region.rawValue)
+                    Text(region.titre).tag(region)
                 }
             }
             .tint(formVm.isRegionValid ? .white : .red)
@@ -37,8 +37,10 @@ struct PublicationRegionField: View {
     //    PublicationRegionField(
     //        region: $region
     //    )
+    @Previewable @State var publicationManager = PublicationViewModel()
     NavigationStack {
         PublicationAddFormView()
+            .environment(publicationManager)
             .preferredColorScheme(.dark)
     }
 }

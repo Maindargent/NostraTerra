@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import PhotosUI
 
 struct PublicationDetailView: View {
     @Environment(PublicationViewModel.self) var publicationsManager
@@ -19,72 +20,94 @@ struct PublicationDetailView: View {
         publicationsManager.getPublication(id: publicationID)
     }
     
+    
+    @State var item: PhotosPickerItem? = nil
+    
+    @State private var image: Image?
+    @State private var isLoading = true
+    
     var body: some View {
         if let publication {
-            VStack{
-                ZStack(alignment: .leading) {
-                    AsyncImage(url: publication.image) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .clipped()
-                            .cornerRadius(20)
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    //                .ignoresSafeArea()
-                    //                .clipped()
-                    //                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .overlay(content: {
-                        
-                        Rectangle()
-                            .fill(
-                                LinearGradient(
-                                    colors: [.black, .clear],
-                                    startPoint: .bottom,
-                                    endPoint: .top
-                                )
-                            )
-                        //     .frame(maxHeight: .infinity)
-                            .clipped()
-                            .cornerRadius(20)
-                    })
-                    .overlay(alignment: .bottomLeading) {
-                        HStack{
-                            VStack(alignment: .leading) {
-                                Text(publication.title)
-                                    .foregroundStyle(.whiteIvoryMist)
-                                    .bold()
-                                    .font(.title)
-                                Text(publication.created_at, format: .dateTime.locale(Locale(identifier: "fr_FR")) )
-                                    .foregroundStyle(.whiteIvoryMist)
+            VStack {
+                ZStack {
+                    if !publication.uploadedImages.isEmpty {
+                        HStack {
+                            if let image {
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .clipped()
+                            } else if isLoading {
+                                ProgressView()
                             }
-                            Spacer()
-                            Button {
-                                userViewModel.toggleLike(
-                                    publication
-                                )
-                            } label: {
-                                Image(
-                                    systemName:
-                                        userViewModel.isLiked(
-                                            publication
-                                        )
-                                    ? "heart.fill"
-                                    : "heart"
-                                )
-                            }
-                            .foregroundStyle(
-                                userViewModel.isLiked(
-                                    publication
-                                )
-                                ? .yellowTuscanSun
-                                : .whiteIvoryMist
-                            )
-                            .font(.title)
                         }
-                        .padding(.horizontal)
+                        .onAppear(perform: {
+                            item = publication.uploadedImages[0]
+                        })
+                        .task(id: item) {
+                            if let item {
+                                isLoading = true
+                                image = try? await item.loadTransferable(type: Image.self)
+                                isLoading = false
+                            }
+                        }
+                    } else {
+                        AsyncImage(url: publication.image) { image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .clipped()
+                        } placeholder: {
+                            ProgressView()
+                        }
                     }
+                }
+                .overlay(content: {
+                    Rectangle()
+                        .fill(
+                            LinearGradient(
+                                colors: [.black, .clear],
+                                startPoint: .bottom,
+                                endPoint: .top
+                            )
+                        )
+                        .clipped()
+                })
+                .overlay(alignment: .bottomLeading) {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(publication.title)
+                                .foregroundStyle(.whiteIvoryMist)
+                                .bold()
+                                .font(.title)
+                            Text(publication.created_at, format: .dateTime.locale(Locale(identifier: "fr_FR")) )
+                                .foregroundStyle(.whiteIvoryMist)
+                        }
+                        Spacer()
+                        Button {
+                            userViewModel.toggleLike(
+                                publication
+                            )
+                        } label: {
+                            Image(
+                                systemName:
+                                    userViewModel.isLiked(
+                                        publication
+                                    )
+                                ? "heart.fill"
+                                : "heart"
+                            )
+                        }
+                        .foregroundStyle(
+                            userViewModel.isLiked(
+                                publication
+                            )
+                            ? .yellowTuscanSun
+                            : .whiteIvoryMist
+                        )
+                        .font(.title)
+                    }
+                    .padding()
                 }
                 
                 ScrollView {
@@ -128,6 +151,7 @@ struct PublicationDetailView: View {
                     .frame(maxWidth: .infinity)
                     .cornerRadius(20)
                     .frame(height: 200)
+                    .preferredColorScheme(.dark)
                 }
                 .padding()
             }

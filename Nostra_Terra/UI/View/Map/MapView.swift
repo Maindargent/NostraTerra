@@ -42,27 +42,7 @@ struct MapView: View {
             UserAnnotation()
             ForEach(publicationsManager.getFilteredPublications(region: selectedRegion, category: selectedCategory), id: \.id) { publication in
                 Annotation(publication.title, coordinate: publication.geoPoint, anchor: .bottom) {
-                    AsyncImage(url: publication.image) { image in
-                        image.resizable()
-                    } placeholder: {
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                            .frame(width: 45, height: 45)
-                            .glassEffect()
-                    }
-                    .scaledToFill()
-                    .frame(width: 45, height: 45)
-                    .clipShape(Circle())
-                    .background(
-                        Circle().stroke(.whiteIvoryMist, lineWidth: 4)
-                    )
-                    .background(alignment: .bottom) {
-                        Image(systemName: "arrowtriangle.down.fill")
-                            .foregroundStyle(.whiteIvoryMist)
-                            .font(.system(size: 15))
-                            .shadow(radius: 10)
-                            .offset(x: 0, y: 10)
-                    }
+                    CustomMapMarker(publication: publication)
                 }.tag(publication.id)
             }
         }

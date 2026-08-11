@@ -24,8 +24,10 @@ struct PublicationTitleField: View {
 }
 
 #Preview {
+    @Previewable @State var publicationManager = PublicationViewModel()
     NavigationStack {
         PublicationAddFormView()
+            .environment(publicationManager)
             .preferredColorScheme(.dark)
     }
 }

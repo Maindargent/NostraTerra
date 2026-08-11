@@ -126,6 +126,8 @@ struct TransferablePhotoView: View {
 //        showPicturePickerSheet: $showPicturePickerSheet, selectedItems: $selectedItems
 //    )
     
+    @Previewable @State var publicationManager = PublicationViewModel()
     PublicationAddFormView()
+        .environment(publicationManager)
 }
 

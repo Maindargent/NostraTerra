@@ -55,7 +55,9 @@ struct PublicationDateField: View {
 //        endDate: $endDate
 //    )
     
+    @Previewable @State var publicationManager = PublicationViewModel()
     PublicationAddFormView()
+        .environment(publicationManager)
     
 }
 

@@ -117,9 +117,12 @@ struct PublicationCategoriesField: View {
 //        selectedCategories: $selectedCategories
 //    )
     
+    @Previewable @State var publicationManager = PublicationViewModel()
+    
     
     NavigationStack {
         PublicationAddFormView()
+            .environment(publicationManager)
             .preferredColorScheme(.dark)
     }
 }

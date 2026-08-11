@@ -20,5 +20,7 @@ struct PublicationTypeField: View {
 }
 
 #Preview {
-    PublicationTypeField(typeForm: .constant(TypeForm.tradition))
+    @Previewable @State var publicationManager = PublicationViewModel()
+    PublicationAddFormView()
+        .environment(publicationManager)
 }

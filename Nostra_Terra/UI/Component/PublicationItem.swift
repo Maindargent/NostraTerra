@@ -6,28 +6,65 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct PublicationItem: View {
     
     let publication: (any Publication)
     
+    
+    @State var item: PhotosPickerItem? = nil
+    
+    @State private var image: Image?
+    @State private var isLoading = true
+    
     var body: some View {
         
         ZStack(alignment: .bottom) {
-            AsyncImage(url: publication.image) { image in
-                image.resizable()
-            } placeholder: {
-                Image(systemName: "photo")
-                    .foregroundStyle(.blueDeepSpace)
+            
+            if !publication.uploadedImages.isEmpty {
+                HStack {
+                    if let image {
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 150, height: 150)
+                            .clipShape(.rect(cornerRadius: 5))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .stroke(.grayLines, lineWidth: 1)
+                            )
+                            .padding(.bottom, 5)
+                    } else if isLoading {
+                        ProgressView()
+                    }
+                }
+                .onAppear(perform: {
+                    item = publication.uploadedImages[0]
+                })
+                .task(id: item) {
+                    if let item {
+                        isLoading = true
+                        image = try? await item.loadTransferable(type: Image.self)
+                        isLoading = false
+                    }
+                }
+            } else {
+                AsyncImage(url: publication.image) { image in
+                    image.resizable()
+                } placeholder: {
+                    Image(systemName: "photo")
+                        .foregroundStyle(.blueDeepSpace)
+                }
+                .scaledToFill()
+                .frame(width: 150, height: 150)
+                .clipShape(.rect(cornerRadius: 5))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(.grayLines, lineWidth: 1)
+                )
+                .padding(.bottom, 5)
             }
-            .scaledToFill()
-            .frame(width: 150, height: 150)
-            .clipShape(.rect(cornerRadius: 5))
-            .overlay(
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(.grayLines, lineWidth: 1)
-            )
-            .padding(.bottom, 5)
             
             
             VStack(alignment: .leading){

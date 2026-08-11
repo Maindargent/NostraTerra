@@ -79,6 +79,7 @@ struct PublicationAddFormView: View {
                         publicationsManager.addPublication(publication)
                         isPublished.toggle()
                         //TODO: ajouter un toast de notification pour valider le publish
+                        formVM.reset()
                     } label: {
                         Text("Mettre en ligne \(formVM.title)")
                             .font(.title3)
@@ -91,6 +92,13 @@ struct PublicationAddFormView: View {
                     .tint(.yellowTuscanSun)
                     .padding(.top, 16)
                     .disabled(!formVM.isFormValid)
+                    .contextMenu {
+                        Button {
+                            formVM.fillWithMockData()
+                        } label: {
+                            Text("Pré-remplir avec un Kebab")
+                        }
+                    }
                 }
                 .environment(formVM)
             }

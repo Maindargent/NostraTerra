@@ -53,7 +53,9 @@ struct PublicationCoordField: View {
 //    )
     
     
+    @Previewable @State var publicationManager = PublicationViewModel()
     
     PublicationAddFormView()
+        .environment(publicationManager)
 }
 
