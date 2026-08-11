@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "icon_cursor_click.png",
+      "filename" : "france_icon.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icon_cursor_click@2x.png",
+      "filename" : "france_icon 1.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "icon_cursor_click 3.png",
+      "filename" : "france_icon 2.svg",
       "idiom" : "universal",
       "scale" : "3x"
     }
