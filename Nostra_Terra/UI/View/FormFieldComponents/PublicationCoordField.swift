@@ -8,12 +8,15 @@ import SwiftUI
 import MapKit
 
 struct PublicationCoordField: View {
+    @Environment(FormPublicationVM.self) var formVm
+    
     @Binding var showMapSheet: Bool
     @Binding var selectedGeoPoint: CLLocationCoordinate2D?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Emplacement GPS")
+                .foregroundStyle(formVm.isSelectedGeoPointValid ? .white : .red)
             Button {
                 showMapSheet.toggle()
             } label: {
@@ -24,7 +27,7 @@ struct PublicationCoordField: View {
                 }
                 .foregroundStyle(.whiteIvoryMist)
                 .padding()
-                .glassEffect(.clear, in: RoundedRectangle(cornerRadius: 12))
+                .glassEffect(formVm.isSelectedGeoPointValid ? .clear : .clear.tint(.red.opacity(0.1)), in: RoundedRectangle(cornerRadius: 12))
             }
             if let selectedGeoPoint {
                 Text("Latitude : \(selectedGeoPoint.latitude)")
@@ -41,12 +44,16 @@ struct PublicationCoordField: View {
 }
 
 #Preview {
-    @Previewable @State var showMapSheet: Bool = false
-    @Previewable @State var selectedGeoPoint: CLLocationCoordinate2D?
+//    @Previewable @State var showMapSheet: Bool = false
+//    @Previewable @State var selectedGeoPoint: CLLocationCoordinate2D?
+//    
+//    PublicationCoordField(
+//        showMapSheet: $showMapSheet,
+//        selectedGeoPoint: $selectedGeoPoint
+//    )
     
-    PublicationCoordField(
-        showMapSheet: $showMapSheet,
-        selectedGeoPoint: $selectedGeoPoint
-    )
+    
+    
+    PublicationAddFormView()
 }
 

@@ -5,14 +5,16 @@
 //  Created by Apprenant 87 on 21/07/2026.
 //
 import Foundation
+import SwiftUI
 import MapKit
+import PhotosUI
 
 
 
 protocol Publication: Identifiable {
     var id: UUID { get set }
     var image: URL { get set }
-    var uploadedImages: [ImageResource] { get set }
+    var uploadedImages: [PhotosPickerItem] { get set }
     var title: String { get set }
     var description: String { get set }
     var created_at: Date { get set }
@@ -26,7 +28,7 @@ protocol Publication: Identifiable {
 struct Tradition: Publication, Identifiable {
     var id = UUID()
     var image: URL
-    var uploadedImages: [ImageResource]
+    var uploadedImages: [PhotosPickerItem] = []
     var title: String
     var description: String
     var created_at: Date
@@ -48,7 +50,7 @@ struct Tradition: Publication, Identifiable {
 struct Event: Publication, Identifiable {
     var id = UUID()
     var image: URL
-    var uploadedImages: [ImageResource]
+    var uploadedImages: [PhotosPickerItem] = []
     var title: String
     var description: String
     var created_at: Date

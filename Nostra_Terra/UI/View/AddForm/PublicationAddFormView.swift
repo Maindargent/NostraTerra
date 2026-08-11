@@ -15,27 +15,15 @@ enum TypeForm: String, CaseIterable {
 }
 
 struct PublicationAddFormView: View {
-//    Type
-    @State var typeForm: TypeForm = .tradition
-//    Titre
-    @State var title: String = ""
-//    Date
-    @State var startDate: Date = .now
-    @State var endDate: Date = .now
-//    Image
-    @State var showPicturePickerSheet: Bool  = false
-    @State var selectedItems: [PhotosPickerItem] = []
-//    Description
-    @State var description: String = ""
-//    Type
-    @State var selectedCategories = Set<PublicationCategory>()
-//    Région
-    @State var region: String = ""
-//    Coordonnées
-    @State var selectedGeoPoint: CLLocationCoordinate2D?
+    @Environment(PublicationViewModel.self) var publicationsManager
     
+    @State var formVM = FormPublicationVM()
+    
+    @State var showPicturePickerSheet: Bool  = false
     @State var showCategoriesSelectionSheet: Bool = false
     @State var showMapSheet: Bool = false
+    
+    @State var isPublished: Bool = false
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -48,54 +36,82 @@ struct PublicationAddFormView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     
                     //MARK: FIELD Type
-                    PublicationTypeField(typeForm: $typeForm)
+                    PublicationTypeField(typeForm: $formVM.typeForm)
                     
                     
                     //MARK: FIELD : Titre
-                    PublicationTitleField(title: $title)
+                    PublicationTitleField(title: $formVM.title)
                     
                     
                     //MARK: FIELD : Date
-                    if typeForm == .event {
-                        PublicationDateField(startDate: $startDate, endDate: $endDate)
+                    if formVM.typeForm == .event {
+                        PublicationDateField(startDate: $formVM.startDate, endDate: $formVM.endDate)
                     }
                     
                     //MARK: FIELD Image
                     PublicationImageField(
-                        showPicturePickerSheet: $showPicturePickerSheet, selectedItems: $selectedItems
+                        showPicturePickerSheet: $showPicturePickerSheet, selectedItems: $formVM.selectedItems
                     )
                     
                     
                     //MARK: FIELD : Description
-                    PublicationDescField(description: $description)
+                    PublicationDescField(description: $formVM.description)
                     
                     //MARK: FIELD : Type
                     PublicationCategoriesField(
-                        typeForm: $typeForm,
                         showCategoriesSelectionSheet: $showCategoriesSelectionSheet,
-                        selectedCategories: $selectedCategories
+                        selectedCategories: $formVM.selectedCategories
                     )
                     
                     //MARK: FIELD : Région
-                    PublicationRegionField(region: $region)
+                    PublicationRegionField(region: $formVM.region)
                     
                     
                     //MARK: FIELD : Coordonnées GPS
                     PublicationCoordField(
                         showMapSheet: $showMapSheet,
-                        selectedGeoPoint: $selectedGeoPoint
+                        selectedGeoPoint: $formVM.selectedGeoPoint
                     )
+                    
+                    //MARK: Save button
+                    Button {
+                        guard let publication = formVM.getPublication else {return}
+                        publicationsManager.addPublication(publication)
+                        isPublished.toggle()
+                        //TODO: ajouter un toast de notification pour valider le publish
+                    } label: {
+                        Text("Mettre en ligne \(formVM.title)")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .padding(.vertical, 6)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.glassProminent)
+                    .buttonBorderShape(.roundedRectangle(radius: 12))
+                    .tint(.yellowTuscanSun)
+                    .padding(.top, 16)
+                    .disabled(!formVM.isFormValid)
                 }
+                .environment(formVM)
             }
             .scrollDismissesKeyboard(.immediately)
             .contentMargins(16, for: .scrollContent)
             .navigationTitle("Crée une publication")
             
         }
+        .navigationDestination(isPresented: $isPublished, destination: {
+            //TODO: modifie la tap bar pour avoir accée a la selection ici et pouvoir retourner a l'ecran d'acceuil
+        })
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .preferredColorScheme(.dark)
     }
 }
 
 #Preview {
-    RootView()
+    @Previewable @State var publicationManager = PublicationViewModel()
+    
+    NavigationStack {
+        PublicationAddFormView()
+            .environment(publicationManager)
+    }
 }

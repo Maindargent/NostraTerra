@@ -7,30 +7,30 @@
 import SwiftUI
 
 struct PublicationCategoriesField: View {
-    @Binding var typeForm: TypeForm
+    @Environment(FormPublicationVM.self) var formVm
+    
     @Binding var showCategoriesSelectionSheet: Bool
     @Binding var selectedCategories: Set<PublicationCategory>
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             
-            Text("Sélectionner les catégories de \(typeForm == .tradition ? "la " : "l'")\(typeForm.rawValue.lowercased())")
+            Text("Sélectionner les catégories de \(formVm.typeForm == .tradition ? "la " : "l'")\(formVm.typeForm.rawValue.lowercased())")
+                .foregroundStyle(formVm.isSelectedCategoriesValid ? .white : .red)
             
             Button {
                 showCategoriesSelectionSheet.toggle()
             } label: {
                 HStack {
-                    Text("Sélectionner les catégories de \(typeForm == .tradition ? "la " : "l'")\(typeForm.rawValue.lowercased())")
+                    Text("Sélectionner les catégories de \(formVm.typeForm == .tradition ? "la " : "l'")\(formVm.typeForm.rawValue.lowercased())")
                         .font(.subheadline)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Image(.iconCursorClick)
-                        .resizable()
-                        .frame(width: 32, height: 32)
+                    Image(systemName: "pointer.arrow.ipad.rays")
                 }
                 .foregroundStyle(.whiteIvoryMist)
                 .padding()
-                .glassEffect(.clear, in: RoundedRectangle(cornerRadius: 12))
+                .glassEffect(formVm.isSelectedCategoriesValid ? .clear : .clear.tint(.red.opacity(0.1)), in: RoundedRectangle(cornerRadius: 12))
             }
             .sheet(isPresented: $showCategoriesSelectionSheet) {
                 VStack {
@@ -63,6 +63,21 @@ struct PublicationCategoriesField: View {
                 .presentationDetents([.medium])
             }
             
+            //TODO: remove "tous" from Categories Enum
+            
+            ScrollView(.horizontal) {
+                HStack(alignment: .center, spacing: 12) {
+                    ForEach(Array(selectedCategories), id: \.id) { category in
+                        Button {
+                        } label: {
+                            Text(category.rawValue)
+                        }
+                        .buttonStyle(.glassProminent)
+                        .tint(category.color.opacity(0.1))
+                    }
+                }
+            }
+            
 //            LazyVGrid(columns: Array(
 //                repeating: GridItem(.flexible(), spacing: 12),
 //                count: 2
@@ -92,14 +107,20 @@ struct PublicationCategoriesField: View {
 
 #Preview {
     
-    @Previewable @State var typeForm: TypeForm = .event
-    @Previewable @State var showCategoriesSelectionSheet: Bool = false
-    @Previewable @State var selectedCategories = Set<PublicationCategory>()
+//    @Previewable @State var typeForm: TypeForm = .event
+//    @Previewable @State var showCategoriesSelectionSheet: Bool = false
+//    @Previewable @State var selectedCategories = Set<PublicationCategory>()
+//    
+//    PublicationCategoriesField(
+//        typeForm: $typeForm,
+//        showCategoriesSelectionSheet: $showCategoriesSelectionSheet,
+//        selectedCategories: $selectedCategories
+//    )
     
-    PublicationCategoriesField(
-        typeForm: $typeForm,
-        showCategoriesSelectionSheet: $showCategoriesSelectionSheet,
-        selectedCategories: $selectedCategories
-    )
+    
+    NavigationStack {
+        PublicationAddFormView()
+            .preferredColorScheme(.dark)
+    }
 }
 

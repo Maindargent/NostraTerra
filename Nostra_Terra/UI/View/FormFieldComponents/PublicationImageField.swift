@@ -9,6 +9,7 @@ import PhotosUI
 
 struct PublicationImageField: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(FormPublicationVM.self) var formVM
     
     @Binding var showPicturePickerSheet: Bool
     @Binding var selectedItems: [PhotosPickerItem]
@@ -16,6 +17,7 @@ struct PublicationImageField: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Image")
+                .foregroundStyle(formVM.isSelectedItemsValid ? .white : .red)
             Button {
                 if selectedItems.count == 2 {
                     selectedItems.remove(at: 1)
@@ -29,11 +31,11 @@ struct PublicationImageField: View {
                 }
                 .foregroundStyle(.whiteIvoryMist)
                 .padding()
-                .glassEffect(.clear, in: RoundedRectangle(cornerRadius: 12))
+                .glassEffect(formVM.isSelectedItemsValid ? .clear : .clear.tint(.red.opacity(0.1)), in: RoundedRectangle(cornerRadius: 12))
             }
             if !selectedItems.isEmpty {
                 ScrollView(.horizontal) {
-                    HStack(spacing: 16) {
+                    HStack(alignment: .center, spacing: 16) {
                         ForEach(selectedItems.enumerated(), id: \.element) { index, item in
                             TransferablePhotoView(item: item, selectedItems: $selectedItems, index: index)
                         }
@@ -85,7 +87,7 @@ struct TransferablePhotoView: View {
     @State private var isLoading = true
     
     var body: some View {
-        Group {
+        HStack {
             if let image {
                 image
                     .resizable()
@@ -107,6 +109,7 @@ struct TransferablePhotoView: View {
                 ProgressView()
             }
         }
+        .frame(maxHeight: 140)
         .task(id: item) {
             isLoading = true
             image = try? await item.loadTransferable(type: Image.self)
@@ -116,11 +119,13 @@ struct TransferablePhotoView: View {
 }
 
 #Preview {
-    @Previewable @State var showPicturePickerSheet: Bool = false
-    @Previewable @State var selectedItems: [PhotosPickerItem] = []
+//    @Previewable @State var showPicturePickerSheet: Bool = false
+//    @Previewable @State var selectedItems: [PhotosPickerItem] = []
+//    
+//    PublicationImageField(
+//        showPicturePickerSheet: $showPicturePickerSheet, selectedItems: $selectedItems
+//    )
     
-    PublicationImageField(
-        showPicturePickerSheet: $showPicturePickerSheet, selectedItems: $selectedItems
-    )
+    PublicationAddFormView()
 }
 

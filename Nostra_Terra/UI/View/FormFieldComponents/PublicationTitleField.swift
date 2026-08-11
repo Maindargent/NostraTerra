@@ -7,24 +7,27 @@
 import SwiftUI
 
 struct PublicationTitleField: View {
-    @Binding var title: String
+    @Environment(FormPublicationVM.self) var formVm
     
+    @Binding var title: String
+
     
     var body: some View {
         VStack(alignment: .leading) {
             Text("Titre")
+                .foregroundStyle(formVm.isTitleValid ? .white : .red)
             TextField("Bigouden", text: $title)
                 .padding()
-                .glassEffect(.clear, in: RoundedRectangle(cornerRadius: 12))
+                .glassEffect(formVm.isTitleValid ? .clear : .clear.tint(.red.opacity(0.1)), in: RoundedRectangle(cornerRadius: 12))
         }
     }
 }
 
 #Preview {
-    @Previewable @State var title: String = ""
-    PublicationTitleField(
-        title: $title
-    )
+    NavigationStack {
+        PublicationAddFormView()
+            .preferredColorScheme(.dark)
+    }
 }
 
 
