@@ -15,11 +15,15 @@ enum TypeForm: String, CaseIterable {
 }
 
 struct PublicationAddFormView: View {
+    @Environment(PublicationViewModel.self) var publicationsManager
+    
     @State var formVM = FormPublicationVM()
     
     @State var showPicturePickerSheet: Bool  = false
     @State var showCategoriesSelectionSheet: Bool = false
     @State var showMapSheet: Bool = false
+    
+    @State var isPublished: Bool = false
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -71,8 +75,10 @@ struct PublicationAddFormView: View {
                     
                     //MARK: Save button
                     Button {
-                        //call vm for validation
-                        //si valid : call publicationManager to add Publication
+                        guard let publication = formVM.getPublication else {return}
+                        publicationsManager.addPublication(publication)
+                        isPublished.toggle()
+                        //TODO: ajouter un toast de notification pour valider le publish
                     } label: {
                         Text("Mettre en ligne \(formVM.title)")
                             .font(.title3)
@@ -84,6 +90,7 @@ struct PublicationAddFormView: View {
                     .buttonBorderShape(.roundedRectangle(radius: 12))
                     .tint(.yellowTuscanSun)
                     .padding(.top, 16)
+                    .disabled(!formVM.isFormValid)
                 }
                 .environment(formVM)
             }
@@ -92,13 +99,19 @@ struct PublicationAddFormView: View {
             .navigationTitle("Crée une publication")
             
         }
+        .navigationDestination(isPresented: $isPublished, destination: {
+            //TODO: modifie la tap bar pour avoir accée a la selection ici et pouvoir retourner a l'ecran d'acceuil
+        })
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .preferredColorScheme(.dark)
     }
 }
 
 #Preview {
+    @Previewable @State var publicationManager = PublicationViewModel()
+    
     NavigationStack {
         PublicationAddFormView()
+            .environment(publicationManager)
     }
 }

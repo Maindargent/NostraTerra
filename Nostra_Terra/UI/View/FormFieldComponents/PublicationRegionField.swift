@@ -8,30 +8,35 @@ import SwiftUI
 
 struct PublicationRegionField: View {
     @Environment(FormPublicationVM.self) var formVm
-    @Binding var region: String
+    
+    @Binding var region: FrenchRegion?
+    
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Région")
-                .foregroundStyle(formVm.isRegionValid ? .white : .red)
-            TextField("PACA", text: .constant(""))
-                .padding()
-                .glassEffect(formVm.isRegionValid ? .clear : .clear.tint(.red.opacity(0.1)), in: RoundedRectangle(cornerRadius: 12))
             Picker("Région", selection: $region) {
-                ForEach(RegionType.AllCases) { region in
-                    Text(region).tag(region.id)
+                if region == nil {
+                    Text("Sélectionner une région").tag(nil as String?)
+                }
+                ForEach(FrenchRegion.allCases) { region in
+                    Text(region.titre).tag(region.rawValue)
                 }
             }
+            .tint(formVm.isRegionValid ? .white : .red)
+            .pickerStyle(.navigationLink)
+            .frame(maxWidth: .infinity)
+            .padding(14)
+            .glassEffect(formVm.isRegionValid ? .clear : .clear.tint(.red.opacity(0.1)), in: RoundedRectangle(cornerRadius: 12))
         }
         
     }
 }
 
 #Preview {
-//    @Previewable @State var region: String = ""
-//    PublicationRegionField(
-//        region: $region
-//    )
+    //    @Previewable @State var region: String = ""
+    //    PublicationRegionField(
+    //        region: $region
+    //    )
     NavigationStack {
         PublicationAddFormView()
             .preferredColorScheme(.dark)
