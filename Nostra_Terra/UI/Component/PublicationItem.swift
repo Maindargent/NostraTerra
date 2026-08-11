@@ -80,10 +80,7 @@ struct PublicationItem: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager =
-           PublicationViewModel(
-               currentUser: users[0]
-           )
+    @Previewable @State var publicationManager = PublicationViewModel()
     
     PublicationItem(publication: publicationManager.getRandomPublication())
 }

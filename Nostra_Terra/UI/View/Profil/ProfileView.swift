@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ProfileView: View {
     @Environment(PublicationViewModel.self) var publicationManager: PublicationViewModel
-    @State var profileViewModel = ProfileViewModel()
+    @Environment(UserViewModel.self) var userViewModel
     
-    let user: User
+    @State var profileViewModel = ProfileViewModel()
     
     var body: some View {
         ZStack{
@@ -24,7 +24,7 @@ struct ProfileView: View {
                 VStack(alignment: .trailing){
                     
                     NavigationLink{
-                        ProfileEditView(user: user)
+                        ProfileEditView(user: userViewModel.currentUser)
                     }label: {
                         Image(systemName: "gearshape")
                             .foregroundStyle(.whiteIvoryMist)
@@ -48,7 +48,7 @@ struct ProfileView: View {
                             
                             HStack(spacing: 20) {
                                 
-                                AsyncImage(url: user.profilPicture) { image in
+                                AsyncImage(url: userViewModel.currentUser.profilPicture) { image in
                                     image.resizable()
                                 } placeholder: {
                                     Image(systemName: "photo")
@@ -61,7 +61,7 @@ struct ProfileView: View {
                                 }
                                 .foregroundStyle(.whiteIvoryMist)
                                 
-                                Text("\(user.lastName) \(user.firstName)")
+                                Text("\(userViewModel.currentUser.lastName) \(userViewModel.currentUser.firstName)")
                                     .padding(.horizontal, 9)
                                     .padding(.vertical, 3)
                                     .background {
@@ -91,7 +91,7 @@ struct ProfileView: View {
                         .padding(.bottom, 20)
                         
                         VStack{
-                            Text(user.description)
+                            Text(userViewModel.currentUser.description)
                                 .foregroundStyle(.whiteIvoryMist)
                                 .multilineTextAlignment(.leading)
                                 .padding(.all, 20)
@@ -109,7 +109,7 @@ struct ProfileView: View {
                             HStack(alignment: .bottom){
                                 
                                 let userPublications = publicationManager.getPublications().filter{
-                                    $0.author.id == user.id
+                                    $0.author.id == userViewModel.currentUser.id
                                 }
                                 if userPublications.isEmpty{
                                     Text("Vous n'avez rien publié.")
@@ -139,7 +139,7 @@ struct ProfileView: View {
                             HStack(alignment: .bottom){
                                 
                                 let likedPublications = publicationManager.getPublications().filter{ publication in
-                                    publicationManager.isLiked(publication)
+                                    userViewModel.isLiked(publication)
                                 }
                                 if likedPublications.isEmpty{
                                     Text("Vous n'avez aucun favoris.")
@@ -168,11 +168,8 @@ struct ProfileView: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager =
-           PublicationViewModel(
-               currentUser: users[0]
-           )
+    @Previewable @State var publicationManager = PublicationViewModel()
     
-    ProfileView(user: users[0])
+    ProfileView()
         .environment(publicationManager)
 }

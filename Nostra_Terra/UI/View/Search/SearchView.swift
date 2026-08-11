@@ -87,7 +87,7 @@ struct SearchView: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager = PublicationViewModel(currentUser: users[0])
+    @Previewable @State var publicationManager = PublicationViewModel()
     SearchView()
         .environment(publicationManager)
 }

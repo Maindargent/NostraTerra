@@ -75,10 +75,7 @@ struct PublicationRegionItem: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager =
-           PublicationViewModel(
-               currentUser: users[0]
-           )
+    @Previewable @State var publicationManager = PublicationViewModel()
     
     PublicationRegionItem(publication: publicationManager.getRandomPublication(), path: .constant([]))
 }

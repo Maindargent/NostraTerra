@@ -11,11 +11,6 @@ import SwiftUI
 final class PublicationViewModel {
     
     var publications = MOCKED_PUBLICATIONS
-    var currentUser: User
-
-    init(currentUser: User) {
-        self.currentUser = currentUser
-    }
 
     var suggestionPublicationsShuffled = MOCKED_PUBLICATIONS.shuffled().prefix(5).enumerated()
     
@@ -47,21 +42,5 @@ final class PublicationViewModel {
     
     func refreshSuggestionPublicationsShuffled() {
         suggestionPublicationsShuffled = MOCKED_PUBLICATIONS.shuffled().prefix(5).enumerated()
-    }
-    
-    func isLiked(_ publication: any Publication) -> Bool {
-        currentUser.likedPublication.contains {
-            $0.id == publication.id
-        }
-    }
-
-    func toggleLike(_ publication: any Publication) {
-        if isLiked(publication) {
-            currentUser.likedPublication.removeAll {
-                $0.id == publication.id
-            }
-        } else {
-            currentUser.likedPublication.append(publication)
-        }
     }
 }

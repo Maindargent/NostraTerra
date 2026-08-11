@@ -9,13 +9,13 @@ import SwiftUI
 
 struct SuggestionsView: View {
     @Environment(PublicationViewModel.self) var publicationsManager
+    @Environment(UserViewModel.self) var userViewModel
     
     @State var x: [CGFloat] = [0,0,0,0,0]
     @State var degree: [Double] = [0,0,0,0,0]
     
     @State private var path: [SuggestionScreen] = []
     
-    let user: User
     
     var body: some View {
         NavigationStack(path: $path){
@@ -32,7 +32,7 @@ struct SuggestionsView: View {
                             Button{
                                 path.append(SuggestionScreen.profile)
                             }label: {
-                                AsyncImage(url: user.profilPicture) { image in
+                                AsyncImage(url: userViewModel.currentUser.profilPicture) { image in
                                     image.resizable()
                                 } placeholder: {
                                     Image(systemName: "person.slash.fill")
@@ -44,7 +44,7 @@ struct SuggestionsView: View {
                                 .shadow(color: .whiteIvoryMist, radius: 3)
                             }
                             
-                            Text("Bonjour \(user.firstName) !")
+                            Text("Bonjour \(userViewModel.currentUser.firstName) !")
                                 .font(.title)
                                 .bold()
                                 .foregroundStyle(.whiteIvoryMist)
@@ -146,7 +146,7 @@ struct SuggestionsView: View {
                 .navigationDestination(for: SuggestionScreen.self) { screen in
                     switch screen {
                         case .profile:
-                            ProfileView(user: publicationsManager.currentUser)
+                            ProfileView()
                             
                         case .listSuggestion:
                             ListSuggestionView()
@@ -163,9 +163,11 @@ struct SuggestionsView: View {
 
 
 #Preview { 
-    @Previewable @State var publicationManager = PublicationViewModel(currentUser: users[0])
+    @Previewable @State var publicationManager = PublicationViewModel()
+    @Previewable @State var userViewModel = UserViewModel(currentUser: users[0])
     
-    SuggestionsView(user: users[0])
+    SuggestionsView()
         .environment(publicationManager)
+        .environment(userViewModel)
 }
 

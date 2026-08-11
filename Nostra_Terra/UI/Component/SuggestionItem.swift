@@ -23,7 +23,7 @@ struct SuggestionItem: View {
                         .foregroundStyle(.blueDeepSpace)
                 }
                 .scaledToFill()
-                .frame(width: .infinity, height: 200)
+                .frame(maxWidth: .infinity, maxHeight: 200)
                 .clipShape(
                     UnevenRoundedRectangle(
                         topLeadingRadius: 20,
@@ -93,9 +93,6 @@ struct SuggestionItem: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager =
-           PublicationViewModel(
-               currentUser: users[0]
-           )
+    @Previewable @State var publicationManager = PublicationViewModel()
     SuggestionItem(publication: publicationManager.getRandomPublication(), path: .constant([]))
 }

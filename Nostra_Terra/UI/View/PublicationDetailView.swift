@@ -10,11 +10,10 @@ import MapKit
 
 struct PublicationDetailView: View {
     @Environment(PublicationViewModel.self) var publicationsManager
-    //    let publication: (any Publication)
+    @Environment(UserViewModel.self) var userViewModel
+    
     let publicationID: UUID
-    //    let colorType: PublicationType = .artVisuel
     @State var cameraPosition: MapCameraPosition = .automatic
-    //    @State var isLiked:Bool = false
     
     var publication: (any Publication)? {
         publicationsManager.getPublication(id: publicationID)
@@ -62,13 +61,13 @@ struct PublicationDetailView: View {
                             }
                             Spacer()
                             Button {
-                                publicationsManager.toggleLike(
+                                userViewModel.toggleLike(
                                     publication
                                 )
                             } label: {
                                 Image(
                                     systemName:
-                                        publicationsManager.isLiked(
+                                        userViewModel.isLiked(
                                             publication
                                         )
                                     ? "heart.fill"
@@ -76,7 +75,7 @@ struct PublicationDetailView: View {
                                 )
                             }
                             .foregroundStyle(
-                                publicationsManager.isLiked(
+                                userViewModel.isLiked(
                                     publication
                                 )
                                 ? .yellowTuscanSun
@@ -149,9 +148,10 @@ struct PublicationDetailView: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager = PublicationViewModel(currentUser: users[0])
+    @Previewable @State var publicationManager = PublicationViewModel()
     PublicationDetailView(
-        publicationID: MOCKED_PUBLICATIONS[0].id
+        publicationID: publicationManager.getRandomPublication().id
     )
     .environment(publicationManager)
 }
+

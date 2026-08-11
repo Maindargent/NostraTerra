@@ -75,7 +75,7 @@ struct SearchItem: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager = PublicationViewModel(currentUser: users[0])
+    @Previewable @State var publicationManager = PublicationViewModel()
     
     SearchItem(publication: publicationManager.getRandomPublication())
 }
