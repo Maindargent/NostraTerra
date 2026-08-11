@@ -118,5 +118,8 @@ struct MapView: View {
 
 
 #Preview {
+    @Previewable @State var publicationManager = PublicationViewModel()
+    
     MapView()
+        .environment(publicationManager)
 }
