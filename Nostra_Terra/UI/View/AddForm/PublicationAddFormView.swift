@@ -102,6 +102,20 @@ struct PublicationAddFormView: View {
                 }
                 .environment(formVM)
             }
+            .toolbar(content: {
+                if formVM.isTitleValid {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            formVM.reset()
+                        } label: {
+                            HStack {
+                                Text("Reset")
+                                Image(systemName: "gobackward")
+                            }.foregroundStyle(.red)
+                        }
+                    }
+                }
+            })
             .scrollDismissesKeyboard(.immediately)
             .contentMargins(16, for: .scrollContent)
             .navigationTitle("Crée une publication")
