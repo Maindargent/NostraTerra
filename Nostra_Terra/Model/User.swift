@@ -5,17 +5,17 @@
 //  Created by Apprenant 87 on 21/07/2026.
 //
 
-import Foundation
+import SwiftUI
+import PhotosUI
 
 struct User: Identifiable {
     let id = UUID()
-    let lastName: String
-    let firstName: String
-    let birthDate: Date
-    let description: String
-    let profilPicture: URL
+    var lastName: String
+    var firstName: String
+    var birthDate: Date
+    var description: String
+    var profilPicture: URL?
+    var uploadedImage: PhotosPickerItem?
     var likedPublication: [(any Publication)] = []
     var publishedPublication: [(any Publication)] = []
 }
-
-
