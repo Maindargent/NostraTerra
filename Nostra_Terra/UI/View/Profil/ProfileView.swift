@@ -14,10 +14,6 @@ struct ProfileView: View {
     
     @State var profileViewModel = ProfileViewModel()
     
-    @State var item: PhotosPickerItem? = nil
-    @State private var image: Image?
-    @State private var isLoading = true
-    
     var body: some View {
         ZStack{
             Image("backgroundPicture")
@@ -54,31 +50,7 @@ struct ProfileView: View {
                             HStack(spacing: 20) {
                                 
                                 if userViewModel.currentUser.uploadedImage != nil {
-                                    HStack {
-                                        if let image {
-                                            image
-                                                .resizable()
-                                                .frame(width: 115, height: 115)
-                                                .clipShape(Circle())
-                                                .overlay {
-                                                    Circle()
-                                                        .stroke(.whiteIvoryMist, lineWidth: 2)
-                                                }
-                                                .foregroundStyle(.whiteIvoryMist)
-                                        } else if isLoading {
-                                            ProgressView()
-                                        }
-                                    }
-                                    .onAppear(perform: {
-                                        item = userViewModel.currentUser.uploadedImage
-                                    })
-                                    .task(id: item) {
-                                        if let item {
-                                            isLoading = true
-                                            image = try? await item.loadTransferable(type: Image.self)
-                                            isLoading = false
-                                        }
-                                    }
+                                    PictureProfil(picture: userViewModel.currentUser.uploadedImage!)
                                 } else {
                                     AsyncImage(url: userViewModel.currentUser.profilPicture) { image in
                                         image.resizable()
