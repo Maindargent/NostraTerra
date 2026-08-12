@@ -29,7 +29,7 @@ struct SearchView: View {
                     
                     ForEach(searchViewModel.searchSuggestions, id: \.id) { suggestion in
                         NavigationLink{
-                            PublicationDetailView(publicationID: suggestion.id)
+                            PublicationDetailView(publication: suggestion)
                         }label: {
                             HStack{
                                 Image(systemName: "magnifyingglass")
@@ -52,7 +52,7 @@ struct SearchView: View {
                     
                     ForEach(searchViewModel.searchResults, id: \.id) { result in
                         NavigationLink{
-                            PublicationDetailView(publicationID: result.id)
+                            PublicationDetailView(publication: result)
                         }label: {
                             SearchItem(publication: result)
                         }

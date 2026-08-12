@@ -129,7 +129,7 @@ struct ProfileView: View {
                                 } else {
                                     ForEach(userPublications, id: \.id) { publication in
                                         NavigationLink {
-                                            PublicationDetailView(publicationID: publication.id)
+                                            PublicationDetailView(publication: publication)
                                         } label: {
                                             PublicationItem(publication: publication)
                                         }
@@ -159,7 +159,7 @@ struct ProfileView: View {
                                 }else{
                                     ForEach(likedPublications, id: \.id) { publication in
                                         NavigationLink {
-                                            PublicationDetailView(publicationID: publication.id)
+                                            PublicationDetailView(publication: publication)
                                         } label: {
                                             PublicationItem(publication: publication)
                                         }

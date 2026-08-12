@@ -82,7 +82,7 @@ struct MapView: View {
             },
             content: {
                 PublicationDetailView(
-                    publicationID: selectedPublicationID!
+                    publication: selectedPublication!
                 ).environment(userViewModel)
                     .toolbar(content: {
                         ToolbarItem(placement: .bottomBar) {

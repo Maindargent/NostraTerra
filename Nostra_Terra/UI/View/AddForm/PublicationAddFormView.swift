@@ -26,7 +26,7 @@ struct PublicationAddFormView: View {
     
     @State var isPublished: Bool = false
     
-    @State var publishedPublicationID: UUID?
+    @State var publishedPublication: (any Publication)?
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -84,7 +84,7 @@ struct PublicationAddFormView: View {
                             "Publication : \(publication.title) crée avec succée !",
                             type: .success
                         )
-                        publishedPublicationID = publicationsManager.getPublication(id: publication.id)?.id
+                        publishedPublication = publicationsManager.getPublication(id: publication.id)!
                         print("notification : \(notificationViewModel.currentNotif ?? nil)")
                         formVM.reset()
                         isPublished.toggle()
@@ -123,14 +123,25 @@ struct PublicationAddFormView: View {
                         }
                     }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        formVM.reset()
-                    } label: {
-                        HStack {
-                            Text("Reset")
-                            Image(systemName: "gobackward")
-                        }.foregroundStyle(.red)
+                if formVM.isFormValid {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            guard let publication = formVM.getPublication else {return}
+                            publicationsManager.addPublication(publication)
+                            notificationViewModel.addNotification(
+                                "Publication : \(publication.title) crée avec succée !",
+                                type: .success
+                            )
+                            publishedPublication = publicationsManager.getPublication(id: publication.id)!
+                            print("notification : \(notificationViewModel.currentNotif ?? nil)")
+                            formVM.reset()
+                            isPublished.toggle()
+                        } label: {
+                            HStack {
+                                Text("Enregistrer")
+                                Image(systemName: "checkmark.circle")
+                            }.foregroundStyle(.yellowTuscanSun)
+                        }
                     }
                 }
             })
@@ -140,7 +151,9 @@ struct PublicationAddFormView: View {
             
         }
         .navigationDestination(isPresented: $isPublished, destination: {
-            PublicationDetailView(publicationID: publishedPublicationID ?? MOCKED_PUBLICATIONS[0].id)
+            PublicationDetailView(
+                publication: publishedPublication ?? MOCKED_PUBLICATIONS[0]
+            )
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .preferredColorScheme(.dark)
@@ -148,7 +161,9 @@ struct PublicationAddFormView: View {
 }
 
 #Preview {
-    PublicationAddFormView()
-        .environment(PublicationViewModel())
-        .environment(NotificationViewModel())
+    NavigationStack {
+        PublicationAddFormView()
+            .environment(PublicationViewModel())
+            .environment(NotificationViewModel())
+    }
 }

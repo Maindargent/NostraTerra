@@ -152,7 +152,7 @@ struct SuggestionsView: View {
                             ListSuggestionView()
                             
                         case .publicationDetail:
-                            PublicationDetailView(publicationID: publicationsManager.getRandomPublication().id)
+                            PublicationDetailView(publication: publicationsManager.getRandomPublication())
                     }
                 }
             }
