@@ -58,8 +58,13 @@ struct ProfileView: View {
                                         if let image {
                                             image
                                                 .resizable()
-                                                .scaledToFit()
-                                                .clipped()
+                                                .frame(width: 115, height: 115)
+                                                .clipShape(Circle())
+                                                .overlay {
+                                                    Circle()
+                                                        .stroke(.whiteIvoryMist, lineWidth: 2)
+                                                }
+                                                .foregroundStyle(.whiteIvoryMist)
                                         } else if isLoading {
                                             ProgressView()
                                         }
@@ -204,7 +209,9 @@ struct ProfileView: View {
     @Previewable @State var publicationManager = PublicationViewModel()
     @Previewable @State var userViewModel = UserViewModel(currentUser: users[0])
     
-    ProfileView()
-        .environment(publicationManager)
-        .environment(userViewModel)
+    NavigationStack {
+        ProfileView()
+            .environment(publicationManager)
+            .environment(userViewModel)
+    }
 }

@@ -8,6 +8,7 @@ import SwiftUI
 import PhotosUI
 
 struct ProfileEditView: View {
+    @Environment(\.dismiss) var dismiss
     @Environment(UserViewModel.self) var userVM
     
     @State private var noSound = false
@@ -94,6 +95,7 @@ struct ProfileEditView: View {
                         Task {
                             if let loaded = try? await avatarItem?.loadTransferable(type: Image.self) {
                                 avatarImage = loaded
+                                profilEditVM.uploadedImage = avatarItem
                             } else {
                                 print("Failed")
                             }
@@ -126,8 +128,8 @@ struct ProfileEditView: View {
                     
                     Button() {
                         if let user = profilEditVM.getUser {
-                            print(user)
                             userVM.currentUser = user
+                            dismiss()
                         }
                     } label: {
                         HStack {

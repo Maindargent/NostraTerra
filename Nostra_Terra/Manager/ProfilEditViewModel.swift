@@ -55,7 +55,7 @@ final class ProfilEditViewModel {
                     firstName: firstName,
                     birthDate: birthDate,
                     description: description,
-                    profilPicture: URL(string: "https://picsum.photos/seed/user1/300/300")
+                    profilPicture: URL(string: "https://picsum.photos/seed/user1/300/300")!
                 )
             }
         } else {
