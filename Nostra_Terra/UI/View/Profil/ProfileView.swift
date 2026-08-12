@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct ProfileView: View {
     @Environment(PublicationViewModel.self) var publicationManager: PublicationViewModel
@@ -15,7 +16,6 @@ struct ProfileView: View {
     
     var body: some View {
         ZStack{
-            
             Image("backgroundPicture")
                 .resizable()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -25,6 +25,7 @@ struct ProfileView: View {
                     
                     NavigationLink{
                         ProfileEditView(user: userViewModel.currentUser)
+                            .environment(userViewModel)
                     }label: {
                         Image(systemName: "gearshape")
                             .foregroundStyle(.whiteIvoryMist)
@@ -48,18 +49,22 @@ struct ProfileView: View {
                             
                             HStack(spacing: 20) {
                                 
-                                AsyncImage(url: userViewModel.currentUser.profilPicture) { image in
-                                    image.resizable()
-                                } placeholder: {
-                                    Image(systemName: "photo")
+                                if userViewModel.currentUser.uploadedImage != nil {
+                                    PictureProfil(picture: userViewModel.currentUser.uploadedImage!)
+                                } else {
+                                    AsyncImage(url: userViewModel.currentUser.profilPicture) { image in
+                                        image.resizable()
+                                    } placeholder: {
+                                        Image(systemName: "photo")
+                                    }
+                                    .frame(width: 115, height: 115)
+                                    .clipShape(Circle())
+                                    .overlay {
+                                        Circle()
+                                            .stroke(.whiteIvoryMist, lineWidth: 2)
+                                    }
+                                    .foregroundStyle(.whiteIvoryMist)
                                 }
-                                .frame(width: 115, height: 115)
-                                .clipShape(Circle())
-                                .overlay {
-                                    Circle()
-                                        .stroke(.whiteIvoryMist, lineWidth: 2)
-                                }
-                                .foregroundStyle(.whiteIvoryMist)
                                 
                                 
                                 Text("\(userViewModel.currentUser.lastName) \(userViewModel.currentUser.firstName)")
@@ -176,7 +181,9 @@ struct ProfileView: View {
     @Previewable @State var publicationManager = PublicationViewModel()
     @Previewable @State var userViewModel = UserViewModel(currentUser: users[0])
     
-    ProfileView()
-        .environment(publicationManager)
-        .environment(userViewModel)
+    NavigationStack {
+        ProfileView()
+            .environment(publicationManager)
+            .environment(userViewModel)
+    }
 }

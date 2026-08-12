@@ -7,7 +7,7 @@
 
 import Foundation
 
-let users: [User] = [
+var users: [User] = [
     User(
         lastName: "Swift",
         firstName: "Yann",

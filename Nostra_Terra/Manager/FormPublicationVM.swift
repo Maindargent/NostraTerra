@@ -26,7 +26,7 @@ final class FormPublicationVM {
     }
     
     var isEndDateValid: Bool {
-        guard typeForm == .event else {
+        guard typeForm == .tradition else {
             return true
         }
         return endDate > startDate

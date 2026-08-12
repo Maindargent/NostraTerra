@@ -159,7 +159,7 @@ struct MapView: View {
                                 Text("\(selectedCategory?.rawValue ?? "Catégories")")
                                 Image(systemName: "line.3.horizontal.decrease")
                             }
-                            .foregroundStyle(.white)
+                            .foregroundStyle(selectedCategory != nil ? selectedCategory!.color : .white)
                         }
                         .padding(12)
                     }
@@ -175,6 +175,8 @@ struct MapView: View {
                             .resizable()
                             .frame(width: 20, height: 20, alignment: .center)
                     }
+                    .foregroundStyle(selectedRegion != nil ? selectedRegion!.color : .white)
+                    .tint(selectedRegion != nil ? selectedRegion!.color : .white)
                     .padding(4)
                 }
                 .buttonStyle(.glassProminent)
