@@ -43,4 +43,8 @@ final class PublicationViewModel {
     func refreshSuggestionPublicationsShuffled() {
         suggestionPublicationsShuffled = MOCKED_PUBLICATIONS.shuffled().prefix(5).enumerated()
     }
+    
+    func getRegionPublications(selectedRegion: FrenchRegion) -> [(any Publication)] {
+        return publications.filter{$0.region == selectedRegion}
+    }
 }

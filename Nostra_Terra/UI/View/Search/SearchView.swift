@@ -22,6 +22,20 @@ struct SearchView: View {
                 
                 VStack (alignment: .leading, spacing: 0){
                     
+                    if !searchViewModel.isSearching{
+                        ScrollView{
+                            ForEach(publicationsManager.getPublications().sorted( by: { $0.created_at > $1.created_at}), id: \.id) { publication in
+                                NavigationLink{
+                                    PublicationDetailView(publicationID: publication.id)
+                                }label: {
+                                    SearchItem(publication: publication)
+                                }
+                            }
+                            .padding(.bottom, 20)
+                        }
+                    }
+                        
+                    
                     if searchViewModel.isSearching && !searchViewModel.searchSuggestions.isEmpty{
                         Text("Suggestions :\n")
                             .foregroundStyle(.whiteIvoryMist)

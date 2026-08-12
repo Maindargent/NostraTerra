@@ -64,7 +64,7 @@ struct SuggestionItem: View {
                     Spacer()
                     
                     Button{
-                        path.append(.publicationDetail)
+                        path.append(.publicationDetail(publication.id))
                     } label : {
                         Image(systemName: "arrow.right")
                     }
