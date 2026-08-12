@@ -16,6 +16,7 @@ enum TypeForm: String, CaseIterable {
 
 struct PublicationAddFormView: View {
     @Environment(PublicationViewModel.self) var publicationsManager
+    @Environment(NotificationViewModel.self) var notificationViewModel
     
     @State var formVM = FormPublicationVM()
     
@@ -24,6 +25,8 @@ struct PublicationAddFormView: View {
     @State var showMapSheet: Bool = false
     
     @State var isPublished: Bool = false
+    
+    @State var publishedPublicationID: UUID?
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -77,9 +80,14 @@ struct PublicationAddFormView: View {
                     Button {
                         guard let publication = formVM.getPublication else {return}
                         publicationsManager.addPublication(publication)
-                        isPublished.toggle()
-                        //TODO: ajouter un toast de notification pour valider le publish
+                        notificationViewModel.addNotification(
+                            "Publication : \(publication.title) crée avec succée !",
+                            type: .success
+                        )
+                        publishedPublicationID = publicationsManager.getPublication(id: publication.id)?.id
+                        print("notification : \(notificationViewModel.currentNotif ?? nil)")
                         formVM.reset()
+                        isPublished.toggle()
                     } label: {
                         Text("Mettre en ligne \(formVM.title)")
                             .font(.title3)
@@ -115,6 +123,16 @@ struct PublicationAddFormView: View {
                         }
                     }
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        formVM.reset()
+                    } label: {
+                        HStack {
+                            Text("Reset")
+                            Image(systemName: "gobackward")
+                        }.foregroundStyle(.red)
+                    }
+                }
             })
             .scrollDismissesKeyboard(.immediately)
             .contentMargins(16, for: .scrollContent)
@@ -122,7 +140,7 @@ struct PublicationAddFormView: View {
             
         }
         .navigationDestination(isPresented: $isPublished, destination: {
-            //TODO: modifie la tap bar pour avoir accée a la selection ici et pouvoir retourner a l'ecran d'acceuil
+            PublicationDetailView(publicationID: publishedPublicationID ?? MOCKED_PUBLICATIONS[0].id)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .preferredColorScheme(.dark)
@@ -130,10 +148,7 @@ struct PublicationAddFormView: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager = PublicationViewModel()
-    
-    NavigationStack {
-        PublicationAddFormView()
-            .environment(publicationManager)
-    }
+    PublicationAddFormView()
+        .environment(PublicationViewModel())
+        .environment(NotificationViewModel())
 }
