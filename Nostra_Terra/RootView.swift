@@ -21,27 +21,44 @@ struct RootView: View {
     
     @State var userViewModel = UserViewModel(currentUser: users[0])
     
+    @State var notificationViewModel = NotificationViewModel()
+    
     var body: some View {
-        TabView(selection: $selectedTab) {
-            Tab("Accueil", systemImage: "house", value: .landing) {
-                SuggestionsView()
-            }
-            Tab("Carte", systemImage: "map", value: .map) {
-                MapView()
-            }
-            Tab("Ajouter", systemImage: "plus", value: .addForm) {
-                NavigationStack {
-                    PublicationAddFormView()
+        ZStack(alignment: .top) {
+            TabView(selection: $selectedTab) {
+                Tab("Accueil", systemImage: "house", value: .landing) {
+                    SuggestionsView()
+                }
+                
+                Tab("Carte", systemImage: "map", value: .map) {
+                    MapView()
+                }
+                
+                Tab("Ajouter", systemImage: "plus", value: .addForm) {
+                    NavigationStack {
+                        PublicationAddFormView()
+                    }
+                }
+                
+                Tab("Recherche", systemImage: "magnifyingglass", value: .search ,role: .search) {
+                    SearchView()
                 }
             }
+            .tabBarMinimizeBehavior(.automatic)
+            .environment(publicationManager)
+            .environment(userViewModel)
+            .environment(notificationViewModel)
             
-            Tab("Recherche", systemImage: "magnifyingglass", value: .search ,role: .search) {
-                SearchView()
+            if let notif = notificationViewModel.getNotification() {
+                VStack {
+                    NotificationBanner(notif: notif)
+                        .padding()
+                        .transition(.move(edge: .leading))
+
+                    Spacer()
+                }
             }
         }
-        .tabBarMinimizeBehavior(.automatic)
-        .environment(publicationManager)
-        .environment(userViewModel)
     }
 }
 
