@@ -22,6 +22,20 @@ struct SearchView: View {
                 
                 VStack (alignment: .leading, spacing: 0){
                     
+                    if !searchViewModel.isSearching{
+                        ScrollView{
+                            ForEach(publicationsManager.getPublications().sorted( by: { $0.created_at > $1.created_at}), id: \.id) { publication in
+                                NavigationLink{
+                                    PublicationDetailView(publicationID: publication.id)
+                                } label: {
+                                    SearchItem(publication: publication)
+                                }
+                            }
+                            .padding(.bottom, 20)
+                        }
+                    }
+                        
+                    
                     if searchViewModel.isSearching && !searchViewModel.searchSuggestions.isEmpty{
                         Text("Suggestions :\n")
                             .foregroundStyle(.whiteIvoryMist)
@@ -29,7 +43,7 @@ struct SearchView: View {
                     
                     ForEach(searchViewModel.searchSuggestions, id: \.id) { suggestion in
                         NavigationLink{
-                            PublicationDetailView(publication: suggestion)
+                            PublicationDetailView(publicationID: suggestion.id)
                         }label: {
                             HStack{
                                 Image(systemName: "magnifyingglass")
@@ -52,14 +66,13 @@ struct SearchView: View {
                     
                     ForEach(searchViewModel.searchResults, id: \.id) { result in
                         NavigationLink{
-                            PublicationDetailView(publication: result)
+                            PublicationDetailView(publicationID: result.id)
                         }label: {
                             SearchItem(publication: result)
                         }
                     }
                     .padding(.bottom, 20)
                 }
-                .padding()
                 .frame(maxHeight: .infinity, alignment: .top)
             }
             .searchable(

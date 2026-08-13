@@ -98,7 +98,8 @@ struct PublicationItem: View {
                                 Text(categorie.rawValue)
                                     .padding(.horizontal, 9)
                                     .padding(.vertical, 3)
-                                    .glassEffect(.clear.tint(categorie.color))
+                                    .font(.system(size: 10))
+                                    .glassEffect(.clear.tint(categorie.color.opacity(0.5)))
                             }
                             .foregroundStyle(.whiteIvoryMist)
                             .padding(.bottom, 10)

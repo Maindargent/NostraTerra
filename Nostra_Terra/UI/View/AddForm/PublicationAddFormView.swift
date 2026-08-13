@@ -143,9 +143,11 @@ struct PublicationAddFormView: View {
             
         }
         .navigationDestination(isPresented: $isPublished, destination: {
-            PublicationDetailView(
-                publication: publishedPublication ?? MOCKED_PUBLICATIONS[0]
-            )
+            if let publishedPublication {
+                PublicationDetailView(
+                    publicationID: publishedPublication.id
+                )
+            }
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .preferredColorScheme(.dark)

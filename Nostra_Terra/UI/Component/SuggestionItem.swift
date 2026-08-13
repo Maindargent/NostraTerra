@@ -41,7 +41,7 @@ struct SuggestionItem: View {
                             endPoint: .top
                         )
                     )
-                    .frame(width: .infinity, height: 60)
+                    .frame(maxWidth: .infinity, maxHeight: 60)
                 
                 HStack {
                     VStack(alignment: .leading){
@@ -51,7 +51,7 @@ struct SuggestionItem: View {
                             .foregroundStyle(.whiteIvoryMist)
                         
                         HStack{
-                            Text("00/00/0000")
+                            Text(publication.created_at, format: .dateTime.day().month(.defaultDigits).year())
                                 .foregroundStyle(.whiteIvoryMist)
                             
                             Text(publication.region.titre)
@@ -64,7 +64,7 @@ struct SuggestionItem: View {
                     Spacer()
                     
                     Button{
-                        path.append(.publicationDetail)
+                        path.append(.publicationDetail(publication.id))
                     } label : {
                         Image(systemName: "arrow.right")
                     }
@@ -75,18 +75,22 @@ struct SuggestionItem: View {
                 }
                 .padding(.all, 20)
             }
-            ///MARK: TODO : REGLER PADDING
-            Text(publication.description)
-                .multilineTextAlignment(.leading)
-                .padding(.all, 10)
-                .frame(width: .infinity, height: 125)
+            
+            
+            VStack(alignment: .leading) {
+                Text(publication.description)
+                    .multilineTextAlignment(.leading)
+                    .padding(.all, 10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, maxHeight: 125)
             
         }
         .background(
             RoundedRectangle(cornerRadius: 20)
                 .fill(.thickMaterial)
                 .shadow(radius: 20)
-                //.frame(height: 50)
         )
         
     }

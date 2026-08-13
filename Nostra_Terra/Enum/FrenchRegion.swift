@@ -79,7 +79,7 @@ enum FrenchRegion: String, CaseIterable, Identifiable {
            case .paysDeLaLoire:
                return URL(string: "https://fr.wikipedia.org/wiki/Pays_de_la_Loire")
            case .provenceAlpesCoteDAzur:
-               return URL(string: "https://fr.wikipedia.org/wiki/Provence-Alpes-Côte_d%27Azur")
+               return URL(string: "https://fr.wikipedia.org/wiki/Provence-Alpes-Côte_d'Azur")
            case .mayotte:
                return URL(string: "https://fr.wikipedia.org/wiki/Mayotte")
            case .guyane:

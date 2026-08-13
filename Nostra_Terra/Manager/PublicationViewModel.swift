@@ -11,7 +11,7 @@ import SwiftUI
 final class PublicationViewModel {
     
     var publications = MOCKED_PUBLICATIONS
-
+    
     var suggestionPublicationsShuffled = MOCKED_PUBLICATIONS.shuffled().prefix(5).enumerated()
     
     func getPublications(maxLength: Int? = nil) -> [(any Publication)] {
@@ -21,7 +21,7 @@ final class PublicationViewModel {
         return publications
     }
     
-    func getShuffledPublications(maxLength: Int? = nil) -> [(any Publication)]{
+    func getShuffledPublications(maxLength: Int? = nil) -> [(any Publication)] {
         if let maxLength {
             return Array(publications.prefix(maxLength)).shuffled()
         }
@@ -44,6 +44,10 @@ final class PublicationViewModel {
         suggestionPublicationsShuffled = MOCKED_PUBLICATIONS.shuffled().prefix(5).enumerated()
     }
     
+    func getRegionPublications(selectedRegion: FrenchRegion) -> [(any Publication)] {
+        return publications.filter{$0.region == selectedRegion}
+    }
+    
     func getFilteredPublications(region: FrenchRegion?, category: PublicationCategory?) -> [(any Publication)] {
         if let region, let category {
             return publications.filter({$0.region == region && $0.categories.contains(category)})
@@ -62,7 +66,7 @@ final class PublicationViewModel {
     
     func getUsedRegions() -> [(region: FrenchRegion, count: Int)] {
         var regions: [(region: FrenchRegion, count: Int)] = []
-
+        
         for publication in getPublications() {
             if let index = regions.firstIndex(where: {$0.region == publication.region}) {
                 regions[index].count += 1
@@ -73,7 +77,8 @@ final class PublicationViewModel {
                 ))
             }
         }
-
+        
         return regions
     }
 }
+

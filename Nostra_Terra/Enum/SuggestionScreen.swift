@@ -9,7 +9,7 @@ import SwiftUI
 
 enum SuggestionScreen: Hashable {
     case profile
-    case publicationDetail
-    case listSuggestion
+    case publicationDetail(UUID)
+    case discoverRegion(FrenchRegion)
     
 }

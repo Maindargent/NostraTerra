@@ -16,7 +16,6 @@ struct SuggestionsView: View {
     
     @State private var path: [SuggestionScreen] = []
     
-    
     var body: some View {
         NavigationStack(path: $path){
             ZStack{
@@ -133,8 +132,8 @@ struct SuggestionsView: View {
                         
                         ScrollView(.horizontal){
                             HStack(alignment: .bottom){
-                                ForEach(publicationsManager.getPublications(), id: \.id) { publication in
-                                    PublicationRegionItem(publication: publication, path: $path)
+                                ForEach(publicationsManager.getUsedRegions().enumerated(), id: \.element.region.id) { regionTuple in
+                                    PublicationRegionItem(region: regionTuple.element.region, path: $path)
                                 }
                                 
                             }
@@ -148,11 +147,11 @@ struct SuggestionsView: View {
                         case .profile:
                             ProfileView()
                             
-                        case .listSuggestion:
-                            ListSuggestionView()
+                        case .discoverRegion(let region):
+                            DiscoverRegionView(selectedRegion: region)
                             
-                        case .publicationDetail:
-                            PublicationDetailView(publication: publicationsManager.getRandomPublication())
+                        case .publicationDetail(let publicationID):
+                            PublicationDetailView(publicationID: publicationID)
                     }
                 }
             }
@@ -162,7 +161,7 @@ struct SuggestionsView: View {
 }
 
 
-#Preview { 
+#Preview {
     @Previewable @State var publicationManager = PublicationViewModel()
     @Previewable @State var userViewModel = UserViewModel(currentUser: users[0])
     

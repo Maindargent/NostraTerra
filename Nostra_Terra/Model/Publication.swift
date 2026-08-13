@@ -11,7 +11,7 @@ import PhotosUI
 
 
 
-protocol Publication: Identifiable {
+protocol Publication: Identifiable, Equatable, Hashable {
     var id: UUID { get set }
     var image: URL { get set }
     var uploadedImages: [PhotosPickerItem] { get set }
@@ -25,7 +25,7 @@ protocol Publication: Identifiable {
     var likeCount: Int { get set }
 }
 
-struct Tradition: Publication, Identifiable {
+struct Tradition: Publication, Identifiable, Equatable, Hashable {
     var id = UUID()
     var image: URL
     var uploadedImages: [PhotosPickerItem] = []
@@ -47,7 +47,7 @@ struct Tradition: Publication, Identifiable {
     }
 }
 
-struct Event: Publication, Identifiable {
+struct Event: Publication, Identifiable, Equatable, Hashable {
     var id = UUID()
     var image: URL
     var uploadedImages: [PhotosPickerItem] = []
