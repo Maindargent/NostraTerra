@@ -12,7 +12,8 @@ struct ToggleButtonView: View {
     @Binding var isOn: Bool
        
        var body: some View {
-           HStack{
+           HStack {
+               
                Toggle(title, isOn: $isOn)
                    .foregroundStyle(.whiteIvoryMist)
                    .tint(.blueDeepSpace)
@@ -22,5 +23,6 @@ struct ToggleButtonView: View {
    }
 
 #Preview {
-    ToggleButtonView(title: "privé", isOn: .constant(false) )
+    @Previewable @State var isOn: Bool = false
+    ToggleButtonView(title: "privé", isOn: $isOn)
 }

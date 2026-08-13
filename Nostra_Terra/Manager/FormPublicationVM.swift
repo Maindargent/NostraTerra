@@ -26,7 +26,7 @@ final class FormPublicationVM {
     }
     
     var isEndDateValid: Bool {
-        guard typeForm == .event else {
+        guard typeForm == .tradition else {
             return true
         }
         return endDate > startDate
@@ -65,11 +65,7 @@ final class FormPublicationVM {
                 created_at: .now,
                 categories: Array(selectedCategories),
                 region: region!,
-                author: User(lastName: "John",
-                             firstName: "Doe",
-                             birthDate: .now,
-                             description: "",
-                             profilPicture: URL(string: "http://google.fr")!),
+                author: users[0],
                 geoPoint: selectedGeoPoint!,
                 likeCount: 0,
                 startDate: startDate,
@@ -83,15 +79,34 @@ final class FormPublicationVM {
                 created_at: .now,
                 categories: Array(selectedCategories),
                 region: region!,
-                author: User(lastName: "John",
-                             firstName: "Doe",
-                             birthDate: .now,
-                             description: "",
-                             profilPicture: URL(string: "http://google.fr")!),
+                author: users[0],
                 geoPoint: selectedGeoPoint!,
                 likeCount: 0)
         } else {
             return nil
         }
+    }
+    
+    func reset() {
+        typeForm = .tradition
+        title = ""
+        startDate = .now
+        endDate = .now
+        selectedItems = []
+        description = ""
+        selectedCategories = Set<PublicationCategory>()
+        region = nil
+        selectedGeoPoint = nil
+    }
+    
+    func fillWithMockData() {
+        typeForm = .tradition
+        title = "Kebab"
+        startDate = .now
+        endDate = .now
+        description = "Le kebab, spécialité de Marseille (faux) mais on aime quand meme"
+        selectedCategories = [PublicationCategory.gastronomie, PublicationCategory.artVivant, PublicationCategory.artVisuel]
+        region = FrenchRegion.provenceAlpesCoteDAzur
+        selectedGeoPoint = CLLocationCoordinate2D(latitude: 43.279370, longitude: 5.409855)
     }
 }

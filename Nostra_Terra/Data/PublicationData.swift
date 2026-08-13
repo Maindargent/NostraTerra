@@ -8,13 +8,14 @@
 import Foundation
 import MapKit
 
+
 let MOCKED_PUBLICATIONS: [any Publication] = [
     Tradition(
         image: URL(string: "https://picsum.photos/seed/fetes-saint-jean/800/600")!,
         uploadedImages: [],
         title: "Les feux de la Saint-Jean",
         description: "À l’arrivée de l’été, les villages se rassemblent autour de grands feux de joie. Entre musique traditionnelle, danses collectives et repas partagés, cette célébration transmet un rituel ancien où l’on vient saluer la lumière, retrouver ses voisins et faire vivre les coutumes locales.",
-        created_at: Date(),
+        created_at: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
         categories: [.festival, .musique, .artVivant],
         region: .occitanie,
         author: users.randomElement()!,
@@ -26,7 +27,7 @@ let MOCKED_PUBLICATIONS: [any Publication] = [
         uploadedImages: [],
         title: "La Braderie de Lille",
         description: "Chaque premier week-end de septembre, les rues de Lille deviennent un immense marché à ciel ouvert. Habitants, associations et visiteurs y chinent des objets, découvrent les spécialités locales et profitent d’animations musicales qui donnent à cette fête populaire une atmosphère unique, conviviale et profondément nordiste.",
-        created_at: Date(),
+        created_at: Calendar.current.date(byAdding: .day, value: -3, to: Date())!,
         categories: [.festival, .gastronomie, .musique],
         region: .hautsDeFrance,
         author: users.randomElement()!,
@@ -40,7 +41,7 @@ let MOCKED_PUBLICATIONS: [any Publication] = [
         uploadedImages: [],
         title: "La transhumance",
         description: "La montée traditionnelle des troupeaux vers les alpages.",
-        created_at: Date(),
+        created_at: Calendar.current.date(byAdding: .day, value: -7, to: Date())!,
         categories: [.artVivant],
         region: .auvergneRhoneAlpes,
         author: users.randomElement()!,
@@ -52,7 +53,7 @@ let MOCKED_PUBLICATIONS: [any Publication] = [
         uploadedImages: [],
         title: "La tapisserie d’Aubusson",
         description: "Un savoir-faire de tissage transmis dans la Creuse.",
-        created_at: Date(),
+        created_at: Calendar.current.date(byAdding: .day, value: -15, to: Date())!,
         categories: [.artVisuel],
         region: .nouvelleAquitaine,
         author: users.randomElement()!,
@@ -64,7 +65,7 @@ let MOCKED_PUBLICATIONS: [any Publication] = [
         uploadedImages: [],
         title: "La porcelaine de Limoges",
         description: "L’artisanat traditionnel de la porcelaine fine.",
-        created_at: Date(),
+        created_at: Calendar.current.date(byAdding: .day, value: -31, to: Date())!,
         categories: [.artVisuel],
         region: .nouvelleAquitaine,
         author: users.randomElement()!,

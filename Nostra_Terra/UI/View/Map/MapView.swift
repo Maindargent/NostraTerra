@@ -10,20 +10,19 @@ import MapKit
 
 struct MapView: View {
     @Environment(PublicationViewModel.self) var publicationsManager
+    @Environment(UserViewModel.self) var userViewModel
     
     @State var cameraPosition: MapCameraPosition = .automatic
-    @State var userLocationOnAppear = CLLocationCoordinate2D(latitude: 1.0, longitude: 1.0)
     
     @State var showPublicationSheet: Bool = false
     
     @State var selectedPublicationID: UUID? = nil
     var selectedPublication: (any Publication)? {
         guard let selectedPublicationID else {return nil}
-        
         return publicationsManager.getPublication(id: selectedPublicationID)
     }
     
-    let locationManager = CLLocationManager()
+    @State var filterVM = FilterMapViewModel()
     
     var body: some View {
         Map(
@@ -31,36 +30,18 @@ struct MapView: View {
             selection: $selectedPublicationID
         ) {
             UserAnnotation()
-            ForEach(publicationsManager.getPublications(), id: \.id) { publication in
+            ForEach(publicationsManager.getFilteredPublications(region: filterVM.selectedRegion, category: filterVM.selectedCategory), id: \.id) { publication in
                 Annotation(publication.title, coordinate: publication.geoPoint, anchor: .bottom) {
-                    AsyncImage(url: publication.image) { image in
-                        image.resizable()
-                    } placeholder: {
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                            .frame(width: 45, height: 45)
-                            .glassEffect()
-                    }
-                    .scaledToFill()
-                    .frame(width: 45, height: 45)
-                    .clipShape(Circle())
-                    .background(
-                        Circle().stroke(.whiteIvoryMist, lineWidth: 4)
-                    )
-                    .background(alignment: .bottom) {
-                        Image(systemName: "arrowtriangle.down.fill")
-                            .foregroundStyle(.whiteIvoryMist)
-                            .font(.system(size: 15))
-                            .shadow(radius: 10)
-                            .offset(x: 0, y: 10)
-                    }
+                    CustomMapMarker(publication: publication)
                 }.tag(publication.id)
             }
         }
+        .colorScheme(.dark)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .mapControls {
             MapUserLocationButton()
         }
+        //MARK: SELECTED PUBLICATION
         .onChange(of: selectedPublicationID) { _, publicationID in
             guard
                 let publicationID,
@@ -91,8 +72,9 @@ struct MapView: View {
             },
             content: {
                 PublicationDetailView(
-                    publicationID: selectedPublicationID!
+                    publication: selectedPublication!
                 )
+                .environment(userViewModel)
                 .toolbar(content: {
                     ToolbarItem(placement: .bottomBar) {
                         Button {
@@ -113,10 +95,52 @@ struct MapView: View {
                 .presentationBackground(.clear)
             }
         )
+        //MARK: FILTER BY REGION & CATEGORIES
+        .overlay(alignment: .topLeading) {
+            MapFilterOverlayView()
+                .environment(filterVM)
+        }
+        //MARK: FILTER BY REGION
+        .sheet(isPresented: $filterVM.showFilterRegionSheet, content: {
+            MapFilterRegionSheetView()
+            .presentationDetents([.fraction(0.4)])
+            .presentationDragIndicator(.visible)
+            .presentationBackground(.blueDeepSpace.gradient.opacity(0.5))
+            .environment(filterVM)
+        })
+        .onChange(of: filterVM.selectedRegion) { oldValue, newValue in
+            let showedPublication = publicationsManager.getFilteredPublications(
+                region: filterVM.selectedRegion,
+                category: filterVM.selectedCategory
+            )
+            
+            if showedPublication.count == 1 {
+                
+                let region = MKCoordinateRegion(
+                    center: showedPublication[0].geoPoint,
+                    latitudinalMeters: 100_000,
+                    longitudinalMeters: 100_000
+                )
+                
+                withAnimation(.smooth) {
+//                    filterVM.selectedCategory = nil
+                    cameraPosition = .region(region)
+                }
+            } else {
+                withAnimation(.smooth) {
+//                    filterVM.selectedCategory = nil
+                    cameraPosition = .automatic
+                }
+            }
+        }
     }
 }
 
 
 #Preview {
+    @Previewable @State var publicationManager = PublicationViewModel()
+    @Previewable @State var userViewModel = UserViewModel(currentUser: users[0])
     MapView()
+        .environment(publicationManager)
+        .environment(userViewModel)
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct ProfileView: View {
     @Environment(PublicationViewModel.self) var publicationManager: PublicationViewModel
@@ -15,7 +16,6 @@ struct ProfileView: View {
     
     var body: some View {
         ZStack{
-            
             Image("backgroundPicture")
                 .resizable()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -25,6 +25,7 @@ struct ProfileView: View {
                     
                     NavigationLink{
                         ProfileEditView(user: userViewModel.currentUser)
+                            .environment(userViewModel)
                     }label: {
                         Image(systemName: "gearshape")
                             .foregroundStyle(.whiteIvoryMist)
@@ -48,18 +49,23 @@ struct ProfileView: View {
                             
                             HStack(spacing: 20) {
                                 
-                                AsyncImage(url: userViewModel.currentUser.profilPicture) { image in
-                                    image.resizable()
-                                } placeholder: {
-                                    Image(systemName: "photo")
+                                if userViewModel.currentUser.uploadedImage != nil {
+                                    PictureProfil(picture: userViewModel.currentUser.uploadedImage!)
+                                } else {
+                                    AsyncImage(url: userViewModel.currentUser.profilPicture) { image in
+                                        image.resizable()
+                                    } placeholder: {
+                                        Image(systemName: "photo")
+                                    }
+                                    .frame(width: 115, height: 115)
+                                    .clipShape(Circle())
+                                    .overlay {
+                                        Circle()
+                                            .stroke(.whiteIvoryMist, lineWidth: 2)
+                                    }
+                                    .foregroundStyle(.whiteIvoryMist)
                                 }
-                                .frame(width: 115, height: 115)
-                                .clipShape(Circle())
-                                .overlay {
-                                    Circle()
-                                        .stroke(.whiteIvoryMist, lineWidth: 2)
-                                }
-                                .foregroundStyle(.whiteIvoryMist)
+                                
                                 
                                 Text("\(userViewModel.currentUser.lastName) \(userViewModel.currentUser.firstName)")
                                     .padding(.horizontal, 9)
@@ -108,18 +114,22 @@ struct ProfileView: View {
                         ScrollView(.horizontal){
                             HStack(alignment: .bottom){
                                 
-                                let userPublications = publicationManager.getPublications().filter{
-                                    $0.author.id == userViewModel.currentUser.id
-                                }
-                                if userPublications.isEmpty{
+                                let userPublications = publicationManager
+                                    .getPublications()
+                                    .filter {
+                                        $0.author.id == userViewModel.currentUser.id
+                                    }
+                                    .sorted(by: {$0.created_at > $1.created_at})
+                                
+                                if userPublications.isEmpty {
                                     Text("Vous n'avez rien publié.")
                                         .padding(.leading, 20)
                                         .padding(.top, 20)
                                         .foregroundStyle(.whiteIvoryMist)
-                                }else{
+                                } else {
                                     ForEach(userPublications, id: \.id) { publication in
                                         NavigationLink {
-                                            PublicationDetailView(publicationID: publication.id)
+                                            PublicationDetailView(publication: publication)
                                         } label: {
                                             PublicationItem(publication: publication)
                                         }
@@ -149,7 +159,7 @@ struct ProfileView: View {
                                 }else{
                                     ForEach(likedPublications, id: \.id) { publication in
                                         NavigationLink {
-                                            PublicationDetailView(publicationID: publication.id)
+                                            PublicationDetailView(publication: publication)
                                         } label: {
                                             PublicationItem(publication: publication)
                                         }
@@ -169,7 +179,11 @@ struct ProfileView: View {
 
 #Preview {
     @Previewable @State var publicationManager = PublicationViewModel()
+    @Previewable @State var userViewModel = UserViewModel(currentUser: users[0])
     
-    ProfileView()
-        .environment(publicationManager)
+    NavigationStack {
+        ProfileView()
+            .environment(publicationManager)
+            .environment(userViewModel)
+    }
 }

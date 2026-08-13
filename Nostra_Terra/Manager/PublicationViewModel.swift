@@ -45,6 +45,39 @@ final class PublicationViewModel {
     }
     
     func getRegionPublications(selectedRegion: FrenchRegion) -> [(any Publication)] {
-        return publications.filter{$0.region == selectedRegion}
+        return publications.filter{$0.region == selectedRegion
+    }
+      
+    func getFilteredPublications(region: FrenchRegion?, category: PublicationCategory?) -> [(any Publication)] {
+        if let region, let category {
+            return publications.filter({$0.region == region && $0.categories.contains(category)})
+        }
+        
+        if let region {
+            return publications.filter({$0.region == region})
+        }
+        
+        if let category {
+            return publications.filter({$0.categories.contains(category)})
+        }
+        
+        return publications
+    }
+    
+    func getUsedRegions() -> [(region: FrenchRegion, count: Int)] {
+        var regions: [(region: FrenchRegion, count: Int)] = []
+
+        for publication in getPublications() {
+            if let index = regions.firstIndex(where: {$0.region == publication.region}) {
+                regions[index].count += 1
+            } else {
+                regions.append((
+                    region: publication.region,
+                    count: 1
+                ))
+            }
+        }
+
+        return regions
     }
 }

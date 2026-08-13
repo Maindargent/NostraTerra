@@ -20,5 +20,9 @@ struct PublicationTypeField: View {
 }
 
 #Preview {
-    PublicationTypeField(typeForm: .constant(TypeForm.tradition))
+    NavigationStack {
+        PublicationAddFormView()
+            .environment(PublicationViewModel())
+            .environment(NotificationViewModel())
+    }
 }

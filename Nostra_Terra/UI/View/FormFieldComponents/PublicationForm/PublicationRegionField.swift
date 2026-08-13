@@ -9,17 +9,15 @@ import SwiftUI
 struct PublicationRegionField: View {
     @Environment(FormPublicationVM.self) var formVm
     
-    @Binding var region: FrenchRegion?
-    
-    
     var body: some View {
+        @Bindable var formVm = formVm
         VStack(alignment: .leading) {
-            Picker("Région", selection: $region) {
-                if region == nil {
-                    Text("Sélectionner une région").tag(nil as String?)
+            Picker("Région", selection: $formVm.region) {
+                if formVm.region == nil {
+                    Text("Sélectionner une région").tag(nil as FrenchRegion?)
                 }
                 ForEach(FrenchRegion.allCases) { region in
-                    Text(region.titre).tag(region.rawValue)
+                    Text(region.titre).tag(region)
                 }
             }
             .tint(formVm.isRegionValid ? .white : .red)
@@ -33,13 +31,10 @@ struct PublicationRegionField: View {
 }
 
 #Preview {
-    //    @Previewable @State var region: String = ""
-    //    PublicationRegionField(
-    //        region: $region
-    //    )
     NavigationStack {
         PublicationAddFormView()
-            .preferredColorScheme(.dark)
+            .environment(PublicationViewModel())
+            .environment(NotificationViewModel())
     }
 }
 

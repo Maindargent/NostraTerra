@@ -16,6 +16,7 @@ enum TypeForm: String, CaseIterable {
 
 struct PublicationAddFormView: View {
     @Environment(PublicationViewModel.self) var publicationsManager
+    @Environment(NotificationViewModel.self) var notificationViewModel
     
     @State var formVM = FormPublicationVM()
     
@@ -24,6 +25,8 @@ struct PublicationAddFormView: View {
     @State var showMapSheet: Bool = false
     
     @State var isPublished: Bool = false
+    
+    @State var publishedPublication: (any Publication)?
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -40,45 +43,43 @@ struct PublicationAddFormView: View {
                     
                     
                     //MARK: FIELD : Titre
-                    PublicationTitleField(title: $formVM.title)
+                    PublicationTitleField()
                     
                     
                     //MARK: FIELD : Date
                     if formVM.typeForm == .event {
-                        PublicationDateField(startDate: $formVM.startDate, endDate: $formVM.endDate)
+                        PublicationDateField()
                     }
                     
                     //MARK: FIELD Image
-                    PublicationImageField(
-                        showPicturePickerSheet: $showPicturePickerSheet, selectedItems: $formVM.selectedItems
-                    )
-                    
+                    PublicationImageField(showPicturePickerSheet: $showPicturePickerSheet)
+                
                     
                     //MARK: FIELD : Description
-                    PublicationDescField(description: $formVM.description)
+                    PublicationDescField()
                     
                     //MARK: FIELD : Type
-                    PublicationCategoriesField(
-                        showCategoriesSelectionSheet: $showCategoriesSelectionSheet,
-                        selectedCategories: $formVM.selectedCategories
-                    )
+                    PublicationCategoriesField(showCategoriesSelectionSheet: $showCategoriesSelectionSheet)
                     
                     //MARK: FIELD : Région
-                    PublicationRegionField(region: $formVM.region)
+                    PublicationRegionField()
                     
                     
                     //MARK: FIELD : Coordonnées GPS
-                    PublicationCoordField(
-                        showMapSheet: $showMapSheet,
-                        selectedGeoPoint: $formVM.selectedGeoPoint
-                    )
+                    PublicationCoordField(showMapSheet: $showMapSheet)
                     
                     //MARK: Save button
                     Button {
                         guard let publication = formVM.getPublication else {return}
                         publicationsManager.addPublication(publication)
+                        notificationViewModel.addNotification(
+                            "Publication : \(publication.title) crée avec succée !",
+                            type: .success
+                        )
+                        publishedPublication = publicationsManager.getPublication(id: publication.id)!
+                        print("notification : \(notificationViewModel.currentNotif ?? nil)")
+                        formVM.reset()
                         isPublished.toggle()
-                        //TODO: ajouter un toast de notification pour valider le publish
                     } label: {
                         Text("Mettre en ligne \(formVM.title)")
                             .font(.title3)
@@ -91,16 +92,60 @@ struct PublicationAddFormView: View {
                     .tint(.yellowTuscanSun)
                     .padding(.top, 16)
                     .disabled(!formVM.isFormValid)
+                    .contextMenu {
+                        Button {
+                            formVM.fillWithMockData()
+                        } label: {
+                            Text("Pré-remplir avec un Kebab")
+                        }
+                    }
                 }
                 .environment(formVM)
             }
+            .toolbar(content: {
+                if formVM.isTitleValid {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            formVM.reset()
+                        } label: {
+                            HStack {
+                                Text("Reset")
+                                Image(systemName: "gobackward")
+                            }.foregroundStyle(.red)
+                        }
+                    }
+                }
+                if formVM.isFormValid {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            guard let publication = formVM.getPublication else {return}
+                            publicationsManager.addPublication(publication)
+                            notificationViewModel.addNotification(
+                                "Publication : \(publication.title) crée avec succée !",
+                                type: .success
+                            )
+                            publishedPublication = publicationsManager.getPublication(id: publication.id)!
+                            print("notification : \(notificationViewModel.currentNotif ?? nil)")
+                            formVM.reset()
+                            isPublished.toggle()
+                        } label: {
+                            HStack {
+                                Text("Enregistrer")
+                                Image(systemName: "checkmark.circle")
+                            }.foregroundStyle(.yellowTuscanSun)
+                        }
+                    }
+                }
+            })
             .scrollDismissesKeyboard(.immediately)
             .contentMargins(16, for: .scrollContent)
             .navigationTitle("Crée une publication")
             
         }
         .navigationDestination(isPresented: $isPublished, destination: {
-            //TODO: modifie la tap bar pour avoir accée a la selection ici et pouvoir retourner a l'ecran d'acceuil
+            PublicationDetailView(
+                publication: publishedPublication ?? MOCKED_PUBLICATIONS[0]
+            )
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .preferredColorScheme(.dark)
@@ -108,10 +153,9 @@ struct PublicationAddFormView: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager = PublicationViewModel()
-    
     NavigationStack {
         PublicationAddFormView()
-            .environment(publicationManager)
+            .environment(PublicationViewModel())
+            .environment(NotificationViewModel())
     }
 }

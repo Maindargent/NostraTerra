@@ -9,18 +9,19 @@ import PhotosUI
 
 struct PublicationImageField: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(FormPublicationVM.self) var formVM
+    @Environment(FormPublicationVM.self) var formVm
     
     @Binding var showPicturePickerSheet: Bool
-    @Binding var selectedItems: [PhotosPickerItem]
     
     var body: some View {
+        @Bindable var formVm = formVm
+        
         VStack(alignment: .leading, spacing: 12) {
             Text("Image")
-                .foregroundStyle(formVM.isSelectedItemsValid ? .white : .red)
+                .foregroundStyle(formVm.isSelectedItemsValid ? .white : .red)
             Button {
-                if selectedItems.count == 2 {
-                    selectedItems.remove(at: 1)
+                if formVm.selectedItems.count == 2 {
+                    formVm.selectedItems.remove(at: 1)
                 }
                 showPicturePickerSheet.toggle()
             } label: {
@@ -31,13 +32,13 @@ struct PublicationImageField: View {
                 }
                 .foregroundStyle(.whiteIvoryMist)
                 .padding()
-                .glassEffect(formVM.isSelectedItemsValid ? .clear : .clear.tint(.red.opacity(0.1)), in: RoundedRectangle(cornerRadius: 12))
+                .glassEffect(formVm.isSelectedItemsValid ? .clear : .clear.tint(.red.opacity(0.1)), in: RoundedRectangle(cornerRadius: 12))
             }
-            if !selectedItems.isEmpty {
+            if !formVm.selectedItems.isEmpty {
                 ScrollView(.horizontal) {
                     HStack(alignment: .center, spacing: 16) {
-                        ForEach(selectedItems.enumerated(), id: \.element) { index, item in
-                            TransferablePhotoView(item: item, selectedItems: $selectedItems, index: index)
+                        ForEach(formVm.selectedItems.enumerated(), id: \.element) { index, item in
+                            TransferablePhotoView(item: item, selectedItems: $formVm.selectedItems, index: index)
                         }
                     }
                 }
@@ -47,7 +48,7 @@ struct PublicationImageField: View {
             ZStack(alignment: .bottomTrailing) {
                 PhotosPicker(
                     "Photo picker",
-                    selection: $selectedItems,
+                    selection: $formVm.selectedItems,
                     maxSelectionCount: 4,
                     selectionBehavior: .continuousAndOrdered,
                     matching: .images,
@@ -63,7 +64,7 @@ struct PublicationImageField: View {
                         Text("Valider")
                             .padding(10)
                     }
-                    .disabled(selectedItems.count < 1)
+                    .disabled(formVm.selectedItems.count < 1)
                     .tint(.yellowTuscanSun)
                     .buttonStyle(.glassProminent)
                     .padding(10)
@@ -119,13 +120,10 @@ struct TransferablePhotoView: View {
 }
 
 #Preview {
-//    @Previewable @State var showPicturePickerSheet: Bool = false
-//    @Previewable @State var selectedItems: [PhotosPickerItem] = []
-//    
-//    PublicationImageField(
-//        showPicturePickerSheet: $showPicturePickerSheet, selectedItems: $selectedItems
-//    )
-    
-    PublicationAddFormView()
+    NavigationStack {
+        PublicationAddFormView()
+            .environment(PublicationViewModel())
+            .environment(NotificationViewModel())
+    }
 }
 

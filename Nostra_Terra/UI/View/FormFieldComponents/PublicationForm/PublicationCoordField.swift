@@ -11,9 +11,10 @@ struct PublicationCoordField: View {
     @Environment(FormPublicationVM.self) var formVm
     
     @Binding var showMapSheet: Bool
-    @Binding var selectedGeoPoint: CLLocationCoordinate2D?
     
     var body: some View {
+        @Bindable var formVm = formVm
+        
         VStack(alignment: .leading, spacing: 12) {
             Text("Emplacement GPS")
                 .foregroundStyle(formVm.isSelectedGeoPointValid ? .white : .red)
@@ -29,13 +30,13 @@ struct PublicationCoordField: View {
                 .padding()
                 .glassEffect(formVm.isSelectedGeoPointValid ? .clear : .clear.tint(.red.opacity(0.1)), in: RoundedRectangle(cornerRadius: 12))
             }
-            if let selectedGeoPoint {
-                Text("Latitude : \(selectedGeoPoint.latitude)")
-                Text("Longitude : \(selectedGeoPoint.longitude)")
+            if let geoPoint = formVm.selectedGeoPoint {
+                Text("Latitude : \(geoPoint.latitude)")
+                Text("Longitude : \(geoPoint.longitude)")
             }
         }
         .sheet(isPresented: $showMapSheet) {
-            PublicationAddFormMapSheetView(showMapSheet: $showMapSheet, selectedGeoPoint: $selectedGeoPoint)
+            PublicationAddFormMapSheetView(showMapSheet: $showMapSheet, selectedGeoPoint: $formVm.selectedGeoPoint)
                 .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
         }
@@ -44,16 +45,10 @@ struct PublicationCoordField: View {
 }
 
 #Preview {
-//    @Previewable @State var showMapSheet: Bool = false
-//    @Previewable @State var selectedGeoPoint: CLLocationCoordinate2D?
-//    
-//    PublicationCoordField(
-//        showMapSheet: $showMapSheet,
-//        selectedGeoPoint: $selectedGeoPoint
-//    )
-    
-    
-    
-    PublicationAddFormView()
+    NavigationStack {
+        PublicationAddFormView()
+            .environment(PublicationViewModel())
+            .environment(NotificationViewModel())
+    }
 }
 
