@@ -13,26 +13,16 @@ struct MapView: View {
     @Environment(UserViewModel.self) var userViewModel
     
     @State var cameraPosition: MapCameraPosition = .automatic
-    @State var userLocationOnAppear = CLLocationCoordinate2D(latitude: 1.0, longitude: 1.0)
     
     @State var showPublicationSheet: Bool = false
     
     @State var selectedPublicationID: UUID? = nil
     var selectedPublication: (any Publication)? {
         guard let selectedPublicationID else {return nil}
-        
         return publicationsManager.getPublication(id: selectedPublicationID)
     }
     
-    let locationManager = CLLocationManager()
-    
-    
-    @State var showFilterRegionSheet: Bool = false
-    
-    @State private var selectedCategory: PublicationCategory?
-    @State private var selectedRegion: FrenchRegion?
-    
-    @State var showFilterCategories: Bool = false
+    @State var filterVM = FilterMapViewModel()
     
     var body: some View {
         Map(
@@ -40,7 +30,7 @@ struct MapView: View {
             selection: $selectedPublicationID
         ) {
             UserAnnotation()
-            ForEach(publicationsManager.getFilteredPublications(region: selectedRegion, category: selectedCategory), id: \.id) { publication in
+            ForEach(publicationsManager.getFilteredPublications(region: filterVM.selectedRegion, category: filterVM.selectedCategory), id: \.id) { publication in
                 Annotation(publication.title, coordinate: publication.geoPoint, anchor: .bottom) {
                     CustomMapMarker(publication: publication)
                 }.tag(publication.id)
@@ -83,129 +73,49 @@ struct MapView: View {
             content: {
                 PublicationDetailView(
                     publication: selectedPublication!
-                ).environment(userViewModel)
-                    .toolbar(content: {
-                        ToolbarItem(placement: .bottomBar) {
-                            Button {
-                                selectedPublicationID = nil
-                                showPublicationSheet.toggle()
-                            } label: {
-                                Image(systemName: "arrowshape.turn.up.backward")
-                                    .foregroundStyle(.white)
-                            }
-                            .padding()
-                            .buttonStyle(.glassProminent)
-                            .glassEffect(.clear, in: .circle)
+                )
+                .environment(userViewModel)
+                .toolbar(content: {
+                    ToolbarItem(placement: .bottomBar) {
+                        Button {
+                            selectedPublicationID = nil
+                            showPublicationSheet.toggle()
+                        } label: {
+                            Image(systemName: "arrowshape.turn.up.backward")
+                                .foregroundStyle(.white)
                         }
-                        .sharedBackgroundVisibility(.hidden)
-                    })
-                    .presentationDragIndicator(.visible)
-                    .presentationDetents([.fraction(0.8), .large])
-                    .presentationBackground(.clear)
+                        .padding()
+                        .buttonStyle(.glassProminent)
+                        .glassEffect(.clear, in: .circle)
+                    }
+                    .sharedBackgroundVisibility(.hidden)
+                })
+                .presentationDragIndicator(.visible)
+                .presentationDetents([.fraction(0.8), .large])
+                .presentationBackground(.clear)
             }
         )
         //MARK: FILTER BY REGION & CATEGORIES
         .overlay(alignment: .topLeading) {
-            VStack(alignment: .leading, spacing: 8) {
-                VStack(alignment: .leading) {
-                    //MARK: FILTER BY CATEGORIES
-                    if showFilterCategories {
-                        VStack(alignment: .leading) {
-                            
-                            Button {
-                                withAnimation {
-                                    selectedCategory = nil
-                                    showFilterCategories.toggle()
-                                }
-                            } label: {
-                                HStack(spacing: 6) {
-                                    Text("Toutes")
-                                        .foregroundStyle(.white)
-                                        .padding(4)
-                                }
-                            }
-                            .padding(4)
-                            .foregroundStyle(.white)
-                            
-                            ForEach(PublicationCategory.allCases) { cat in
-                                Button {
-                                    withAnimation {
-                                        selectedRegion = nil
-                                        selectedCategory = cat
-                                        showFilterCategories.toggle()
-                                    }
-                                } label: {
-                                    HStack(spacing: 6) {
-                                        Text(cat.rawValue)
-                                            .foregroundStyle(.white)
-                                            .padding(4)
-                                        if selectedCategory == cat {
-                                            Image(systemName: "checkmark")
-                                        }
-                                    }
-                                    .padding(4)
-                                    .foregroundStyle(.white)
-                                }
-                            }
-                        }
-                        .padding(8)
-                    } else {
-                        Button {
-                            withAnimation {
-                                showFilterCategories.toggle()
-                            }
-                        } label: {
-                            HStack(spacing: 6) {
-                                Text("\(selectedCategory?.rawValue ?? "Catégories")")
-                                if (selectedCategory != nil) {
-                                    Button {
-                                        selectedCategory = nil
-                                    } label : {
-                                        Image(systemName: "multiply")
-                                    }
-                                } else {
-                                    Image(systemName: "line.3.horizontal.decrease")
-                                }
-                            }
-                            .foregroundStyle(selectedCategory != nil ? selectedCategory!.color : .white)
-                        }
-                        .padding(12)
-                    }
-                }
-                .glassEffect(.regular, in: .rect(cornerRadius: 24))
-                
-                Button {
-                    showFilterRegionSheet.toggle()
-                } label: {
-                    HStack(spacing: 6) {
-                        Text("\(selectedRegion?.titre ?? "Régions")")
-                        Image(.franceIcon)
-                            .resizable()
-                            .frame(width: 20, height: 20, alignment: .center)
-                    }
-                    .foregroundStyle(selectedRegion != nil ? selectedRegion!.color : .white)
-                    .tint(selectedRegion != nil ? selectedRegion!.color : .white)
-                    .padding(4)
-                }
-                .buttonStyle(.glassProminent)
-                .tint(.clear)
-            }
-            .padding()
+            MapFilterOverlayView()
+                .environment(filterVM)
         }
         //MARK: FILTER BY REGION
-        .sheet(isPresented: $showFilterRegionSheet, content: {
-            FilterPublicationView(
-                selectedCategory: $selectedCategory,
-                selectedRegion: $selectedRegion,
-                showFilterRegionSheet: $showFilterRegionSheet
+        .sheet(isPresented: $filterVM.showFilterRegionSheet, content: {
+            MapFilterRegionSheetView(
+                selectedCategory: $filterVM.selectedCategory,
+                selectedRegion: $filterVM.selectedRegion,
+                showFilterRegionSheet: $filterVM.showFilterRegionSheet
             )
             .presentationDetents([.fraction(0.4)])
             .presentationDragIndicator(.visible)
+            .presentationBackground(.blueDeepSpace.gradient.opacity(0.5))
+            .environment(filterVM)
         })
-        .onChange(of: selectedRegion) { oldValue, newValue in
+        .onChange(of: filterVM.selectedRegion) { oldValue, newValue in
             let showedPublication = publicationsManager.getFilteredPublications(
-                region: selectedRegion,
-                category: selectedCategory
+                region: filterVM.selectedRegion,
+                category: filterVM.selectedCategory
             )
             
             if showedPublication.count == 1 {
@@ -217,12 +127,12 @@ struct MapView: View {
                 )
                 
                 withAnimation(.smooth) {
-                    selectedCategory = nil
+//                    filterVM.selectedCategory = nil
                     cameraPosition = .region(region)
                 }
             } else {
                 withAnimation(.smooth) {
-                    selectedCategory = nil
+//                    filterVM.selectedCategory = nil
                     cameraPosition = .automatic
                 }
             }
