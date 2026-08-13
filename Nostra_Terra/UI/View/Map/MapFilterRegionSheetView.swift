@@ -12,17 +12,14 @@ struct MapFilterRegionSheetView: View {
     @Environment(PublicationViewModel.self) var publicationManager: PublicationViewModel
     @Environment(FilterMapViewModel.self) var filterVM: FilterMapViewModel
     
-    @Binding var selectedCategory: PublicationCategory?
-    @Binding var selectedRegion: FrenchRegion?
-    @Binding var showFilterRegionSheet: Bool
-    
     var body: some View {
-        Picker("Appearance", selection: $selectedRegion) {
+        @Bindable var filterVM = filterVM
+        Picker("Appearance", selection: $filterVM.selectedRegion) {
             Text("Toutes les regions").tag(nil as FrenchRegion?)
-                .foregroundStyle(selectedRegion != nil ? .black : .yellowTuscanSun)
+                .foregroundStyle(filterVM.selectedRegion != nil ? .black : .yellowTuscanSun)
             ForEach(publicationManager.getUsedRegions(), id: \.region.id) { region in
                 Text(region.region.titre).tag(region.region)
-                    .foregroundStyle(selectedRegion != region.region ? .black : .yellowTuscanSun)
+                    .foregroundStyle(filterVM.selectedRegion != region.region ? .black : .yellowTuscanSun)
             }
         }
         .pickerStyle(.wheel)

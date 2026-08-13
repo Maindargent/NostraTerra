@@ -102,11 +102,7 @@ struct MapView: View {
         }
         //MARK: FILTER BY REGION
         .sheet(isPresented: $filterVM.showFilterRegionSheet, content: {
-            MapFilterRegionSheetView(
-                selectedCategory: $filterVM.selectedCategory,
-                selectedRegion: $filterVM.selectedRegion,
-                showFilterRegionSheet: $filterVM.showFilterRegionSheet
-            )
+            MapFilterRegionSheetView()
             .presentationDetents([.fraction(0.4)])
             .presentationDragIndicator(.visible)
             .presentationBackground(.blueDeepSpace.gradient.opacity(0.5))
