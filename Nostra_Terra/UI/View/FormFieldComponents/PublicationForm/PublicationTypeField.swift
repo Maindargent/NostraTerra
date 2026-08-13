@@ -20,7 +20,9 @@ struct PublicationTypeField: View {
 }
 
 #Preview {
-    @Previewable @State var publicationManager = PublicationViewModel()
-    PublicationAddFormView()
-        .environment(publicationManager)
+    NavigationStack {
+        PublicationAddFormView()
+            .environment(PublicationViewModel())
+            .environment(NotificationViewModel())
+    }
 }

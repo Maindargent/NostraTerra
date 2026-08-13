@@ -38,7 +38,7 @@ struct Notification {
 
 @Observable
 final class NotificationViewModel {
-    var currentNotif: Notification? = Notification(content: "coucou la notif", type: .success, created_at: .now)
+    var currentNotif: Notification? = Notification(content: "coucou", type: .error, created_at: .now)
     
     func addNotification(_ content: String, type: NotificationType = .success) {
         let notif = Notification(content: content, type: type, created_at: .now)

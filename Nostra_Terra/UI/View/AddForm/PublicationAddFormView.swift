@@ -43,38 +43,30 @@ struct PublicationAddFormView: View {
                     
                     
                     //MARK: FIELD : Titre
-                    PublicationTitleField(title: $formVM.title)
+                    PublicationTitleField()
                     
                     
                     //MARK: FIELD : Date
                     if formVM.typeForm == .event {
-                        PublicationDateField(startDate: $formVM.startDate, endDate: $formVM.endDate)
+                        PublicationDateField()
                     }
                     
                     //MARK: FIELD Image
-                    PublicationImageField(
-                        showPicturePickerSheet: $showPicturePickerSheet, selectedItems: $formVM.selectedItems
-                    )
-                    
+                    PublicationImageField(showPicturePickerSheet: $showPicturePickerSheet)
+                
                     
                     //MARK: FIELD : Description
-                    PublicationDescField(description: $formVM.description)
+                    PublicationDescField()
                     
                     //MARK: FIELD : Type
-                    PublicationCategoriesField(
-                        showCategoriesSelectionSheet: $showCategoriesSelectionSheet,
-                        selectedCategories: $formVM.selectedCategories
-                    )
+                    PublicationCategoriesField(showCategoriesSelectionSheet: $showCategoriesSelectionSheet)
                     
                     //MARK: FIELD : Région
-                    PublicationRegionField(region: $formVM.region)
+                    PublicationRegionField()
                     
                     
                     //MARK: FIELD : Coordonnées GPS
-                    PublicationCoordField(
-                        showMapSheet: $showMapSheet,
-                        selectedGeoPoint: $formVM.selectedGeoPoint
-                    )
+                    PublicationCoordField(showMapSheet: $showMapSheet)
                     
                     //MARK: Save button
                     Button {
@@ -135,7 +127,7 @@ struct PublicationAddFormView: View {
                             publishedPublication = publicationsManager.getPublication(id: publication.id)!
                             print("notification : \(notificationViewModel.currentNotif ?? nil)")
                             formVM.reset()
-                            isPublished.toggle()
+//                            isPublished.toggle()
                         } label: {
                             HStack {
                                 Text("Enregistrer")

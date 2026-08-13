@@ -24,38 +24,38 @@ struct RootView: View {
     @State var notificationViewModel = NotificationViewModel()
     
     var body: some View {
-        ZStack(alignment: .top) {
-            TabView(selection: $selectedTab) {
-                Tab("Accueil", systemImage: "house", value: .landing) {
-                    SuggestionsView()
-                }
-                
-                Tab("Carte", systemImage: "map", value: .map) {
-                    MapView()
-                }
-                
-                Tab("Ajouter", systemImage: "plus", value: .addForm) {
-                    NavigationStack {
-                        PublicationAddFormView()
-                    }
-                }
-                
-                Tab("Recherche", systemImage: "magnifyingglass", value: .search ,role: .search) {
-                    SearchView()
+        TabView(selection: $selectedTab) {
+            Tab("Accueil", systemImage: "house", value: .landing) {
+                SuggestionsView()
+            }
+            
+            Tab("Carte", systemImage: "map", value: .map) {
+                MapView()
+            }
+            
+            Tab("Ajouter", systemImage: "plus", value: .addForm) {
+                NavigationStack {
+                    PublicationAddFormView()
                 }
             }
-            .tabBarMinimizeBehavior(.automatic)
-            .environment(publicationManager)
-            .environment(userViewModel)
-            .environment(notificationViewModel)
             
+            Tab("Recherche", systemImage: "magnifyingglass", value: .search ,role: .search) {
+                SearchView()
+            }
+        }
+        .tabBarMinimizeBehavior(.automatic)
+        .environment(publicationManager)
+        .environment(userViewModel)
+        .environment(notificationViewModel)
+        .overlay(alignment: .bottom) {
             if let notif = notificationViewModel.getNotification() {
                 VStack {
+                    Spacer()
+                    
                     NotificationBanner(notif: notif)
                         .padding()
                         .transition(.move(edge: .leading))
-
-                    Spacer()
+                        .environment(notificationViewModel)
                 }
             }
         }
