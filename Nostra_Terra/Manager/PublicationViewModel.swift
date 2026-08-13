@@ -14,9 +14,15 @@ final class PublicationViewModel {
     
     var suggestionPublicationsShuffled = MOCKED_PUBLICATIONS.shuffled().prefix(5).enumerated()
     
-    func getPublications(maxLength: Int? = nil) -> [(any Publication)] {
+    func getPublications(maxLength: Int? = nil, user: User? = nil) -> [(any Publication)] {
         if let maxLength {
             return Array(publications.prefix(maxLength))
+        }
+        if let user {
+            return Array(publications).filter {
+                $0.author.id == user.id
+            }
+            .sorted(by: {$0.created_at > $1.created_at})
         }
         return publications
     }
@@ -79,6 +85,15 @@ final class PublicationViewModel {
         }
         
         return regions
+    }
+    
+    func removePublication(_ publi: (any Publication)) -> Bool {
+        if let index = publications.firstIndex(where: {$0.id == publi.id}) {
+            publications.remove(at: index)
+            return true
+        } else {
+            return false
+        }
     }
 }
 

@@ -62,19 +62,4 @@ final class ProfilEditViewModel {
             return nil
         }
     }
-    
-    func reset() {
-        lastName = ""
-        firstName = ""
-        birthDate = Calendar.current.date(byAdding: .year, value: -10, to: Date())!
-        description = ""
-        uploadedImage = nil
-    }
-    
-    func fillWithMockData() {
-        lastName = "Yann"
-        firstName = "Swifties"
-        birthDate = Calendar.current.date(byAdding: .year, value: -10, to: Date())!
-        description = "Yann, aka le Swiftie ultime, Passionné par Swift et grand fan de Taylor Swift, je passe mon temps à coder et écouter ses albums. Entre lignes de code et paroles de chansons, je vis pleinement ma double passion ! 💻🩵"
-    }
 }

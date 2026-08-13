@@ -9,6 +9,7 @@ import SwiftUI
 enum NotificationType {
     case success
     case error
+    case info
     
     var color: Color {
         switch self {
@@ -16,6 +17,8 @@ enum NotificationType {
                 .greenIndian
             case .error:
                 Color.red
+            case .info:
+                Color.blueDeepSpace
         }
     }
     
@@ -25,6 +28,8 @@ enum NotificationType {
                 "checkmark"
             case .error:
                 "exclamationmark.warninglight"
+            case .info:
+                "lightbulb.min"
         }
     }
 }

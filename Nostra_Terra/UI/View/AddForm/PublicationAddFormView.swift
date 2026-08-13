@@ -28,6 +28,8 @@ struct PublicationAddFormView: View {
     
     @State var publishedPublication: (any Publication)?
     
+    var publicationToEdit: (any Publication)? = nil
+    
     var body: some View {
         ZStack(alignment: .topLeading) {
             
@@ -151,12 +153,17 @@ struct PublicationAddFormView: View {
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .preferredColorScheme(.dark)
+        .onAppear {
+            if let publicationToEdit {
+                formVM.editPublication(publicationToEdit)
+            }
+        }
     }
 }
 
 #Preview {
     NavigationStack {
-        PublicationAddFormView()
+        PublicationAddFormView(publicationToEdit: MOCKED_PUBLICATIONS[0])
             .environment(PublicationViewModel())
             .environment(NotificationViewModel())
     }

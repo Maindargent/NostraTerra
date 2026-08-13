@@ -47,6 +47,7 @@ struct RootView: View {
         .environment(publicationManager)
         .environment(userViewModel)
         .environment(notificationViewModel)
+        
         .overlay(alignment: .bottom) {
             if let notif = notificationViewModel.getNotification() {
                 VStack {
