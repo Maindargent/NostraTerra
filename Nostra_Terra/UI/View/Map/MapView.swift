@@ -41,7 +41,6 @@ struct MapView: View {
         .mapControls {
             MapUserLocationButton()
         }
-        //MARK: SELECTED PUBLICATION
         .onChange(of: selectedPublicationID) { _, publicationID in
             guard
                 let publicationID,
@@ -72,7 +71,7 @@ struct MapView: View {
             },
             content: {
                 PublicationDetailView(
-                    publication: selectedPublication!
+                    publicationID: selectedPublicationID!
                 )
                 .environment(userViewModel)
                 .toolbar(content: {
@@ -95,12 +94,10 @@ struct MapView: View {
                 .presentationBackground(.clear)
             }
         )
-        //MARK: FILTER BY REGION & CATEGORIES
         .overlay(alignment: .topLeading) {
             MapFilterOverlayView()
                 .environment(filterVM)
         }
-        //MARK: FILTER BY REGION
         .sheet(isPresented: $filterVM.showFilterRegionSheet, content: {
             MapFilterRegionSheetView()
             .presentationDetents([.fraction(0.4)])

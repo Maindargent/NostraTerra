@@ -13,7 +13,6 @@ struct MapFilterOverlayView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             VStack(alignment: .leading) {
-                //MARK: FILTER BY CATEGORIES
                 if filterVM.showFilterCategories {
                     VStack(alignment: .leading) {
                         

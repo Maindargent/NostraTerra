@@ -10,44 +10,12 @@ import MapKit
 
 struct PublicationRegionItem: View {
     
-    let regions: FrenchRegion
+    let region: FrenchRegion
     @Binding var path: [SuggestionScreen]
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            //            AsyncImage(url: publication.image) { image in
-            //                image.resizable()
-            //            } placeholder: {
-            //                Image(systemName: "photo")
-            //                    .foregroundStyle(.blueDeepSpace)
-            //            }
-            //            .scaledToFill()
-            //            .frame(width: 150, height: 150)
-            //            .clipShape(.rect(cornerRadius: 5))
-            //                .overlay(
-            //                    RoundedRectangle(cornerRadius: 5)
-            //                        .stroke(.grayLines, lineWidth: 1)
-            //                )
-            //            .padding(.bottom, 5)
-            Map(initialPosition: .region(MKCoordinateRegion(center: regions.coordonneeGPS, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)))){
-                Annotation("", coordinate: regions.coordonneeGPS, anchor: .center){
-                    
-                    //                    ZStack{
-                    //                        MarkerView()
-                    //
-                    //                        AsyncImage(url: streetArt.thumbnail) { image in
-                    //                            image.resizable()
-                    //                                .frame(width: 50, height: 50)
-                    //                                .clipShape(Circle())
-                    //                        }placeholder: {
-                    //                            Image(systemName: "photo")
-                    //                                .foregroundStyle(.secondText)
-                    //                                .frame(width: 50, height: 50)
-                    //                                .clipShape(Circle())
-                    //                        }
-                    //                    }
-                }
-            }
+            Map(initialPosition: .region(MKCoordinateRegion(center: region.coordonneeGPS, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))))
             .disabled(true)
             .scaledToFill()
             .frame(width: 150, height: 150)
@@ -59,7 +27,7 @@ struct PublicationRegionItem: View {
             .padding(.bottom, 5)
             
             VStack(alignment: .leading){
-                Text(regions.titre)
+                Text(region.titre)
                     .bold()
                     .font(.system(size: 16))
                     .foregroundStyle(.whiteIvoryMist)
@@ -77,7 +45,7 @@ struct PublicationRegionItem: View {
             .frame(width: 150, height: 150, alignment: .topLeading)
             
             Button{
-                path.append(.discoverRegion(regions))
+                path.append(.discoverRegion(region))
             } label : {
                 Text("Je découvre")
             }
@@ -94,5 +62,5 @@ struct PublicationRegionItem: View {
 #Preview {
     @Previewable @State var publicationManager = PublicationViewModel()
     
-    PublicationRegionItem(regions: .guadeloupe, path: .constant([]))
+    PublicationRegionItem(region: .guadeloupe, path: .constant([]))
 }

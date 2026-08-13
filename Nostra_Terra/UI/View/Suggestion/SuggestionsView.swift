@@ -132,8 +132,8 @@ struct SuggestionsView: View {
                         
                         ScrollView(.horizontal){
                             HStack(alignment: .bottom){
-                                ForEach(FrenchRegion.allCases) { region in
-                                    PublicationRegionItem(regions: region, path: $path)
+                                ForEach(publicationsManager.getUsedRegions().enumerated(), id: \.element.region.id) { regionTuple in
+                                    PublicationRegionItem(region: regionTuple.element.region, path: $path)
                                 }
                                 
                             }
@@ -148,10 +148,10 @@ struct SuggestionsView: View {
                             ProfileView()
                             
                         case .discoverRegion(let region):
-                        DiscoverRegionView(selectedRegion: region)
+                            DiscoverRegionView(selectedRegion: region)
                             
-                    case .publicationDetail(let publicationID):
-                        PublicationDetailView(publicationID: publicationID)
+                        case .publicationDetail(let publicationID):
+                            PublicationDetailView(publicationID: publicationID)
                     }
                 }
             }
@@ -161,7 +161,7 @@ struct SuggestionsView: View {
 }
 
 
-#Preview { 
+#Preview {
     @Previewable @State var publicationManager = PublicationViewModel()
     @Previewable @State var userViewModel = UserViewModel(currentUser: users[0])
     
