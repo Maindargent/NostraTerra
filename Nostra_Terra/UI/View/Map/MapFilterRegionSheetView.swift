@@ -16,10 +16,10 @@ struct MapFilterRegionSheetView: View {
         @Bindable var filterVM = filterVM
         Picker("Appearance", selection: $filterVM.selectedRegion) {
             Text("Toutes les regions").tag(nil as FrenchRegion?)
-                .foregroundStyle(filterVM.selectedRegion != nil ? .black : .yellowTuscanSun)
+                .foregroundStyle(filterVM.selectedRegion != nil ? .whiteIvoryMist : .yellowTuscanSun)
             ForEach(publicationManager.getUsedRegions(), id: \.region.id) { region in
                 Text(region.region.titre).tag(region.region)
-                    .foregroundStyle(filterVM.selectedRegion != region.region ? .black : .yellowTuscanSun)
+                    .foregroundStyle(filterVM.selectedRegion != region.region ? .whiteIvoryMist : .yellowTuscanSun)
             }
         }
         .pickerStyle(.wheel)

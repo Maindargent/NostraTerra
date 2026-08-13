@@ -127,7 +127,7 @@ struct PublicationAddFormView: View {
                             publishedPublication = publicationsManager.getPublication(id: publication.id)!
                             print("notification : \(notificationViewModel.currentNotif ?? nil)")
                             formVM.reset()
-//                            isPublished.toggle()
+                            isPublished.toggle()
                         } label: {
                             HStack {
                                 Text("Enregistrer")
