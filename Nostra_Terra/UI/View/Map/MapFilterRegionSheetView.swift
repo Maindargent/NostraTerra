@@ -8,36 +8,27 @@
 import SwiftUI
 
 
-struct FilterPublicationView: View {
+struct MapFilterRegionSheetView: View {
     @Environment(PublicationViewModel.self) var publicationManager: PublicationViewModel
+    @Environment(FilterMapViewModel.self) var filterVM: FilterMapViewModel
     
     @Binding var selectedCategory: PublicationCategory?
     @Binding var selectedRegion: FrenchRegion?
     @Binding var showFilterRegionSheet: Bool
     
     var body: some View {
-//        HStack{
-//            Menu{
-//                ForEach(PublicationCategory.allCases, id: \.self) { category in
-//                    Button(category.rawValue){
-//                        selectedCategory = category
-//                    }.tag(category)
-//                }
-//            } label: {
-//                Image(systemName: "line.3.horizontal.decrease.circle")
-//            }
-//        }
-        
         Picker("Appearance", selection: $selectedRegion) {
             Text("Toutes les regions").tag(nil as FrenchRegion?)
+                .foregroundStyle(selectedRegion != nil ? .black : .yellowTuscanSun)
             ForEach(publicationManager.getUsedRegions(), id: \.region.id) { region in
                 Text(region.region.titre).tag(region.region)
+                    .foregroundStyle(selectedRegion != region.region ? .black : .yellowTuscanSun)
             }
         }
         .pickerStyle(.wheel)
         
         Button {
-            showFilterRegionSheet.toggle()
+            filterVM.showFilterRegionSheet.toggle()
         } label: {
             Text("Valider")
                 .padding(.vertical, 8)
@@ -52,10 +43,7 @@ struct FilterPublicationView: View {
 
 #Preview {
     @Previewable @State var publicationManager = PublicationViewModel()
-    @Previewable @State var selectedCategory: PublicationCategory?
-    @Previewable @State var selectedRegion: FrenchRegion?
-    @Previewable @State var showFilterRegionSheet: Bool = false
-    
-    FilterPublicationView(selectedCategory: $selectedCategory, selectedRegion: $selectedRegion, showFilterRegionSheet: $showFilterRegionSheet)
+    @Previewable @State var userViewModel = UserViewModel(currentUser: users[0])
+    MapView()
         .environment(publicationManager)
-}
+        .environment(userViewModel)}
