@@ -157,7 +157,15 @@ struct MapView: View {
                         } label: {
                             HStack(spacing: 6) {
                                 Text("\(selectedCategory?.rawValue ?? "Catégories")")
-                                Image(systemName: "line.3.horizontal.decrease")
+                                if (selectedCategory != nil) {
+                                    Button {
+                                        selectedCategory = nil
+                                    } label : {
+                                        Image(systemName: "multiply")
+                                    }
+                                } else {
+                                    Image(systemName: "line.3.horizontal.decrease")
+                                }
                             }
                             .foregroundStyle(selectedCategory != nil ? selectedCategory!.color : .white)
                         }
