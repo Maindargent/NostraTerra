@@ -109,4 +109,19 @@ final class FormPublicationVM {
         region = FrenchRegion.provenceAlpesCoteDAzur
         selectedGeoPoint = CLLocationCoordinate2D(latitude: 43.279370, longitude: 5.409855)
     }
+    
+    func editPublication(_ publi: (any Publication)) {
+        if publi is Tradition {
+            typeForm = .tradition
+        } else {
+            typeForm = .event
+        }
+        
+        title = publi.title
+        description = publi.description
+        selectedItems = publi.uploadedImages
+        selectedCategories = Set(publi.categories)
+        region = publi.region
+        selectedGeoPoint = publi.geoPoint
+    }
 }

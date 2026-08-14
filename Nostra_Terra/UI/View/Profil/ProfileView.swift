@@ -9,10 +9,15 @@ import SwiftUI
 import PhotosUI
 
 struct ProfileView: View {
-    @Environment(PublicationViewModel.self) var publicationManager: PublicationViewModel
+    @Environment(PublicationViewModel.self) var publicationManager
     @Environment(UserViewModel.self) var userViewModel
+    @Environment(NotificationViewModel.self) var notifVM
     
     @State var profileViewModel = ProfileViewModel()
+    
+    @State var isAlertShown: Bool = false
+    @State var publicationToDelete: (any Publication)?
+    @State var publicationToEdit: (any Publication)?
     
     var body: some View {
         ZStack{
@@ -115,11 +120,7 @@ struct ProfileView: View {
                             HStack(alignment: .bottom){
                                 
                                 let userPublications = publicationManager
-                                    .getPublications()
-                                    .filter {
-                                        $0.author.id == userViewModel.currentUser.id
-                                    }
-                                    .sorted(by: {$0.created_at > $1.created_at})
+                                    .getPublications(user: userViewModel.currentUser)
                                 
                                 if userPublications.isEmpty {
                                     Text("Vous n'avez rien publié.")
@@ -132,11 +133,33 @@ struct ProfileView: View {
                                             PublicationDetailView(publicationID: publication.id)
                                         } label: {
                                             PublicationItem(publication: publication)
+                                                .contextMenu {
+                                                    Button("Supprimer", role: .destructive) {
+                                                        isAlertShown.toggle()
+                                                        publicationToDelete = publication
+                                                    }
+                                                    NavigationLink {
+                                                        PublicationAddFormView()
+                                                            .environment(notifVM)
+                                                            .environment(publicationManager)
+                                                    } label: {
+                                                        Text("Modifier")
+                                                    }
+                                                }
                                         }
                                     }
-                                    
                                 }
                                 
+                            }
+                            .alert("voulez-vous supprimer \(publicationToDelete?.title ?? "") ?", isPresented: $isAlertShown) {
+                                Button("Annuler", role: .cancel) {}
+                                Button("Supprimer", role: .destructive) {
+                                    if let publication = publicationToDelete {
+                                        if publicationManager.removePublication(publication) {
+                                            notifVM.addNotification("\(publication.title) a bien été supprimer !", type: .info)
+                                        }
+                                    }
+                                }
                             }
                         }
                         .padding(.horizontal)
@@ -185,5 +208,6 @@ struct ProfileView: View {
         ProfileView()
             .environment(publicationManager)
             .environment(userViewModel)
+            .environment(NotificationViewModel())
     }
 }

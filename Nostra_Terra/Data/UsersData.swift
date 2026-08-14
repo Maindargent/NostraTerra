@@ -9,10 +9,10 @@ import Foundation
 
 var users: [User] = [
     User(
-        lastName: "Swift",
-        firstName: "Yann",
+        lastName: "Androidos",
+        firstName: "José",
         birthDate: Calendar.current.date(from: DateComponents(year: 1995, month: 3, day: 12))!,
-        description: "Passionné de randonnée et de photographie.",
+        description: "Passionné Kotlin / Java. Apple a la poubelle",
         profilPicture: URL(string: "https://picsum.photos/seed/user1/300/300")!
     ),
     User(
