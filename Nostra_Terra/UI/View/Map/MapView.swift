@@ -77,8 +77,10 @@ struct MapView: View {
                 .toolbar(content: {
                     ToolbarItem(placement: .bottomBar) {
                         Button {
-                            selectedPublicationID = nil
-                            showPublicationSheet.toggle()
+                            withAnimation(.smooth) {
+                                selectedPublicationID = nil
+                                showPublicationSheet.toggle()
+                            }
                         } label: {
                             Image(systemName: "arrowshape.turn.up.backward")
                                 .foregroundStyle(.white)

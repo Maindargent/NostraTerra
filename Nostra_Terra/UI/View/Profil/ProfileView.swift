@@ -139,9 +139,9 @@ struct ProfileView: View {
                                                         publicationToDelete = publication
                                                     }
                                                     NavigationLink {
-                                                        PublicationAddFormView()
-                                                            .environment(notifVM)
-                                                            .environment(publicationManager)
+//                                                        PublicationAddFormView()
+//                                                            .environment(notifVM)
+//                                                            .environment(publicationManager)
                                                     } label: {
                                                         Text("Modifier")
                                                     }

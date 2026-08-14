@@ -84,7 +84,7 @@ final class PublicationViewModel {
             }
         }
         
-        return regions
+        return regions.sorted(by: {$0.region.titre > $1.region.titre})
     }
     
     func removePublication(_ publi: (any Publication)) -> Bool {

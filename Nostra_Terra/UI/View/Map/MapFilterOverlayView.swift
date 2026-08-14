@@ -63,7 +63,9 @@ struct MapFilterOverlayView: View {
                             Text("\(filterVM.selectedCategory?.rawValue ?? "Catégories")")
                             if (filterVM.selectedCategory != nil) {
                                 Button {
-                                    filterVM.selectedCategory = nil
+                                    withAnimation(.smooth) {
+                                        filterVM.selectedCategory = nil
+                                    }
                                 } label : {
                                     Image(systemName: "multiply")
                                 }
@@ -85,7 +87,9 @@ struct MapFilterOverlayView: View {
                     Text("\(filterVM.selectedRegion?.titre ?? "Régions")")
                     if (filterVM.selectedRegion != nil) {
                         Button {
-                            filterVM.selectedRegion = nil
+                            withAnimation(.smooth) {
+                                filterVM.selectedRegion = nil
+                            }
                         } label : {
                             Image(systemName: "multiply")
                         }

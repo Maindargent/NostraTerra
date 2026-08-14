@@ -26,15 +26,17 @@ final class ProfilEditViewModel {
     var isLastNameValid: Bool {
         return !lastName.isEmpty
     }
-    var isFirstNameValid: Bool {
-        return !firstName.isEmpty
-    }
     var isBirthDate: Bool {
         return birthDate < .now
     }
     var isUploeadedImage: Bool {
         return uploadedImage != nil
     }
+    
+    var isFirstNameValid: Bool {
+        return !firstName.isEmpty
+    }
+    
     var isFormValid: Bool{
         return isLastNameValid && isFirstNameValid && isBirthDate
     }
