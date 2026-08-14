@@ -91,9 +91,11 @@ struct SuggestionsView: View {
                                             DragGesture()
                                                 .onChanged({(value) in
                                                     if value.translation.width > 0 {
+                                                        
                                                         self.x[i] = value.translation.width
                                                         self.degree[i] = 7
                                                     } else {
+                                                        
                                                         self.x[i] = value.translation.width
                                                         self.degree[i] = -7
                                                     }

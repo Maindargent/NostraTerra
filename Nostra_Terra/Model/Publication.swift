@@ -41,10 +41,11 @@ struct Tradition: Publication, Identifiable, Equatable, Hashable {
     static func == (lhs: Tradition, rhs: Tradition) -> Bool {
         lhs.id == rhs.id
     }
-
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
+    
 }
 
 struct Event: Publication, Identifiable, Equatable, Hashable {
